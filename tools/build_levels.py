@@ -1,96 +1,100 @@
 """Build what_the_golf/levels.json (the real campaign world) from the in-game
-level dump (mod/wtg_levels.json).
+section dump (mod/wtg_sections.json) + level metadata (mod/wtg_levels.json).
 
-Filters to real campaign holes, groups them into theme-areas (balanced: big
-themes split, tiny themes merged), and writes an areas structure that data.py
-consumes. Run: python tools/build_levels.py [--write]
+wtg_sections.json is the AUTHORITATIVE campaign structure, read straight from the
+game's OverworldLevelData ScriptableObject: 21 ordered sections (sub-areas) with
+their exact hole membership, grouped into the real chambers (10 -> 00, counting
+down; 10 = intro/start, 00 = finale). We group the sections into chambers and
+emit the schema data.py already consumes ({final_boss_scene, start_area, areas}),
+so nothing downstream changes -- an "area" is now a real chamber.
+
+Chamber gating: chamber 10 is the free start; every other chamber gets an Access
+item. Run: python tools/build_levels.py [--write]
 """
 
 import json
 import os
 import re
 import sys
-from collections import defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "mod", "wtg_levels.json")
+SECTIONS = os.path.join(ROOT, "mod", "wtg_sections.json")
+LEVELS = os.path.join(ROOT, "mod", "wtg_levels.json")
 OUT = os.path.join(ROOT, "what_the_golf", "levels.json")
 
-MAX_AREA = 16     # split themes larger than this
-MIN_AREA = 4      # themes smaller than this get merged into "Assorted"
 FINAL_BOSS_SCENE = "Final boss"
 
-
-def is_campaign(x):
-    # Real single-player campaign holes: short opaque id, and either has
-    # mini-challenges or is a boss. Exclude 2-player "multiplayer" variants,
-    # which a solo player cannot clear (they'd be dead checks).
-    if "multiplayer" in x["scene"].lower():
-        return False
-    return len(x["id"]) <= 6 and (x["challenges"] > 0 or x["boss"])
-
-
-SPECIAL_CASE = {"fpg": "FPG", "supergolf": "SUPERGOLF", "fps": "FPS"}
-
-
-def _canon(word):
-    w = re.sub(r"\d+$", "", word) or word
-    return SPECIAL_CASE.get(w.lower(), w[:1].upper() + w[1:].lower())
-
-
-def theme_key(scene):
-    s = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", scene.strip())  # camelCase -> spaces
-    parts = [p for p in re.split(r"[\s_\-]+", s) if p]
-    if not parts:
-        return "Misc"
-    if parts[0] == "2D" and len(parts) > 1:        # sub-divide the huge 2D theme
-        return "2D " + _canon(parts[1])
-    return _canon(parts[0])
+# Section code (name suffix) -> display theme, from PlateInfoManager.AreaIDEnum
+# (THEME_CHAMBER+SUBAREA). See tools/chamber_ids.py / mod/harvested-levels.md.
+SECTION_THEME = {
+    "10": "Intro",
+    "09A": "Easy 2D", "09B": "Living Room",
+    "08A": "Platformers", "08B": "Soccer", "08C": "Space", "08D": "Explosion",
+    "07A": "OL", "07B": "Lebowski",
+    "06A": "Portal", "06B": "Super Putt",
+    "05A": "Kitchen", "05B": "Gravity", "05C": "FPG",
+    "04A": "Music", "04B": "Stealth",
+    "03A": "Jungle", "03B": "Cars",
+    "02": "Water",
+    "01": "Western",
+    "00": "Finale",
+}
 
 
-def chunk(items, size):
-    for i in range(0, len(items), size):
-        yield items[i:i + size]
+def chamber_num(section_name):
+    m = re.match(r"(\d+)", section_name.strip())
+    return int(m.group(1)) if m else None
 
 
 def build():
-    dump = json.load(open(SRC, encoding="utf-8"))
-    camp = [x for x in dump if is_campaign(x)]
+    sections = json.load(open(SECTIONS, encoding="utf-8"))
+    meta = {x["scene"]: x for x in json.load(open(LEVELS, encoding="utf-8"))}
 
-    groups = defaultdict(list)
-    for x in camp:
-        groups[theme_key(x["scene"])].append(x)
+    # Group sections into chambers, preserving progression order of first sight.
+    chambers = {}       # num -> {"themes": [...], "levels": [...]}
+    order = []
+    for sec in sections:
+        code = sec["name"].strip()
+        num = chamber_num(code)
+        if num is None:
+            raise SystemExit(f"section '{code}' has no chamber number")
+        if num not in chambers:
+            chambers[num] = {"themes": [], "levels": []}
+            order.append(num)
+        theme = SECTION_THEME.get(code, code)
+        if theme not in chambers[num]["themes"]:
+            chambers[num]["themes"].append(theme)
+        for scene in sec["levels"]:
+            m = meta.get(scene, {})
+            chambers[num]["levels"].append({
+                "id": m.get("id", ""),
+                "scene": scene,
+                "boss": bool(m.get("boss", False)),
+                "challenges": int(m.get("challenges", 0)),
+                "subarea": code,
+                "theme": theme,
+            })
 
-    areas = {}          # name -> list of levels
-    leftovers = []
-    for name, lvls in sorted(groups.items(), key=lambda kv: -len(kv[1])):
-        if len(lvls) < MIN_AREA:
-            leftovers.extend(lvls)
-            continue
-        if len(lvls) > MAX_AREA:
-            for i, part in enumerate(chunk(lvls, MAX_AREA)):
-                areas[f"{name} {chr(65 + i)}"] = part   # "2D Rope A/B..."
-        else:
-            areas[name] = lvls
+    areas = []
+    for num in order:
+        c = chambers[num]
+        areas.append({
+            "name": f"Chamber {num:02d}",
+            "chamber": num,
+            "themes": c["themes"],
+            "levels": c["levels"],
+        })
 
-    for i, part in enumerate(chunk(leftovers, 12), 1):
-        areas[f"Assorted {i}"] = part
+    start_area = areas[0]["name"]   # Chamber 10 (intro) — the free start
+    final_scenes = {l["scene"] for a in areas for l in a["levels"]}
+    if FINAL_BOSS_SCENE not in final_scenes:
+        raise SystemExit(f"final boss scene '{FINAL_BOSS_SCENE}' not found in sections")
 
-    # order areas: put the boss areas / final boss sensibly; keep deterministic
-    ordered = sorted(areas.items())
-
-    world = {
+    return {
         "final_boss_scene": FINAL_BOSS_SCENE,
-        "start_area": ordered[0][0],
-        "areas": [
-            {"name": name,
-             "levels": [{"id": l["id"], "scene": l["scene"],
-                         "boss": l["boss"], "challenges": l["challenges"]}
-                        for l in lvls]}
-            for name, lvls in ordered
-        ],
+        "start_area": start_area,
+        "areas": areas,
     }
-    return world
 
 
 def main():
@@ -98,12 +102,12 @@ def main():
     total = sum(len(a["levels"]) for a in world["areas"])
     crowns = sum(1 for a in world["areas"] for l in a["levels"] if l["challenges"] > 0)
     bosses = sum(1 for a in world["areas"] for l in a["levels"] if l["boss"])
-    print(f"areas: {len(world['areas'])} | holes: {total} | crowns: {crowns} | bosses: {bosses}")
-    print(f"start area: {world['start_area']}")
-    print("\n=== areas ===")
+    print(f"chambers: {len(world['areas'])} | holes: {total} | crowns: {crowns} | bosses: {bosses}")
+    print(f"start (free): {world['start_area']}\n")
     for a in world["areas"]:
         b = sum(1 for l in a["levels"] if l["boss"])
-        print(f"  {len(a['levels']):2d}  {a['name']}" + (f"  (+{b} boss)" if b else ""))
+        themes = ", ".join(a["themes"])
+        print(f"  {a['name']}  ({len(a['levels']):2d} holes)  {themes}" + (f"  [+{b} boss]" if b else ""))
 
     if "--write" in sys.argv:
         with open(OUT, "w", encoding="utf-8") as f:

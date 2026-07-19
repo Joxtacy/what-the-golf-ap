@@ -18,6 +18,11 @@ def create_regions(world) -> None:
     menu = Region("Menu", player, multiworld)
     multiworld.regions.append(menu)
 
+    # NON-LINEAR: the game lets you teleport (pause menu) / portal-room travel to
+    # any UNLOCKED chamber, so chambers are independent regions each gated only by
+    # their own Access item (Rules.py). The mod unlocks a chamber for teleport when
+    # its Access arrives (SaveGame.SetMainDoorOpen + RefreshDoorsAndGoals). The
+    # start chamber connects freely.
     for area in AREAS:
         region = Region(area.name, player, multiworld)
         multiworld.regions.append(region)
@@ -27,8 +32,6 @@ def create_regions(world) -> None:
             if level.challenges > 0:
                 _add_location(region, crown_loc(level.scene))
 
-        # Menu -> area. The entrance rule (Rules.py) requires the area's Access
-        # item, except the start area which connects freely.
         menu.connect(region, f"To {area.name}")
 
     # Campaign victory: an internal event placed in the Final boss area, so it's

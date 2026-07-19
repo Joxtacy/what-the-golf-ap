@@ -13,9 +13,12 @@ namespace WtgArchipelago;
 /// </summary>
 public class Mod : MelonMod
 {
-    // OFF while we observe the game's NATIVE gating on a fresh save. Flip to
-    // true to re-enable mod-enforced gating (GoalGate + EntryGate).
-    public const bool GatingEnabled = false;
+    // Legacy gating experiments (door-plate suppression / area goal-hiding). Kept
+    // off: non-linear teleport unlocking (ChamberUnlock) is the real mechanism.
+    public const bool LegacyGatingEnabled = false;
+
+    // Read-only save-vocabulary diagnostic (UnlockProbe). Off outside R&D.
+    public const bool ProbeEnabled = false;
 
     public override void OnInitializeMelon()
     {
@@ -32,6 +35,7 @@ public class Mod : MelonMod
 
     private int _dumpTimer;
     private int _gateTimer;
+    private int _unlockTimer;
 
     // Runs every frame on Unity's main thread -> ideal main-thread pump.
     public override void OnUpdate()
@@ -44,10 +48,17 @@ public class Mod : MelonMod
             // TODO: reset/kill the ball on an incoming DeathLink.
         }
 
-        // One-shot lever validation (temporary): open a computer door via SetState.
-        Mapping.DoorTest.MaybeRun();
+        if (ProbeEnabled) Mapping.UnlockProbe.RunOnce();
 
-        if (GatingEnabled)
+        // Apply any AP chamber unlocks that couldn't be applied yet (e.g. items
+        // received before the overworld loaded). Cheap no-op when up to date.
+        if (++_unlockTimer >= 30)
+        {
+            _unlockTimer = 0;
+            Mapping.ChamberUnlock.TryApply();
+        }
+
+        if (LegacyGatingEnabled)
         {
             // Hard gate: kick the player out of a locked level (every frame).
             Mapping.EntryGate.Tick();
@@ -67,6 +78,8 @@ public class Mod : MelonMod
             Mapping.LevelDumper.Dump();
             Mapping.GoalDumper.Dump();
             Mapping.BridgeDumper.Dump();
+            Mapping.DoorDumper.Dump();
+            Mapping.SectionDumper.Dump();
         }
     }
 }

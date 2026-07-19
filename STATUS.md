@@ -9,58 +9,93 @@ for the game internals.
 ## What works (validated end-to-end)
 
 - **apworld generates** on released **Archipelago 0.6.7** (and `main`/0.6.8):
-  180 real single-player campaign holes grouped into 21 theme "areas", 351
-  locations, real level names, area-gated logic.
+  the 132 real campaign holes in the 11 real chambers (10→00), 251 locations
+  (Clears + Crowns), real level names, non-linear per-chamber gating.
 - **Mod loads** under **MelonLoader v0.7.3** (BepInEx's Dobby detour crashes this
   game — see below) and connects to an AP server.
-- **Live loop verified in-game:** clear a level → the mod reads the scene →
-  sends the Clear (and Crown) check → server registers it under the real name →
-  the mod receives items back (including progression Flags).
-- **Full game data dumped:** all 642 `LevelData` (`mod/wtg_levels.json`) and the
-  real overworld goal/hub-section structure (`mod/wtg_goals.json`).
+- **Full randomizer loop verified in-game (non-linear):** clear a level → the mod
+  sends the Clear (+Crown) check → server registers it → the mod receives items,
+  including `Chamber NN Access` → that chamber becomes teleport-reachable → hop
+  there and play. (See the gating section below for the unlock mechanism.)
+- **Full game data dumped:** all 642 `LevelData` (`mod/wtg_levels.json`), the real
+  overworld goal/hub structure (`mod/wtg_goals.json`), and the authoritative
+  chamber/section structure (`mod/wtg_sections.json`) + door topology
+  (`mod/wtg_doors.json`).
 
-## The open problem: hard gating — MECHANISM FOUND
+## Real chamber structure — CAPTURED, apworld RESTRUCTURED (2026-07-19)
 
-**Key discovery:** on a **fresh save** the game DOES physically gate — you're
-fenced into the first area until you beat the required levels. (On a 100% save
-everything is already unlocked, which is why earlier tests failed. WTG has
-multiple save slots, so use a dedicated fresh "dev" slot; the 100% save is safe.)
+**Authoritative source found:** the game's `OverworldLevelData` ScriptableObject
+(a fully-loaded asset — one pass, no overworld-walking gaps) lists all **21
+sections** of the campaign with exact hole membership. `mod/src/Mapping/
+SectionDumper.cs` dumps it to **`mod/wtg_sections.json`**: per section `name`
+(chamber code e.g. "08A"/"02"), `hasBoss`, `saveSpotId`, `unlockTriggerId`, and
+ordered `levels` (scenes). = **11 chambers, 132 holes** (all resolve in
+wtg_levels.json; 119 crowns). The sub-area themes decode from
+`PlateInfoManager.AreaIDEnum` (see `mod/harvested-levels.md`).
 
-**The gate lever (chamber level):**
-- **`OverworldMainDoorRobot`** — the 9 computer/chamber doors. Fields:
-  `bossLevelID`, `bossLevelName`, `List<OverworldMainDoorPlate> plates`,
-  `OnOpen`/`OnCompleted`.
-- **`OverworldMainDoorPlate`** — the switches. `public bool isOn` +
-  **`public void SetState(bool on, bool onLoad=false)`** — directly turn a plate
-  on/off. When all a door's plates are on, the door opens.
-- So AP gating: keep a chamber's plates off until its Access item arrives, then
-  `SetState(true)` to open the door. Suppress native opening by forcing locked
-  chambers' plates off each frame (override).
+Real chambers (10 -> 00, counting DOWN; 10 = intro/free start, 00 = finale):
+`10`(3) `09`(10) `08`(25) `07`(10) `06`(12) `05`(18) `04`(10) `03`(20) `02`(5)
+`01`Western(17) `00`finale(2).
 
-**Design implication:** the computer doors gate at the CHAMBER level (~9-11),
-not the 21 theme-areas we currently generate. To wire gating cleanly, restructure
-the apworld around the real chambers (map hub sections -> chambers) — this matches
-the original vision. Interop types are global -> `Il2Cpp.OverworldMainDoorRobot`,
-`Il2Cpp.OverworldMainDoorPlate`.
+**apworld rebuilt around chambers (DONE):** `tools/build_levels.py` now groups
+`wtg_sections.json` into chambers and emits the same `levels.json` schema data.py
+already consumes (an "area" is now a chamber). **Nothing downstream changed.**
+Locations = 132 Clears + 119 Crowns = 251. Items = 10 Chamber Access keys
+(chambers 09..00; chamber 10 free) + Flags + filler = 17 names. **Generates clean
+& solvable on 0.6.7** for campaign and door_100 goals (verified 2026-07-19); all
+10 Access keys placed as progression, real chamber gating in the spoiler.
+Rebuild: `python tools/build_levels.py --write && python tools/export_ids.py`.
 
-**Diagnostic dumpers added** (mod/src/Mapping/): GoalDumper (wtg_goals.json),
-BridgeDumper (now a general gate/name scanner -> wtg_gates.json). `Mod.GatingEnabled`
-const toggles the (old, area-level) GoalGate/EntryGate off for observation.
+## Gating — SOLVED via non-linear teleport unlocking (2026-07-19)
 
-**LEVER VALIDATED (2026-07-19):** `mod/src/Mapping/DoorTest.cs` called
-`OverworldMainDoorPlate.SetState(true)` on both plates of a partially-activated
-computer door (`boss='ID_2D_HOLEINONE_1'`, 1 of 2 plates on) — this activated the
-computer/boss and let the player fight it and advance to the next area, exactly
-like hitting both switches natively. So SetState IS the working gate control.
-DoorTest is one-shot/dev-only (runs from Mod.OnUpdate regardless of GatingEnabled).
+The randomizer is **non-linear** (matches the game: pause-menu teleport + portal
+room let you travel to any UNLOCKED chamber — no forced linear walking). Full loop
+VALIDATED in-game: clear levels → receive `Chamber NN Access` → that chamber
+becomes teleport-reachable → hop there and play.
 
-**Next steps:** (1) restructure the apworld around the real ~9-11 chambers (each
-computer door = one chamber gate; map hub sections -> chambers, boss ids like
-ID_2D_HOLEINONE_N -> computer N). (2) implement: on AP Access item for chamber N,
-SetState(true) on that door's plates; keep locked chambers' plates SetState(false)
-each frame to suppress native activation. (3) delete/disable DoorTest. The finer
-sub-area fences (opened by beating levels) are a separate, optional finer-grain
-gate; chamber-level via the computer doors is the clean first target.
+**The unlock lever (found by probing a 100% save's SaveGame sets):** a section
+unlocks when its **`unlockTriggerId`** is registered as an open door. The save
+stores these in `OPEN_DOORS` (regular, e.g. `door_platformer_00`, `Z4UZC`) and
+`OPEN_MAIN_DOORS` (computer, e.g. `YX3NO`, `9DSBG`, `OS8GA`). So the mod
+(`mod/src/Mapping/ChamberUnlock.cs`) does, per section of the unlocked chamber:
+`SaveGame.SetDoorOpen(trig)` + `SaveGame.SetMainDoorOpen(trig)` then
+`OverworldManager2d.RefreshDoorsAndGoals()`. `SaveGame.GetStringList(key,slot)` /
+`AddToSet(key,elems,slot)` are the generic save accessors. `ItemApplier` calls
+`ChamberUnlock.Request(N)`; `Mod.OnUpdate` re-applies pending unlocks once an
+overworld is loaded (items can arrive at connect before the overworld exists).
+
+AP logic is non-linear: each chamber is an independent region gated by its own
+`Chamber NN Access` (Regions.py connects all from Menu; chamber 10 = free start).
+NOTE physical looseness: chamber 09 is walk-reachable from the intro (no computer
+door there) so it's not hard-gated — harmless (checks can send out-of-logic; no
+softlock). `mod/src/Mapping/UnlockProbe.cs` = the read-only save-vocabulary probe
+(toggle `Mod.ProbeEnabled`). ChamberGate/EntryGate/GoalGate/DoorDumper are now
+dead/secondary (door-suppression approach abandoned in favour of teleport unlock).
+
+## ROADMAP — richer progression (agreed 2026-07-19)
+
+Current: only ~10 progression items (chamber access) vs 251 locations — too few.
+Planned, several as **apworld Options**:
+1. **Section-level access (~17 items).** Gate per section, not per chamber — the
+   mod already unlocks per section. CEILING is 17: chambers 05 (Kitchen/Gravity/FPG
+   share `9DSBG`) and 06 (Portal/Superhot share `YX3NO`) unlock as one unit; all
+   other sections have distinct triggers (08 = 4 separate!). Name by theme.
+2. **Computer boss keys (9 items).** Gate each of the 9 boss doors behind a key,
+   using the VALIDATED `OverworldMainDoorPlate.SetState` lever. Bosses become gates.
+3. **Chests as locations (~24 checks).** Save tracks 24 overworld chests
+   (`CHEST_KITCHEN`…, key `OPEN_CHESTS` / `SetChestUnlocked`). More checks = better
+   spread. (Option.)
+4. **Crown-gating.** Some sections unlock natively via crowns (`CROWN_MAIN1`→Lebowski
+   07B, `CROWN_MAIN2`→Cars 03B). Make Crown a counted progression item + gate some
+   sections behind N crowns. (Option.)
+5. **DLC (Sporty Sports).** Adds more sections → more of everything. (Option.)
+6. **Ball shapes / Transmogrif (stretch).** Section `ballShape` = `Transmogrif.
+   BALLSHAPES`; gating ball abilities as items = most WTG-flavoured progression, but
+   needs R&D on whether ball shape is force-settable.
+
+**Note:** on a **fresh save** the game natively gates progression; the 100% save
+has everything unlocked. Use a dedicated fresh dev save slot to test; the 100%
+save is safe. ChamberUnlock WRITES save state (persists on that slot).
 
 ## How to resume
 

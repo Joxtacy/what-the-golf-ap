@@ -53,3 +53,31 @@ MISSING: chamber/area grouping is NOT in LevelData — it lives in the overworld
 hub structure (which hubsection contains which levels + flag/crown door gates).
 Design decision pending: (A) flat/count-based world from the 223 campaign holes
 (playable now), or (B) also dump overworld structure to keep chamber-access design.
+
+## CHAMBER STRUCTURE DECODED (2026-07-19) — from dump.cs `PlateInfoManager.AreaIDEnum`
+
+The real gate structure is the "computer" doors (`OverworldMainDoorRobot`, one per
+chamber, `bossLevelID = ID_2D_HOLEINONE_N`). Each door has plates
+(`OverworldMainDoorPlate`); each plate's `PlateInfoManager` has an `AreaIDEnum Name`
+plus `List<LevelData> levels` / `List<OverworldGoal> goals` = the holes behind that
+sub-area. The enum reveals the whole `<THEME>_<CHAMBER><SUBAREA>` scheme, chambers
+counting **10 -> 00**:
+
+| Chamber | Sub-areas (plates)                         |
+|---------|--------------------------------------------|
+| 10 INTRO| (start, free)                              |
+| 09      | EASY2D_09A, LIVINGROOM_09B                  |
+| 08      | PLATFORMERS_08A, SOCCER_08B, SPACE_08C, EXPLOSION_08D |
+| 07      | OL_07A, LEBOWSKI_07B                        |
+| 06      | PORTAL_06A, SUPERPUTT_06B                   |
+| 05      | KITCHEN_05A, GRAVITY_05B, FPG_05C           |
+| 04      | MUSIC_04A, STEALTH_04B                      |
+| 03      | JUNGLE_03A, CARS_03B                        |
+| 02      | WATER_02                                    |
+| 01      | WETERN_01 (Western, final run)              |
+| 00      | END_00                                      |
+
+21 AreaIDEnum values total (INTRO_10..END_00). NOTE: WATER_02 exists (earlier
+"no Computer 02" note was wrong). `DoorDumper.cs` reads this live -> wtg_doors.json
+(door -> plate.area_id/area_name + levels/goals scenes) = the level->sub-area->chamber
+membership needed to rebuild the apworld around real chambers.

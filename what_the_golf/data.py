@@ -1,13 +1,14 @@
 """Central data model for the WHAT THE GOLF? Archipelago world.
 
-Built from REAL game data: `levels.json` is generated from an in-game dump of
-every LevelData (see tools/build_levels.py and mod/harvested-levels.md). It
-contains the 232 real campaign holes grouped into theme "areas". This module
-loads it and exposes the item/location/region primitives the rest of the world
-uses. Everything downstream is data-driven from levels.json.
+Built from REAL game data: `levels.json` is generated from the in-game dump of
+the OverworldLevelData ScriptableObject (see tools/build_levels.py and
+mod/harvested-levels.md). It contains the 132 real campaign holes grouped into
+the 11 real chambers (10 -> 00). This module loads it and exposes the item/
+location/region primitives the rest of the world uses; everything downstream is
+data-driven from levels.json.
 
-Model:
-  * Area  = a themed group of holes (e.g. "Livingroom", "Space", "Bowling").
+Model (an "Area" is a real chamber; naming kept generic for the framework code):
+  * Area  = a chamber (e.g. "Chamber 08" = Platformers/Soccer/Space/Explosion).
   * Level = one hole: opaque game id, human scene name, boss flag, challenge count.
   * Locations: every hole's "<scene> - Clear", plus "<scene> - Crown" for holes
     that have mini-challenges.

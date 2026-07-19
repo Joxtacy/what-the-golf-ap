@@ -20,8 +20,10 @@ public static class ItemApplier
         else if (name.EndsWith(" Access"))
         {
             string area = name.Substring(0, name.Length - " Access".Length);
-            AreaState.Unlock(area);
-            MelonLoader.MelonLogger.Msg($"Area unlocked: {area}");
+            AreaState.Unlock(area);   // legacy scene->area tracking
+            if (ChamberGate.TryParseChamber(area, out int chamber))
+                ChamberUnlock.Request(chamber);   // make it teleport-reachable
+            MelonLoader.MelonLogger.Msg($"Chamber unlocked: {area}");
         }
         // else: filler / cosmetic -- nothing to apply.
 

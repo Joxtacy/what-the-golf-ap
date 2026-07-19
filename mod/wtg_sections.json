@@ -1,0 +1,302 @@
+[
+  {
+    "name": "10",
+    "hasBoss": false,
+    "saveSpotId": "SAVE_introroom_01",
+    "unlockTriggerId": "",
+    "levels": [
+      "ClubBallMany",
+      "AHoleInAOne",
+      "CatBall"
+    ]
+  },
+  {
+    "name": "09A",
+    "hasBoss": false,
+    "saveSpotId": "TELEPORT_EASY2D",
+    "unlockTriggerId": "DOOR_easy2d_00",
+    "levels": [
+      "2DBall many balls 1",
+      "2DBall Simple 0",
+      "2D Rubber 1",
+      "2D Sticky 1"
+    ]
+  },
+  {
+    "name": "09B",
+    "hasBoss": false,
+    "saveSpotId": "TELEPORT_LIVINGROOM",
+    "unlockTriggerId": "Z4UZC",
+    "levels": [
+      "Livingroom couch",
+      "Livingroom tv",
+      "LivingroomChair",
+      "Livingroom Arrow ball",
+      "Livingroom vase",
+      "SquareBall"
+    ]
+  },
+  {
+    "name": "08A",
+    "hasBoss": true,
+    "saveSpotId": "TELEPORT_PLATFORMERS",
+    "unlockTriggerId": "door_platformer_00",
+    "levels": [
+      "2DBall mario 1",
+      "2D Football",
+      "AngryGolf",
+      "2DBall Flabby Golf",
+      "2D HoleInOne 01 basic"
+    ]
+  },
+  {
+    "name": "08B",
+    "hasBoss": false,
+    "saveSpotId": "TELEPORT_SOCCER",
+    "unlockTriggerId": "NLABA",
+    "levels": [
+      "GoalInOne",
+      "SoccerBall tutorial",
+      "SoccerBall",
+      "SoccerBall 1",
+      "SoccerBall 2",
+      "SoccerBall 3"
+    ]
+  },
+  {
+    "name": "08C",
+    "hasBoss": false,
+    "saveSpotId": "SAVE_space_01",
+    "unlockTriggerId": "door_space_00",
+    "levels": [
+      "2D Moon Lander",
+      "SpaceGolf1",
+      "SpaceGolf3",
+      "SpaceGolf5",
+      "SpaceGolf6"
+    ]
+  },
+  {
+    "name": "08D",
+    "hasBoss": false,
+    "saveSpotId": "TELEPORT_EXPLOSION",
+    "unlockTriggerId": "VJ69W",
+    "levels": [
+      "Explosion2",
+      "Explosion3",
+      "Explosion4",
+      "Explosion5",
+      "Explosion6",
+      "Explosion rolling",
+      "Explosion barrel flying",
+      "Manball 3",
+      "Explosion barrel"
+    ]
+  },
+  {
+    "name": "07A",
+    "hasBoss": true,
+    "saveSpotId": "TELEPORT_OL",
+    "unlockTriggerId": "door_ol_00",
+    "levels": [
+      "2D 100meter",
+      "2D Bow And Arrow",
+      "2D Golf Olympics Start",
+      "2D 150meter",
+      "2D HoleInOne 2 basic"
+    ]
+  },
+  {
+    "name": "07B",
+    "hasBoss": false,
+    "saveSpotId": "TELEPORT_LEBOWSKI",
+    "unlockTriggerId": "CROWN_MAIN1",
+    "levels": [
+      "Bowling 3",
+      "Bowling",
+      "Bowling 6 - white hat",
+      "ManyBowlings",
+      "Bowling MoonGolf 0"
+    ]
+  },
+  {
+    "name": "06A",
+    "hasBoss": true,
+    "saveSpotId": "SAVE_PORTAL_01",
+    "unlockTriggerId": "YX3NO",
+    "levels": [
+      "2D Rope Portal 1",
+      "2D Rope Portal 2",
+      "2DBall Portal 1",
+      "2D Portal Gun 1",
+      "2D Player Portal 1 3",
+      "2D Player Portal 1",
+      "2D HoleInOne 03 frogger"
+    ]
+  },
+  {
+    "name": "06B",
+    "hasBoss": false,
+    "saveSpotId": "TELEPORT_SUPERHOT",
+    "unlockTriggerId": "YX3NO",
+    "levels": [
+      "SUPERGOLF0",
+      "SUPERGOLF6",
+      "SUPERGOLF - tutorial 1",
+      "SUPERGOLF dodge",
+      "EvilFlag 3 Circle"
+    ]
+  },
+  {
+    "name": "05A",
+    "hasBoss": true,
+    "saveSpotId": "SAVE_kitchen_menu_01",
+    "unlockTriggerId": "9DSBG",
+    "levels": [
+      "EvilFlag move then stop",
+      "2D HoleInOne 04 peggle",
+      "Livingroom Egg",
+      "Livingroom champagne"
+    ]
+  },
+  {
+    "name": "05B",
+    "hasBoss": false,
+    "saveSpotId": "TELEPORT_GRAVITY",
+    "unlockTriggerId": "9DSBG",
+    "levels": [
+      "2D Gravity Change On Aim",
+      "2D Super Golf Boy 0",
+      "2D Super Golf Boy 1",
+      "2D Super Golf Boy 2",
+      "2D Super Golf Boy 3",
+      "2D Custom Gravity",
+      "2D Bouncyboy",
+      "2D Bouncyboy 2"
+    ]
+  },
+  {
+    "name": "05C",
+    "hasBoss": false,
+    "saveSpotId": "SAVE_fpg_01",
+    "unlockTriggerId": "9DSBG",
+    "levels": [
+      "FPG Ordinary Golf 0",
+      "FPG Ordinary Golf 1",
+      "FPG Swinging Golf Clubs",
+      "FPG Targets",
+      "FPG Targets 2",
+      "FPG Ordinary Golf 3"
+    ]
+  },
+  {
+    "name": "04A",
+    "hasBoss": true,
+    "saveSpotId": "TELEPORT_MUSIC",
+    "unlockTriggerId": "door_music_00",
+    "levels": [
+      "2D Music Imitation 1",
+      "Golf Hero 1",
+      "2D Music Karaoke 1"
+    ]
+  },
+  {
+    "name": "04B",
+    "hasBoss": false,
+    "saveSpotId": "TELEPORT_STEALTH",
+    "unlockTriggerId": "0PMM9",
+    "levels": [
+      "Manball Stealth",
+      "SneakTutorial",
+      "MetalGearSolid01",
+      "GolfClubObstacles",
+      "SoccerBallStealth",
+      "Harmonikadyr",
+      "SquareBallSneak"
+    ]
+  },
+  {
+    "name": "03A",
+    "hasBoss": true,
+    "saveSpotId": "TELEPORT_JUNGLE",
+    "unlockTriggerId": "RVQTA",
+    "levels": [
+      "EvilFlag Magic 0",
+      "2D Explosions Rubber 0",
+      "2D Explosions Rubber 1",
+      "2D Explosions Sticky 1",
+      "2D Arrow Is Club 0",
+      "2D Arrow Is Club 1",
+      "2D Explosions Egg 0",
+      "2D Explosions Egg 1",
+      "2D Explosions Egg 2",
+      "2D Explosions Simple 0"
+    ]
+  },
+  {
+    "name": "03B",
+    "hasBoss": true,
+    "saveSpotId": "TELEPORT_CARS",
+    "unlockTriggerId": "CROWN_MAIN2",
+    "levels": [
+      "CarCompetition",
+      "car tutorial",
+      "car zigzag",
+      "car windmill",
+      "car explosions",
+      "car but actual car",
+      "Car bicycle",
+      "car monstertruck",
+      "car opponents",
+      "2D HoleInOne 07 basic"
+    ]
+  },
+  {
+    "name": "02",
+    "hasBoss": false,
+    "saveSpotId": "save_water_menu",
+    "unlockTriggerId": "P3I4O",
+    "levels": [
+      "Beach",
+      "Beach 1",
+      "Water Rising 0",
+      "Water Rising 1",
+      "BeachVolleyGolf"
+    ]
+  },
+  {
+    "name": "01",
+    "hasBoss": true,
+    "saveSpotId": "SAVE_western_01",
+    "unlockTriggerId": "8LARX",
+    "levels": [
+      "2D Western Train",
+      "2D Western Bottle Shooting 0",
+      "2D Western Bottle Shooting 1",
+      "Western Horse Shoe Throwing",
+      "RouletteGolf",
+      "DiceFlagGolf Normal Level",
+      "Saloon Piano",
+      "FPG Western Bottle Shooting 0",
+      "FPG Western Shooting Gallery 0",
+      "2D Banjo",
+      "Western Drunk Cowboy 0",
+      "Horse Jumping",
+      "2D Horse On Train",
+      "2D Katamari",
+      "Spitting with fan 0",
+      "Spitting 1",
+      "2D HoleInOne 08 flying ball"
+    ]
+  },
+  {
+    "name": "00",
+    "hasBoss": true,
+    "saveSpotId": "TELEPORT_FINAL",
+    "unlockTriggerId": "OS8GA",
+    "levels": [
+      "Final boss",
+      "2D HoleInOne 09 3d"
+    ]
+  }
+]
