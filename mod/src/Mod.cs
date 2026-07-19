@@ -44,6 +44,9 @@ public class Mod : MelonMod
             // TODO: reset/kill the ball on an incoming DeathLink.
         }
 
+        // One-shot lever validation (temporary): open a computer door via SetState.
+        Mapping.DoorTest.MaybeRun();
+
         if (GatingEnabled)
         {
             // Hard gate: kick the player out of a locked level (every frame).

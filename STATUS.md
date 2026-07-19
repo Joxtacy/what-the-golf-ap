@@ -47,9 +47,20 @@ the original vision. Interop types are global -> `Il2Cpp.OverworldMainDoorRobot`
 BridgeDumper (now a general gate/name scanner -> wtg_gates.json). `Mod.GatingEnabled`
 const toggles the (old, area-level) GoalGate/EntryGate off for observation.
 
-**Next steps:** (1) validate the lever — call `SetState` on a computer door's
-plates and confirm it opens/closes. (2) restructure apworld around chambers.
-(3) implement AP item -> open the matching computer door, native opening suppressed.
+**LEVER VALIDATED (2026-07-19):** `mod/src/Mapping/DoorTest.cs` called
+`OverworldMainDoorPlate.SetState(true)` on both plates of a partially-activated
+computer door (`boss='ID_2D_HOLEINONE_1'`, 1 of 2 plates on) — this activated the
+computer/boss and let the player fight it and advance to the next area, exactly
+like hitting both switches natively. So SetState IS the working gate control.
+DoorTest is one-shot/dev-only (runs from Mod.OnUpdate regardless of GatingEnabled).
+
+**Next steps:** (1) restructure the apworld around the real ~9-11 chambers (each
+computer door = one chamber gate; map hub sections -> chambers, boss ids like
+ID_2D_HOLEINONE_N -> computer N). (2) implement: on AP Access item for chamber N,
+SetState(true) on that door's plates; keep locked chambers' plates SetState(false)
+each frame to suppress native activation. (3) delete/disable DoorTest. The finer
+sub-area fences (opened by beating levels) are a separate, optional finer-grain
+gate; chamber-level via the computer doors is the clean first target.
 
 ## How to resume
 
