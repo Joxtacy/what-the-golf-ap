@@ -47,6 +47,18 @@ Requires the .NET 6 SDK, MelonLoader installed in the game
 MelonLoader generated its interop assemblies. **Kill the game before rebuilding**
 (it locks the deployed DLL). The mod's Archipelago dep goes in `<game>\UserLibs\`.
 
+### Building the mod on macOS / Linux (no game install)
+The mod is managed .NET, so it *compiles* on any OS (incl. Apple Silicon) — you
+just need the reference assemblies. Copy the 9 DLLs listed in `mod/refs/README.md`
+into `mod/refs/` (from a Windows/Linux machine that has the game + MelonLoader),
+then `cd mod && dotnet build -c Debug`. The csproj auto-switches to `refs/` when
+those DLLs are present; Windows builds are unaffected.
+
+Note: you can build there, but **running/testing** the mod still needs the game +
+MelonLoader on that platform. On Apple Silicon that's dicey (MelonLoader macOS is
+experimental + x64/Rosetta issues) — do live testing on Windows/Linux. The
+apworld side (generate/host) runs fine natively on Mac.
+
 ### Regenerate the apworld data / IDs
 ```
 python tools/build_levels.py --write   # rebuild what_the_golf/levels.json from wtg_levels.json

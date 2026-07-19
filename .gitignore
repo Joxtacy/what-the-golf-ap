@@ -2,6 +2,9 @@
 mod/bin/
 mod/obj/
 
+# Portable reference DLLs (game-derived; copied per-machine, not committed)
+mod/refs/*.dll
+
 # Python
 __pycache__/
 *.pyc
