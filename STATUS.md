@@ -97,6 +97,23 @@ Planned, several as **apworld Options**:
 has everything unlocked. Use a dedicated fresh dev save slot to test; the 100%
 save is safe. ChamberUnlock WRITES save state (persists on that slot).
 
+## ROADMAP — mod UX / lifecycle (agreed 2026-07-19)
+
+Right now the mod hard-codes `Connect("localhost",38281,"Player1")` in
+`Mod.OnInitializeMelon` and starts pumping/dumping on load, so to play vanilla you
+must delete `<game>\Mods\WtgArchipelago.dll`. Should not require that:
+
+1. **Passive until connected.** With no active AP connection the mod must have ZERO
+   side effects — no auto-connect, no save writes (ChamberUnlock), no periodic
+   dumpers. Installed mod == vanilla play until you opt in. (Gate all gameplay
+   effects behind "connected".)
+2. **In-game connection UI.** Enter host / port / slot name / password and hit
+   Connect from within the game (e.g. a MelonLoader IMGUI panel on a hotkey, or a
+   main-menu button) instead of the hard-coded Connect. Persist last-used details
+   (MelonPreferences). A disconnect/toggle to drop back to vanilla mid-session.
+3. Optional: a MelonPreferences "enabled" flag / main-menu toggle so AP mode is
+   off by default.
+
 ## How to resume
 
 ### Build & run the mod
