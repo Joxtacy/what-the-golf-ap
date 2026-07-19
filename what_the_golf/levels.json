@@ -1,0 +1,1191 @@
+{
+ "final_boss_scene": "Final boss",
+ "start_area": "2D Explosions",
+ "areas": [
+  {
+   "name": "2D Explosions",
+   "levels": [
+    {
+     "id": "RGUEMY",
+     "scene": "2D Explosions Rubber 0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "ERYWJ2",
+     "scene": "2D Explosions Rubber 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "OC2JBO",
+     "scene": "2D Explosions Sticky 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "78L44H",
+     "scene": "2D Explosions Egg 0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "MNAVZG",
+     "scene": "2D Explosions Egg 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "Y5F4KJ",
+     "scene": "2D Explosions Egg 2",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "ABHRY5",
+     "scene": "2D Explosions Simple 0",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "2D Hole",
+   "levels": [
+    {
+     "id": "IKCV7",
+     "scene": "2D HoleInOne 09 3d",
+     "boss": true,
+     "challenges": 0
+    },
+    {
+     "id": "349CM9",
+     "scene": "2D HoleInOne 01 basic",
+     "boss": true,
+     "challenges": 0
+    },
+    {
+     "id": "DSCVS",
+     "scene": "2D HoleInOne 07 basic",
+     "boss": true,
+     "challenges": 0
+    },
+    {
+     "id": "0WUALV",
+     "scene": "2D HoleInOne 05 basic",
+     "boss": true,
+     "challenges": 0
+    },
+    {
+     "id": "AXCX7",
+     "scene": "2D HoleInOne 08 flying ball",
+     "boss": true,
+     "challenges": 0
+    },
+    {
+     "id": "3VGKO4",
+     "scene": "2D HoleInOne 04 peggle",
+     "boss": true,
+     "challenges": 0
+    },
+    {
+     "id": "9ZBIZC",
+     "scene": "2D HoleInOne 2 basic",
+     "boss": true,
+     "challenges": 0
+    },
+    {
+     "id": "C1C9DS",
+     "scene": "2D HoleInOne 03 frogger",
+     "boss": true,
+     "challenges": 0
+    }
+   ]
+  },
+  {
+   "name": "2D Super",
+   "levels": [
+    {
+     "id": "MVIJEC",
+     "scene": "2D Super Golf Boy 0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "VEQZ1E",
+     "scene": "2D Super Golf Boy 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "ZEBYHS",
+     "scene": "2D Super Golf Boy 2",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "Z7RZ1R",
+     "scene": "2D Super Golf Boy 3",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "2dball",
+   "levels": [
+    {
+     "id": "I3T2YU",
+     "scene": "2DBall many balls 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "4IKB2M",
+     "scene": "2DBall Simple 0",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "BCX57O",
+     "scene": "2DBall Portal 2",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "0ME12P",
+     "scene": "2DBall Portal 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "TLHZRN",
+     "scene": "2DBall mario 1",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "6LZ3Z7",
+     "scene": "2DBall mario 2",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "K051NY",
+     "scene": "2DBall Flabby Golf",
+     "boss": false,
+     "challenges": 1
+    }
+   ]
+  },
+  {
+   "name": "Assorted 1",
+   "levels": [
+    {
+     "id": "KLKT1P",
+     "scene": "2D Rope 2",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "CGIMO6",
+     "scene": "2D Rope Portal 2",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "FG4659",
+     "scene": "2D Rope Portal 4",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "CTMOYG",
+     "scene": "Beach 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "Y8ZWBW",
+     "scene": "Beach",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "6SXVJW",
+     "scene": "BeachVolleyGolf",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "3Z5OGT",
+     "scene": "2D Western Train",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "CFXC91",
+     "scene": "2D Western Bottle Shooting 0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "PA1XRO",
+     "scene": "2D Western Bottle Shooting 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "VQ4BSA",
+     "scene": "2D Music Imitation 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "B7K5DY",
+     "scene": "2D Music Karaoke 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "EP3MW0",
+     "scene": "2D Music Platformer 1",
+     "boss": false,
+     "challenges": 1
+    }
+   ]
+  },
+  {
+   "name": "Assorted 2",
+   "levels": [
+    {
+     "id": "3GXNUI",
+     "scene": "2D Player Portal 1 3",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "2OTMFO",
+     "scene": "2D Player Portal 1",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "MMSH32",
+     "scene": "2D Player Portal 3",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "WZXCF8",
+     "scene": "SquareBall",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "I8IBDK",
+     "scene": "SquareBallSneak",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "P226OF",
+     "scene": "Western Horse Shoe Throwing",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "YBN74R",
+     "scene": "Western Drunk Cowboy 0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "01AAG6",
+     "scene": "ReversePolo Bait",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "9JA8HZ",
+     "scene": "ReversePolo rings",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "J50HWD",
+     "scene": "Swimming Shark Challenge",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "PRC461",
+     "scene": "Swimming Skip Race Challenge",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "RXFDW9",
+     "scene": "GoalInOne4",
+     "boss": false,
+     "challenges": 1
+    }
+   ]
+  },
+  {
+   "name": "Assorted 3",
+   "levels": [
+    {
+     "id": "0054WC",
+     "scene": "GoalInOne5",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "HWMZR7",
+     "scene": "2D Bouncyboy",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "NHNB1L",
+     "scene": "2D Bouncyboy 2",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "J6CQS6",
+     "scene": "Spitting with fan 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "V4A05X",
+     "scene": "Spitting 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "RCO2X6",
+     "scene": "2D Arrow Is Club 0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "AI0UHJ",
+     "scene": "2D Arrow Is Club 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "XE4AHA",
+     "scene": "Manball Stealth",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "DR5GKB",
+     "scene": "Manball 3",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "H29VWE",
+     "scene": "ManyBowlings",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "L4IV9T",
+     "scene": "ManyBowlings 2",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "SVWJSP",
+     "scene": "2D Bow And Arrow",
+     "boss": false,
+     "challenges": 1
+    }
+   ]
+  },
+  {
+   "name": "Assorted 4",
+   "levels": [
+    {
+     "id": "IE0FWJ",
+     "scene": "2D Bow And Arrow long",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "4EYR4I",
+     "scene": "2D Football",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "MKJHQS",
+     "scene": "2D Football 2",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "QXE006",
+     "scene": "Water Rising 0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "K04MWO",
+     "scene": "Water Rising 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "5M26AD",
+     "scene": "HammerThrowing Challenge boomerang",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "9FQ1ZO",
+     "scene": "HammerThrowing Challenge double throw",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "80SUDR",
+     "scene": "PoleVaulting Challenge Grapple",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "J0LZQJ",
+     "scene": "PoleVaulting Challenge Variable 1",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "EU2BYN",
+     "scene": "GiraffePainter 0",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "Z24ZSR",
+     "scene": "GiraffePainter 2 ragdoll",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "TSEWKN",
+     "scene": "2D Rubber 1",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "Assorted 5",
+   "levels": [
+    {
+     "id": "3ZTTCV",
+     "scene": "2D Sticky 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "YPUD8T",
+     "scene": "ClubBallMany",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "DI3JRA",
+     "scene": "AHoleInAOne",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "KBCBVH",
+     "scene": "CatBall",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "2ETQ6Q",
+     "scene": "MetalGearSolid01",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "5J8NLI",
+     "scene": "SneakTutorial",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "6JL9XD",
+     "scene": "2D Gravity Change On Aim",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "F1A3HC",
+     "scene": "2D Custom Gravity",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "CAWMQ4",
+     "scene": "RouletteGolf",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "43V4BS",
+     "scene": "DiceFlagGolf Normal Level",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "X7KRW9",
+     "scene": "Saloon Piano",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "J61H50",
+     "scene": "2D Banjo",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "Assorted 6",
+   "levels": [
+    {
+     "id": "2834C4",
+     "scene": "Horse Jumping",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "B3P25D",
+     "scene": "2D Horse On Train",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "HCTG3X",
+     "scene": "2D Katamari",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "NMN3E2",
+     "scene": "Harmonikadyr",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "O5PB6R",
+     "scene": "2D Portal Gun 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "R8673H",
+     "scene": "Lebowski rug",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "HLZ1YA",
+     "scene": "2D 100meter",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "WUF9R5",
+     "scene": "2D High Jump",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "RDQ5U4",
+     "scene": "2D Golf Olympics Start",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "W1KA1P",
+     "scene": "2D 150meter",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "59V9BL",
+     "scene": "2D Olympics Elastomania",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "6QIHRJ",
+     "scene": "2D Moon Lander",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "Assorted 7",
+   "levels": [
+    {
+     "id": "IG0RZ5",
+     "scene": "AngryGolf",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "W3D6P5",
+     "scene": "2D Bubble Bobble",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "059JVP",
+     "scene": "Final boss",
+     "boss": true,
+     "challenges": 0
+    },
+    {
+     "id": "114GF5",
+     "scene": "2D credits",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "Z2W6RB",
+     "scene": "Archery_1_Basic",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "HVO57H",
+     "scene": "Wrestling Challenge",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "8CJPOW",
+     "scene": "Tower Wrestling",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "MIULSW",
+     "scene": "LawnMover football field",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "QTQ592",
+     "scene": "ElasticBed",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "2MFLD4",
+     "scene": "DanceOff",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "29W1G7",
+     "scene": "WhackAMole",
+     "boss": false,
+     "challenges": 1
+    }
+   ]
+  },
+  {
+   "name": "Bowling",
+   "levels": [
+    {
+     "id": "W0QBY9",
+     "scene": "Bowling MoonGolf 0",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "28YN9S",
+     "scene": "Bowling 4",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "1YRC3S",
+     "scene": "Bowling 5",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "0A6P6X",
+     "scene": "Bowling",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "1KO6F3",
+     "scene": "Bowling 2",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "BLNH2O",
+     "scene": "Bowling 6 - white hat",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "5RJPQ8",
+     "scene": "Bowling MoonGolf 1",
+     "boss": false,
+     "challenges": 1
+    }
+   ]
+  },
+  {
+   "name": "Car",
+   "levels": [
+    {
+     "id": "DQ9PHI",
+     "scene": "car but actual car",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "D209PW",
+     "scene": "car monstertruck 1",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "8B7JY0",
+     "scene": "CarCompetition",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "AEPGWL",
+     "scene": "car tutorial",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "KH2Y5W",
+     "scene": "car zigzag",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "URYM1G",
+     "scene": "car windmill",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "9L69DA",
+     "scene": "car explosions",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "GIUB1I",
+     "scene": "Car bicycle",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "R9XQ98",
+     "scene": "car monstertruck",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "O9CW2I",
+     "scene": "car opponents",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "Evil",
+   "levels": [
+    {
+     "id": "6IZQX6",
+     "scene": "EvilFlag 2 Furthest",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "BA06VO",
+     "scene": "EvilFlag Magic 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "XI2BDX",
+     "scene": "EvilFlag 2",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "BFXT71",
+     "scene": "EvilFlag move then stop",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "IFJCGG",
+     "scene": "EvilFlag 3 Circle",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "XWLEXZ",
+     "scene": "EvilFlag complex",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "Explosion",
+   "levels": [
+    {
+     "id": "BICZL1",
+     "scene": "Explosion6",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "SFY5S4",
+     "scene": "Explosion4",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "1J680F",
+     "scene": "Explosion2",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "0W9AYR",
+     "scene": "Explosion3",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "1PPLOS",
+     "scene": "Explosion5",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "KQDNSY",
+     "scene": "Explosion rolling",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "92YY4L",
+     "scene": "Explosion barrel flying",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "BNDXX0",
+     "scene": "Explosion barrel",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "FPG",
+   "levels": [
+    {
+     "id": "F4EM1H",
+     "scene": "FPG Ordinary Golf 0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "DNKBY1",
+     "scene": "FPG Ordinary Golf 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "Y7RHZH",
+     "scene": "FPG Swinging Golf Clubs",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "6BHOJB",
+     "scene": "FPG Targets",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "037L5B",
+     "scene": "FPG Targets 2",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "IF6FKB",
+     "scene": "FPG Ordinary Golf 3",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "6NRVED",
+     "scene": "FPG Western Bottle Shooting 0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "8TV0B0",
+     "scene": "FPG Western Shooting Gallery 0",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "Golf",
+   "levels": [
+    {
+     "id": "YW006F",
+     "scene": "Golf Hero 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "QZUS32",
+     "scene": "GolfClubObstacles",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "SW8W3R",
+     "scene": "GolfThings_Shoes_Challenge",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "NY9DQW",
+     "scene": "GolfIntoOlympicsChallenge",
+     "boss": false,
+     "challenges": 1
+    }
+   ]
+  },
+  {
+   "name": "Livingroom",
+   "levels": [
+    {
+     "id": "I1QFFG",
+     "scene": "Livingroom couch",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "P5HS2I",
+     "scene": "Livingroom tv",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "9QTFG6",
+     "scene": "LivingroomChair",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "WA1KWB",
+     "scene": "Livingroom Arrow ball",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "JEDKJB",
+     "scene": "Livingroom vase",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "6S527A",
+     "scene": "Livingroom Egg",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "ZNMSS0",
+     "scene": "Livingroom champagne",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "SUPERGOLF",
+   "levels": [
+    {
+     "id": "3HGCVU",
+     "scene": "SUPERGOLF - tutorial 1",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "IX6RD2",
+     "scene": "SUPERGOLF - tutorial 2",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "XUOB63",
+     "scene": "SUPERGOLF0",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "AFIE0W",
+     "scene": "SUPERGOLF6",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "ITFCWE",
+     "scene": "SUPERGOLF dodge",
+     "boss": false,
+     "challenges": 2
+    }
+   ]
+  },
+  {
+   "name": "Soccer",
+   "levels": [
+    {
+     "id": "SXIG32",
+     "scene": "SoccerBall 3",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "IUHIK5",
+     "scene": "SoccerBall tutorial 2",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "Z63NAO",
+     "scene": "SoccerBallStealth",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "MQA5DJ",
+     "scene": "SoccerBall tutorial",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "M6PSLB",
+     "scene": "SoccerBall",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "KM556V",
+     "scene": "SoccerBall 1",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "I4SCOY",
+     "scene": "SoccerBall 2",
+     "boss": false,
+     "challenges": 2
+    },
+    {
+     "id": "SSJHI0",
+     "scene": "SoccerBall OL Soccer Cup",
+     "boss": false,
+     "challenges": 1
+    }
+   ]
+  },
+  {
+   "name": "Space",
+   "levels": [
+    {
+     "id": "TJZWUA",
+     "scene": "SpaceGolf1",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "S1Z1TK",
+     "scene": "SpaceGolf2",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "9LAGY7",
+     "scene": "SpaceGolf3",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "DXKTQ5",
+     "scene": "SpaceGolf4",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "P2AECH",
+     "scene": "SpaceGolf5",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "9N4QKC",
+     "scene": "SpaceGolf7 planet 1",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "ACVM56",
+     "scene": "SpaceGolf6",
+     "boss": false,
+     "challenges": 1
+    },
+    {
+     "id": "KY7KTY",
+     "scene": "SpaceGolf7 planet",
+     "boss": false,
+     "challenges": 1
+    }
+   ]
+  }
+ ]
+}

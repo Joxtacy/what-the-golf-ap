@@ -1,0 +1,14 @@
+# .NET build artifacts (mod)
+mod/bin/
+mod/obj/
+
+# Python
+__pycache__/
+*.pyc
+
+# Editor / OS
+.vs/
+.idea/
+*.user
+.DS_Store
+Thumbs.db

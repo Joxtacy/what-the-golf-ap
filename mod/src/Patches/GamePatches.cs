@@ -1,0 +1,95 @@
+using System;
+using HarmonyLib;
+
+namespace WtgArchipelago.Patches;
+
+/// <summary>
+/// Harmony hooks into WHAT THE GOLF?. Method names are REAL, discovered from an
+/// Il2CppDumper dump (see mod/REVERSE_ENGINEERING.md). Patches are applied by
+/// string via AccessTools, so this compiles without the generated interop
+/// assemblies. Reading level ids/challenge lists inside the postfixes needs the
+/// interop assemblies (see GameState + the RE doc); until then the postfixes log
+/// and call GameState, which returns null with a clear TODO.
+/// </summary>
+public static class GamePatches
+{
+    public static void Apply(HarmonyLib.Harmony harmony)
+    {
+        // Level cleared -> read the current level and send the AP Clear/Crown.
+        //
+        // IMPORTANT: we DON'T patch Core.Level.Complete. Its signature has a
+        // Nullable<float> and a by-value struct param, which Il2CppInterop can't
+        // marshal through Harmony's native->managed trampoline -- patching it
+        // throws NullReferenceException on every call and breaks/crashes the game.
+        // GameAnalytics.OnLevelComplete is the analytics reporter for the same
+        // event, is static, and takes only a reference-type param (safe). We read
+        // the level via GameState (reading fields OUT is the safe direction).
+        TryPatch(harmony, "GameAnalytics:OnLevelComplete", nameof(LevelCompletePostfix));
+
+        // Level started -> if its area is locked, request a kick-back (EntryGate).
+        TryPatch(harmony, "GameAnalytics:OnLevelBegin", nameof(LevelBeginPostfix));
+
+        // Campaign goal: final Computer defeated.
+        TryPatch(harmony, "GameAnalytics:OnFinalBossCompleted", nameof(FinalBossPostfix));
+
+        // NOTE: DeathLink (a Level.Fail hook) is deferred -- Fail also has a
+        // tricky signature; wire it when implementing DeathLink, carefully.
+        // The main-thread pump lives in Mod.OnUpdate, which runs every frame.
+    }
+
+    private static void TryPatch(HarmonyLib.Harmony harmony, string target, string postfix)
+    {
+        try
+        {
+            var method = AccessTools.Method(target);
+            if (method == null)
+            {
+                Plugin.Log.LogWarning($"patch target not found (check the dump): {target}");
+                return;
+            }
+            harmony.Patch(method, postfix: new HarmonyMethod(typeof(GamePatches), postfix));
+            Plugin.Log.LogInfo($"patched: {target}");
+        }
+        catch (Exception e)
+        {
+            Plugin.Log.LogError($"failed to patch {target}: {e.Message}");
+        }
+    }
+
+    // --- Postfixes -----------------------------------------------------------
+
+    private static void LevelCompletePostfix()
+    {
+        // Never let an exception escape a postfix into the game.
+        try
+        {
+            Plugin.Log.LogInfo($"[LEVEL] {GameState.CurrentLevelInfo()}");
+
+            string scene = GameState.CurrentLevelScene();
+            if (scene != null)
+            {
+                Plugin.Client?.SendClear(scene);
+                if (GameState.CurrentLevelCrowned())
+                    Plugin.Client?.SendCrown(scene);
+            }
+        }
+        catch (Exception e) { Plugin.Log.LogError($"LevelCompletePostfix: {e}"); }
+    }
+
+    private static void LevelBeginPostfix()
+    {
+        // Scene isn't known yet here; arm a deferred check (see EntryGate).
+        try { Mapping.EntryGate.Arm(); }
+        catch (Exception e) { Plugin.Log.LogError($"LevelBeginPostfix: {e}"); }
+    }
+
+    private static void FinalBossPostfix()
+    {
+        try
+        {
+            Plugin.Log.LogInfo("OnFinalBossCompleted -> campaign goal reached");
+            Plugin.Client?.SendVictory();
+        }
+        catch (Exception e) { Plugin.Log.LogError($"FinalBossPostfix: {e}"); }
+    }
+}
