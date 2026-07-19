@@ -97,6 +97,22 @@ Planned, several as **apworld Options**:
 has everything unlocked. Use a dedicated fresh dev save slot to test; the 100%
 save is safe. ChamberUnlock WRITES save state (persists on that slot).
 
+## ROADMAP — goal options (idea, 2026-07-20)
+
+Current goals: `campaign` (beat the final boss) and `door_50/75/100` (Flag count).
+Idea: add a **"beat all bosses"** goal — win requires **defeating all 9 Computer
+bosses**, not just the final one. Rationale: reaching only the final-area gate can
+be satisfied by one progression chain, leaving many chamber-access items unneeded;
+requiring every boss forces MORE progression items (every chamber's Access key) to
+actually be in logic → deeper, more spread-out progression, fewer hub shortcuts.
+Keep final-boss-only as an option too (new `Options` value, e.g.
+`goal: campaign / all_bosses / door_50/75/100`).
+
+Implementation sketch: track per-boss Defeat events (mod already has
+`GameAnalytics.OnFinalBossCompleted` + boss detection via `GameState.isBossBattle`
+and boss level IDs `ID_2D_HOLEINONE_N`) and fire the Victory event once all 9 are
+registered. Pairs naturally with progression roadmap #2 (computer boss keys).
+
 ## ROADMAP — mod UX / lifecycle (agreed 2026-07-19)
 
 Right now the mod hard-codes `Connect("localhost",38281,"Player1")` in
