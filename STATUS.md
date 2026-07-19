@@ -19,21 +19,37 @@ for the game internals.
 - **Full game data dumped:** all 642 `LevelData` (`mod/wtg_levels.json`) and the
   real overworld goal/hub-section structure (`mod/wtg_goals.json`).
 
-## The one open problem: hard gating
+## The open problem: hard gating — MECHANISM FOUND
 
-Making received Access items actually **lock/unlock areas in-game** is unsolved.
-- Detection works perfectly (the mod knows which level is in which area and
-  whether it's unlocked).
-- Physically **kicking the player out of a locked level does not** — tried
-  `Core.Level.Instance.Abort()` and `LevelManager.InGameMenu.AbandonLevel()`;
-  neither returns to the overworld.
-- Untried "exit to overworld" candidates (from the dump): `ReturnToOverworld()`,
-  `OnReturnToOverworld()`, `LevelManager.UnloadLevelEvent()`,
-  `LoadOverworld(ContentPack, bool)`.
-- **Important:** test gating on a **FRESH save**, not a 100% save. On a 100% save
-  the game treats everything as already unlocked, so goal-state hiding only
-  changes visuals. The intended design likely needs suppressing the game's
-  native progression on a fresh save and driving unlocks from AP items.
+**Key discovery:** on a **fresh save** the game DOES physically gate — you're
+fenced into the first area until you beat the required levels. (On a 100% save
+everything is already unlocked, which is why earlier tests failed. WTG has
+multiple save slots, so use a dedicated fresh "dev" slot; the 100% save is safe.)
+
+**The gate lever (chamber level):**
+- **`OverworldMainDoorRobot`** — the 9 computer/chamber doors. Fields:
+  `bossLevelID`, `bossLevelName`, `List<OverworldMainDoorPlate> plates`,
+  `OnOpen`/`OnCompleted`.
+- **`OverworldMainDoorPlate`** — the switches. `public bool isOn` +
+  **`public void SetState(bool on, bool onLoad=false)`** — directly turn a plate
+  on/off. When all a door's plates are on, the door opens.
+- So AP gating: keep a chamber's plates off until its Access item arrives, then
+  `SetState(true)` to open the door. Suppress native opening by forcing locked
+  chambers' plates off each frame (override).
+
+**Design implication:** the computer doors gate at the CHAMBER level (~9-11),
+not the 21 theme-areas we currently generate. To wire gating cleanly, restructure
+the apworld around the real chambers (map hub sections -> chambers) — this matches
+the original vision. Interop types are global -> `Il2Cpp.OverworldMainDoorRobot`,
+`Il2Cpp.OverworldMainDoorPlate`.
+
+**Diagnostic dumpers added** (mod/src/Mapping/): GoalDumper (wtg_goals.json),
+BridgeDumper (now a general gate/name scanner -> wtg_gates.json). `Mod.GatingEnabled`
+const toggles the (old, area-level) GoalGate/EntryGate off for observation.
+
+**Next steps:** (1) validate the lever — call `SetState` on a computer door's
+plates and confirm it opens/closes. (2) restructure apworld around chambers.
+(3) implement AP item -> open the matching computer door, native opening suppressed.
 
 ## How to resume
 

@@ -75,6 +75,9 @@
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(GameDir)\Mods" />
     <!-- Deploy the apworld's id table for LocationMap. -->
     <Copy SourceFiles="$(MSBuildProjectDirectory)\ids.json" DestinationFiles="$(GameDir)\wtg_ids.json" Condition="Exists('$(MSBuildProjectDirectory)\ids.json')" />
+    <!-- Stage the Archipelago client dep into UserLibs (MelonLoader loads deps from there). -->
+    <MakeDir Directories="$(GameDir)\UserLibs" />
+    <Copy SourceFiles="$(TargetDir)Archipelago.MultiClient.Net.dll" DestinationFolder="$(GameDir)\UserLibs" Condition="Exists('$(TargetDir)Archipelago.MultiClient.Net.dll')" />
   </Target>
 
 </Project>

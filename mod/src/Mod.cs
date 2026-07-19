@@ -13,6 +13,10 @@ namespace WtgArchipelago;
 /// </summary>
 public class Mod : MelonMod
 {
+    // OFF while we observe the game's NATIVE gating on a fresh save. Flip to
+    // true to re-enable mod-enforced gating (GoalGate + EntryGate).
+    public const bool GatingEnabled = false;
+
     public override void OnInitializeMelon()
     {
         Plugin.Client = new ArchipelagoClient();
@@ -40,14 +44,17 @@ public class Mod : MelonMod
             // TODO: reset/kill the ball on an incoming DeathLink.
         }
 
-        // Hard gate: kick the player out of a locked level (every frame).
-        Mapping.EntryGate.Tick();
-
-        // Gating: hide overworld goals whose area isn't unlocked (~3x/sec).
-        if (++_gateTimer >= 20)
+        if (GatingEnabled)
         {
-            _gateTimer = 0;
-            Mapping.GoalGate.Apply();
+            // Hard gate: kick the player out of a locked level (every frame).
+            Mapping.EntryGate.Tick();
+
+            // Gating: hide overworld goals whose area isn't unlocked (~3x/sec).
+            if (++_gateTimer >= 20)
+            {
+                _gateTimer = 0;
+                Mapping.GoalGate.Apply();
+            }
         }
 
         // Periodically harvest level/goal data (accumulates). ~every 5s.
@@ -56,6 +63,7 @@ public class Mod : MelonMod
             _dumpTimer = 0;
             Mapping.LevelDumper.Dump();
             Mapping.GoalDumper.Dump();
+            Mapping.BridgeDumper.Dump();
         }
     }
 }
