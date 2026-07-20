@@ -96,6 +96,10 @@ public class Mod : MelonMod
         // reacting to clicks/mouse behind the UI). No-op when the panel is closed.
         ConnectionUI.UpdatePause();
 
+        // In-scene TextMeshPro DeathLink counter (uses the game's font). Shows/hides
+        // itself based on connection + DeathLink state; safe to call every frame.
+        DeathLinkHud.Tick();
+
         // Spike diagnostic: periodic read-only overworld gating snapshot
         // (WalkGateProbe) for the within-chamber hard-lock investigation. ~every
         // 12s when enabled; correlate before/after with when a section is unlocked.

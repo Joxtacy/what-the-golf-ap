@@ -3,7 +3,7 @@
 The mod compiles against MelonLoader + the game's Il2Cpp interop assemblies.
 On Windows the `.csproj` references them straight from the game install. On a
 machine WITHOUT the game/MelonLoader installed (e.g. developing on a Mac), drop
-copies of these 10 managed DLLs into this folder and the build will use them
+copies of these 14 managed DLLs into this folder and the build will use them
 automatically (the csproj switches to `refs/` when this folder exists).
 
 These are **managed, platform-agnostic** assemblies, so DLLs copied from a
@@ -26,6 +26,10 @@ From `<game>/MelonLoader/Il2CppAssemblies/`:
 - `Il2CppSystem.dll`
 - `UnityEngine.CoreModule.dll`
 - `UnityEngine.IMGUIModule.dll`
+- `UnityEngine.TextRenderingModule.dll`
+- `UnityEngine.UIModule.dll`
+- `UnityEngine.UI.dll`
+- `Unity.TextMeshPro.dll`
 - `Assembly-CSharp.dll`
 
 Then: `cd mod && dotnet build -c Debug` (needs the .NET 6 SDK).

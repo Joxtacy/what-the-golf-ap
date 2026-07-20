@@ -75,29 +75,7 @@ public static class ConnectionUI
         }
         catch { }
 
-        DrawHud();
         Draw();
-    }
-
-    /// <summary>Always-on HUD (independent of the F8 panel) showing the DeathLink
-    /// wipe counter — "x/N" — while DeathLink is active. The count loops back to 0
-    /// each time it reaches N and a death is broadcast. Hidden unless connected and
-    /// DeathLink is enabled for this slot; hidden entirely if outgoing is disabled
-    /// (threshold 0).</summary>
-    private static void DrawHud()
-    {
-        try
-        {
-            var dl = Plugin.Client?.DeathLink;
-            if (dl == null || !dl.Enabled || Plugin.Client == null || !Plugin.Client.Connected)
-                return;
-            if (dl.Threshold <= 0) return;   // outgoing disabled -> nothing to count
-
-            const float w = 128f, h = 30f, margin = 12f;
-            float x = Screen.width - w - margin;
-            GUI.Box(new Rect(x, margin, w, h), $"☠ DeathLink {dl.WipeCount}/{dl.Threshold}");
-        }
-        catch { }
     }
 
     private static void Draw()

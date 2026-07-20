@@ -402,17 +402,37 @@ skip this next time). See the mod-UX section above.
    each connect) enables/disables via the AP service's DeathLink tag. Files:
    `DeathLinkHandler.cs`, `GamePatches.LevelResetPostfix`,
    `GameState.IsInLevel`/`RestartLevel`, apworld `Options.DeathLinkAmnesty` +
-   `fill_slot_data`, `ConnectionUI` (HUD + toggle). An on-screen HUD
-   (`ConnectionUI.DrawHud`, always-on while DeathLink active + connected) shows the
-   wipe counter `x/N`, looping to 0 on each broadcast. **LIVE-VALIDATED 2026-07-20**:
-   `OnLevelReset` binds + fires on real wipes and NOT on manual restart/quit; counter
-   broadcasts at N and loops; incoming death (fired via `tools/send_deathlink.py`,
-   a 2nd DeathLink-tagged connection) restarts the current hole (`killed=True`) and is
-   dropped in the overworld; loop-suppression held; HUD confirmed; the
-   `death_link_amnesty` option flows to the mod (log `per 5 wipes` from a
-   `death_link_amnesty: 5` seed). Remaining: interactive F8-toggle check + cosmetic
-   HUD polish (user has feedback, deferred). `send_deathlink.py` = reusable
-   incoming-death test tool.
+   `fill_slot_data`, `ConnectionUI` (F8 toggle), `DeathLinkHud` (on-screen counter).
+   **On-screen HUD = `mod/src/DeathLinkHud.cs`** — a real in-scene TextMeshPro object
+   (NOT IMGUI): a DontDestroyOnLoad ScreenSpaceOverlay Canvas + `TextMeshProUGUI`,
+   driven from `Mod.OnUpdate`. Uses the GAME's font (NotoSans-Black — the rounded
+   font WTG uses for menus/labels; Orbitron is only its thin numeric readouts and
+   looked wrong). Text `DEATHS n/m` (~1/3 down the left), WTG palette: cream fill
+   `#F5E6C6` + thick dark-teal outline `#213D3A` (the logo/sign-label look); no skull
+   (glyph absent from these fonts, dropped). IMGUI can't use the game fonts (only
+   legacy `UnityEngine.Font`, and the game's are TMP with null `sourceFontFile`),
+   which is why the HUD is TMP. Needs csproj refs: `Unity.TextMeshPro`,
+   `UnityEngine.UIModule`, `UnityEngine.UI`, `UnityEngine.TextRenderingModule`.
+   The chunky outline is faked with 8 dark-teal copies offset 5px behind the cream
+   face (TMP's own `outlineWidth` is SDF-capped ~0.4, too thin). Known-minor: the
+   offset copies can show slight rendering artifacts at the edges — accepted.
+   **LIVE-VALIDATED 2026-07-20**: `OnLevelReset` binds + fires on real wipes and NOT
+   on manual restart/quit; counter broadcasts at N and loops; incoming death (fired
+   via `tools/send_deathlink.py`, a 2nd DeathLink-tagged connection) restarts the
+   current hole (`killed=True`) and is dropped in the overworld; loop-suppression
+   held; TMP HUD renders in-game in the game font/palette. `send_deathlink.py` =
+   reusable incoming-death test tool.
+
+   **PLANNED — HUD slide-in animation (agreed, not built yet).** Instead of always-on,
+   make the counter slide in from the left edge when you die, hold ~2–3s, then slide
+   back out (Celeste-ish; keeps it unobtrusive). Sketch: `DeathLinkHud` gets a small
+   state machine (Hidden → SlideIn → Hold → SlideOut) in `Tick()`; on a count change
+   reset a hold timer and trigger SlideIn; lerp `RectTransform.anchoredPosition.x`
+   between an off-screen x (e.g. `-width`) and the on-screen x, driven by
+   `Time.unscaledDeltaTime` so it animates even while paused. Keep a config toggle
+   (always-on vs. slide-in-on-death) — likely a `MelonPreferences` bool since it's
+   pure client cosmetics. Consider also sliding in briefly on connect so the player
+   sees the current tally once. Everything needed is already referenced (UIModule/TMP).
 3. Polish: friendlier area/section display names.
 4. Optional: rebuild `data.py` from the **real hub sections** (`wtg_goals.json`)
    for authentic, spatially-coherent areas.

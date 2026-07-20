@@ -53,6 +53,10 @@
     <Reference Include="$(MLDir)\Il2CppAssemblies\Il2CppSystem.dll" Private="false" />
     <Reference Include="$(MLDir)\Il2CppAssemblies\UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="$(MLDir)\Il2CppAssemblies\UnityEngine.IMGUIModule.dll" Private="false" />   <!-- in-game connection UI (GUI/Event) -->
+    <Reference Include="$(MLDir)\Il2CppAssemblies\UnityEngine.TextRenderingModule.dll" Private="false" />   <!-- HUD GUIStyle: FontStyle/TextAnchor -->
+    <Reference Include="$(MLDir)\Il2CppAssemblies\Unity.TextMeshPro.dll" Private="false" />   <!-- DeathLink HUD: in-scene TMP text in the game's font -->
+    <Reference Include="$(MLDir)\Il2CppAssemblies\UnityEngine.UIModule.dll" Private="false" />   <!-- Canvas / CanvasRenderer for the HUD -->
+    <Reference Include="$(MLDir)\Il2CppAssemblies\UnityEngine.UI.dll" Private="false" />   <!-- MaskableGraphic (TextMeshProUGUI base) -->
     <Reference Include="$(MLDir)\Il2CppAssemblies\Assembly-CSharp.dll" Private="false" />
   </ItemGroup>
 
@@ -67,6 +71,10 @@
     <Reference Include="$(RefDir)/Il2CppSystem.dll" Private="false" />
     <Reference Include="$(RefDir)/UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="$(RefDir)/UnityEngine.IMGUIModule.dll" Private="false" />
+    <Reference Include="$(RefDir)/UnityEngine.TextRenderingModule.dll" Private="false" />
+    <Reference Include="$(RefDir)/Unity.TextMeshPro.dll" Private="false" />
+    <Reference Include="$(RefDir)/UnityEngine.UIModule.dll" Private="false" />
+    <Reference Include="$(RefDir)/UnityEngine.UI.dll" Private="false" />
     <Reference Include="$(RefDir)/Assembly-CSharp.dll" Private="false" />
   </ItemGroup>
 
