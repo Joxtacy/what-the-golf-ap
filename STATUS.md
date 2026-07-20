@@ -78,11 +78,30 @@ chamber 08). So `area_access: section` is physically loose within the
 multi-sub-area chambers (03/04/07/08/09); also chamber 09 is walk-reachable from
 the intro. This is **out-of-logic but never a softlock** — logic still requires
 each key; the player merely *can* play ahead. DECISION: keep `section` as default
-and document (done: `Options.AreaAccess` docstring); optionally pursue a
-within-chamber hard-lock later (see roadmap). `chamber` granularity has no
+and document (done: `Options.AreaAccess` docstring). `chamber` granularity has no
 looseness (computer doors are hard walls). `mod/src/Mapping/UnlockProbe.cs` = the
 read-only save-vocabulary probe (`Mod.ProbeEnabled`). ChamberGate/EntryGate/
-GoalGate are dead; DoorDumper is being revived for boss-key work.
+GoalGate are dead.
+
+### Within-chamber hard-lock — SPIKE DONE, FEASIBLE (2026-07-20)
+
+The looseness above **can** be fixed. Validated in-game on a FRESH save: sub-areas
+connect via `OverworldButton2D` connectors that open on ball-touch while
+`canOpen==true`, and each connector's `OverworldID.ID` equals its section's
+`unlockTriggerId`. Forcing `canOpen=false` on a locked section's connector makes
+its door refuse to open (hard gate); restoring `canOpen=true` on unlock re-opens
+it. Proven: fresh save, only Easy 2D (09A) keyed → Living Room (09B/`Z4UZC`) door
+stayed shut while Easy 2D opened. **Only works on a FRESH save** — a progressed
+save re-derives door state from the persistent `OPEN_DOORS` flag each frame and
+overwrites the poke (this fooled earlier same-save tests into a premature
+"infeasible"). Experiment: `mod/src/Mapping/ActiveGateTest.cs` (+ read-only
+`WalkGateProbe.cs`; `ChamberUnlock.AllTriggers()`/`IsTriggerUnlocked()`), toggles
+`Mod.ActiveGateTestEnabled`/`WalkProbeEnabled` (both OFF). TODO: productionize as a
+`SectionGate` (sibling to `BossGate`) behind a `hard_sections` apworld option.
+
+Related finding: the pause-menu **teleporter is progression-unlocked** — absent on
+a brand-new save until early play unlocks it (works fine thereafter). Low-priority
+sanity-check that no distant early key is stranded before it unlocks.
 
 ## ROADMAP — richer progression (agreed 2026-07-19)
 

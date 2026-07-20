@@ -26,6 +26,12 @@ public class Mod : MelonMod
     // so keep OFF; flip to true + rebuild only when re-capturing game data.
     public const bool DumpersEnabled = false;
 
+    // Within-chamber hard-lock spike (VALIDATED, 2026-07-20): forcing a locked
+    // section connector's canOpen=false hard-gates the sub-area on a FRESH save.
+    // Kept OFF; productionize as a real SectionGate option. See ActiveGateTest.cs.
+    public const bool WalkProbeEnabled = false;      // read-only gating probe
+    public const bool ActiveGateTestEnabled = false; // active force-lock experiment
+
     public override void OnInitializeMelon()
     {
         Plugin.Client = new ArchipelagoClient();
@@ -45,12 +51,25 @@ public class Mod : MelonMod
     private int _gateTimer;
     private int _unlockTimer;
     private int _bossTimer;
+    private int _walkTimer;
 
     // Runs every frame on Unity's main thread -> ideal main-thread pump.
     public override void OnUpdate()
     {
         var client = Plugin.Client;
         client?.Tick();
+
+        // Spike diagnostic: periodic read-only overworld gating snapshot
+        // (WalkGateProbe) for the within-chamber hard-lock investigation. ~every
+        // 12s when enabled; correlate before/after with when a section is unlocked.
+        if (WalkProbeEnabled && ++_walkTimer >= 720)
+        {
+            _walkTimer = 0;
+            Mapping.WalkGateProbe.Snapshot();
+        }
+
+        // Spike: actively force a chosen section locked, to test feasibility.
+        if (ActiveGateTestEnabled) Mapping.ActiveGateTest.Tick();
 
         if (client?.DeathLink != null && client.DeathLink.ConsumePending())
         {

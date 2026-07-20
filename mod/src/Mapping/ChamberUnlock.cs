@@ -41,6 +41,21 @@ public static class ChamberUnlock
         public Dictionary<string, List<string>> unlocks_by_item;
     }
 
+    /// <summary>Every section trigger known to the seed (all door ids we manage).</summary>
+    public static HashSet<string> AllTriggers()
+    {
+        var set = new HashSet<string>();
+        foreach (var trigs in _unlocksByItem.Values)
+            if (trigs != null)
+                foreach (var t in trigs)
+                    if (!string.IsNullOrEmpty(t)) set.Add(t);
+        return set;
+    }
+
+    /// <summary>Has this section trigger been unlocked by an AP key this session?</summary>
+    public static bool IsTriggerUnlocked(string trigger)
+        => !string.IsNullOrEmpty(trigger) && Requested.Contains(trigger);
+
     public static void Load()
     {
         try
