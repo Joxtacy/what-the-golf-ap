@@ -35,6 +35,7 @@ public static class ChamberUnlock
     // Trigger ids requested (union across all received Access items) and applied.
     private static readonly HashSet<string> Requested = new();
     private static readonly HashSet<string> Applied = new();
+    private static readonly HashSet<string> Available = new();  // sections confirmed teleport-available
 
     private class IdsFile
     {
@@ -92,7 +93,10 @@ public static class ChamberUnlock
     {
         try
         {
-            if (Requested.Count == Applied.Count) return;
+            // Keep running until every requested trigger is opened AND its section
+            // is confirmed teleport-available (the level data can load a few frames
+            // after the manager, so a one-shot apply may miss the sections).
+            if (Requested.Count == Applied.Count && Available.Count == Applied.Count) return;
 
             // Need an overworld loaded for RefreshDoorsAndGoals to matter.
             var mgrs = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldManager2d>();
@@ -114,7 +118,46 @@ public static class ChamberUnlock
                 for (int m = 0; m < mgrs.Length; m++)
                     if (mgrs[m] != null) { try { mgrs[m].RefreshDoorsAndGoals(); } catch { } }
             }
+
+            // Refresh each unlocked SECTION so its isAvailable recomputes from the
+            // now-open door flag -- otherwise the pause-menu teleporter
+            // (PopulateMainCampaignSections filters by isAvailable) won't list it.
+            // Retried each tick until confirmed, because OverworldLevelData can load
+            // after the manager. (Prior saves "worked" only because the section was
+            // already available from earlier play.)
+            RefreshUnlockedSections();
         }
         catch (Exception e) { Plugin.Log.LogError($"ChamberUnlock.TryApply: {e}"); }
+    }
+
+    /// <summary>Recompute isAvailable for every section whose trigger we've opened,
+    /// so the teleporter lists it. Belt-and-suspenders: call Refresh(), and if it's
+    /// still not available, force isAvailable = true.</summary>
+    private static void RefreshUnlockedSections()
+    {
+        try
+        {
+            var datas = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldLevelData>();
+            int sectionsSeen = 0;
+            for (int a = 0; a < datas.Length; a++)
+            {
+                var secs = datas[a] != null ? datas[a].Sections : null;
+                if (secs == null) continue;
+                for (int s = 0; s < secs.Count; s++)
+                {
+                    var sec = secs[s];
+                    if (sec == null || string.IsNullOrEmpty(sec.unlockTriggerId)) continue;
+                    sectionsSeen++;
+                    if (!Applied.Contains(sec.unlockTriggerId)) continue;
+                    try { sec.Refresh(); } catch { }
+                    if (!sec.isAvailable) sec.isAvailable = true;
+                    if (sec.isAvailable && Available.Add(sec.unlockTriggerId))
+                        Plugin.Log.LogInfo($"[UNLOCK] section '{sec.name}' ({sec.unlockTriggerId}) now teleport-available");
+                }
+            }
+            // Nothing to refresh against yet (level data not loaded) -> stays retryable.
+            if (sectionsSeen == 0) return;
+        }
+        catch (Exception e) { Plugin.Log.LogError($"ChamberUnlock.RefreshUnlockedSections: {e}"); }
     }
 }

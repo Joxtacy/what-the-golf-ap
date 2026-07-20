@@ -99,9 +99,39 @@ overwrites the poke (this fooled earlier same-save tests into a premature
 `Mod.ActiveGateTestEnabled`/`WalkProbeEnabled` (both OFF). TODO: productionize as a
 `SectionGate` (sibling to `BossGate`) behind a `hard_sections` apworld option.
 
-Related finding: the pause-menu **teleporter is progression-unlocked** — absent on
-a brand-new save until early play unlocks it (works fine thereafter). Low-priority
-sanity-check that no distant early key is stranded before it unlocks.
+### Teleporter / reachability — OPEN THREAD (resume here, 2026-07-20)
+
+Big open issue for the non-linear model. On a **fresh save** a keyed-but-unvisited
+chamber may not be teleport-reachable, so "receive a chamber key → teleport there"
+can fail. Investigation so far (all prior success was on progressed saves where
+everything was already reached, which masked this):
+
+- **`ChamberUnlock` fix already made (kept):** after `SetDoorOpen`/`SetMainDoorOpen`
+  it now calls each unlocked `OverworldLevelSection.Refresh()` and sets
+  `isAvailable=true`, **retried each tick** until `OverworldLevelData` loads (logs
+  `section 'X' now teleport-available`). This made **Easy 2D (09A)** teleportable
+  on a fresh save. Necessary but not sufficient in all cases (below).
+- **Space (08C) still didn't list** — but 08C is a bad test target: its
+  `saveSpotId='SAVE_space_01'` while every sibling is `TELEPORT_*`
+  (`TELEPORT_PLATFORMERS`/`_SOCCER`/`_EXPLOSION`/`_EASY2D`/…). Space may simply not
+  be a teleport destination (walk-in + save point only). **Re-test with a real
+  `TELEPORT_` section that's unreached (e.g. 08A Platformers).**
+- **`ACCESSIBLE_LEVELS` save set is EMPTY yet teleport-to-reached works** → it is
+  NOT the teleport gate. Gate is likely the game's **SaveSpot "reached" system**
+  (`SaveSpot`/`OnEnterSaveSpot`, section `saveSpotId`). There may be a
+  "reached save spots" save key `UnlockProbe` doesn't dump yet.
+- **Levers on hand:** `SaveGame.AddToSet(key, elem, slot)` (generic set writer),
+  `SetLevelCompleted(id)`, `SaveGame.currentOverworld.*` set keys. `UnlockProbe`
+  (`Mod.ProbeEnabled`) dumps OPEN_DOORS/OPEN_MAIN_DOORS/CONSOLES_HIT/
+  COMPLETED_LEVELS/ACCESSIBLE_LEVELS/UNLOCKED_CHESTS + section state.
+
+**NEXT (fresh thread):** (1) extend `UnlockProbe` to dump *all* `currentOverworld`
+keys → find the "reached save spots" set; (2) clean re-test on a fresh save with a
+`TELEPORT_` unreached section, probe timed AFTER unlock; (3) decide the design fork
+(see task): (A) mod marks keyed sections reached/teleportable via that set, or (B)
+rework apworld into a chamber progression chain, or (C) hybrid. NOTE the committed
+non-linear "teleport anywhere keyed" claim (below) is **only verified on progressed
+saves** — treat as unconfirmed for fresh saves until this thread closes.
 
 ## ROADMAP — richer progression (agreed 2026-07-19)
 
