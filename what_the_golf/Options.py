@@ -95,4 +95,9 @@ class WTGOptions(PerGameCommonOptions):
     boss_keys: BossKeys
     hard_sections: HardSections
     crowns: Crowns
+    # NOT YET IMPLEMENTED in the game mod: the option generates and is sent in slot
+    # data, but the mod does nothing with it yet -- incoming deaths don't kill the
+    # ball and player deaths aren't sent out (the Level.Fail hook is deferred). It
+    # has no effect on generation logic; it simply won't do anything in-game until
+    # wired up. Left in so seeds/IDs stay stable when it's implemented.
     death_link: DeathLink
