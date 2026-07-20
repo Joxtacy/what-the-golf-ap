@@ -184,17 +184,28 @@ Planned, several as **apworld Options**:
    (section/chamber × campaign/door) generates solvable on 0.6.7 — section = 17
    access keys, chamber = 10, both 132 flags. Mod builds + deploys. **Live in-game
    test of section unlocking still pending.**
-2. **Computer boss keys. ✅ DONE (apworld + mod; live test pending).** New
-   `boss_keys` toggle option. Gates the 7 keyable campaign computer bosses
-   (Computers 1,2,3,4,7,8,9 — the Final boss is gated by the goal, not a key)
-   behind a `Computer N Key` each, using the VALIDATED `OverworldMainDoorPlate.
-   SetState` lever run in reverse: `mod/src/Mapping/BossGate.cs` holds a locked
-   boss's door shut (forces its lit plates off every ~6th frame) until the key
-   arrives, then re-lights them. apworld: `data.BOSS_HOLES` /
-   `boss_key_to_level_id()`, `Options.BossKeys`, boss-key items (progression) +
-   Clear/Crown rules in `Rules.py`; `export_ids.py` emits `boss_by_item`
-   (key → boss LevelData.ID). Generates solvable on 0.6.7. **In-game live test of
-   the door-suppression still pending.**
+2. **Computer boss keys. ✅ DONE (apworld + mod; live-tested via all_bosses run).**
+   New `boss_keys` toggle option. Gates campaign computer bosses behind a
+   `Computer N Key` each, using the VALIDATED `OverworldMainDoorPlate.SetState`
+   lever run in reverse: `mod/src/Mapping/BossGate.cs` holds a locked boss's door
+   shut (forces its lit plates off ~6x/sec) until the key arrives, then re-lights
+   them **every tick** (self-healing — see the 2026-07-20 fix below). apworld:
+   `data.BOSS_HOLES` / `boss_key_to_level_id()`, `Options.BossKeys`, boss-key
+   items (progression) + Clear/Crown rules in `Rules.py`; `export_ids.py` emits
+   `boss_by_item` (key → boss LevelData.ID). Generates solvable on 0.6.7.
+
+   **⚠️ KNOWN BUG — keyable set is wrong (FOLLOW-UP, 2026-07-20).** The real
+   chamber-gating computers (doors with plate-areas in `wtg_doors.json`) are
+   **1,2,3,4,5,7,8**. But `BOSS_HOLES` keys **1,2,3,4,7,8,9**: it wrongly INCLUDES
+   Computer 9 (the plateless finale-special `IKCV7`, chamber -1 — keying it is
+   meaningless) and OMITS Computer 5 (`0WUALV`, "HoleInOne 05 basic") — because
+   Computer 5's boss hole **isn't in `wtg_sections.json`**, so `build_levels.py`
+   never added it to the apworld (no Clear/Crown location for it either). Root
+   cause: the keyable set is derived from campaign holes, not the door data. Fix
+   = source the keyable set from `wtg_doors.json` (plate-area doors), decide how to
+   surface Computer 5's missing boss hole, regenerate the ID table (drop C9 key,
+   add C5 key), and re-verify solvability. Touches `build_levels.py`, `data.py`,
+   `Rules.py`. Not started.
 3. **Chests as locations (~24 checks).** Save tracks 24 overworld chests
    (`CHEST_KITCHEN`…, key `OPEN_CHESTS` / `SetChestUnlocked`). More checks = better
    spread. (Option.)
@@ -233,10 +244,26 @@ progression. Since the Final boss is included, `all_bosses` subsumes `campaign`.
 - **Latent bug fixed:** `FinalBossPostfix` previously always sent Victory, which
   would wrongly complete a `door_%` seed on the final boss. It now branches on the
   goal (campaign → Victory; all_bosses → count the boss; door → nothing).
-- **VALIDATED:** 3-player seed (all_bosses×section+boss_keys / all_bosses×chamber /
-  campaign) generates solvable on 0.6.7; spoiler shows `Goal: All Bosses` and
-  `Computer N Key` items placed as in-logic progression. Mod builds + deploys.
-  **In-game live test pending.**
+- **VALIDATED (generation + LIVE in-game, 2026-07-20).** 3-player seed
+  (all_bosses×section+boss_keys / all_bosses×chamber / campaign) generates solvable
+  on 0.6.7; spoiler shows `Goal: All Bosses` and `Computer N Key` items in-logic.
+  Live: solo all_bosses seed (all keys via `start_inventory`), beat the 7 reachable
+  bosses → `[GOAL] ... (7/7)` → `all bosses defeated -> victory reported` → server
+  accepted the goal.
+
+- **Two mod bugs found + fixed live (commit after 37a5261):**
+  (a) `BossGate` lit each unlocked computer's plates only ONCE; a door reached AFTER
+  its key arrived (overworld reloads door objects on teleport) stayed dark and
+  unfightable (hit Western + finale). Now re-lights every tick (self-healing).
+  (b) `BossGoal` forgot bosses beaten before the process started; now reconciles
+  against the server's already-checked boss Clear locations on connect.
+
+- **DESIGN FIX — `all_bosses` excludes the finale's `HoleInOne 09 3d`.** It's the
+  only boss door with no plate-areas / chamber -1 (`wtg_doors.json`): a scripted
+  finale-sequence encounter, not an independently-reachable computer, so requiring
+  it made the goal unbeatable (teleport lands you on the Final boss, can't trigger
+  09). `data.all_boss_scenes()` now drops any boss sharing the Final boss's area →
+  the finale is represented by the Final boss alone → 7 required bosses.
 
 ## ROADMAP — mod UX / lifecycle (agreed 2026-07-19)
 
