@@ -4,8 +4,9 @@ from worlds.AutoWorld import World, WebWorld
 from .Options import WTGOptions
 from .Items import (
     WTGItem, item_name_to_id, item_classification,
-    ACCESS_ITEMS, FLAG_ITEM, FILLER_ITEMS, flag_pool,
+    access_items_for, BOSS_KEY_ITEMS, FLAG_ITEM, FILLER_ITEMS, flag_pool,
 )
+from .data import CHAMBER, SECTION
 from .Locations import location_name_to_id
 from .Regions import create_regions
 from .Rules import set_rules
@@ -41,6 +42,11 @@ class WTGWorld(World):
 
     # -- generation pipeline --------------------------------------------------
 
+    def area_access_mode(self) -> str:
+        """'section' or 'chamber' -- the granularity of the Access keys."""
+        return CHAMBER if self.options.area_access.value == \
+            self.options.area_access.option_chamber else SECTION
+
     def create_regions(self) -> None:
         create_regions(self)
 
@@ -50,9 +56,14 @@ class WTGWorld(World):
     def create_items(self) -> None:
         pool = []
 
-        # Progression: one Access key per non-start area.
-        for name in ACCESS_ITEMS:
+        # Progression: one Access key per gate, per the chosen granularity.
+        for name in access_items_for(self.area_access_mode()):
             pool.append(self.create_item(name))
+
+        # Progression: computer boss keys (only when enabled).
+        if self.options.boss_keys.value:
+            for name in BOSS_KEY_ITEMS:
+                pool.append(self.create_item(name))
 
         # Progression: one Flag per hole (counted for the % goals).
         for _ in range(flag_pool()):
@@ -78,5 +89,7 @@ class WTGWorld(World):
     def fill_slot_data(self) -> dict:
         return {
             "goal": self.options.goal.value,
+            "area_access": self.area_access_mode(),
+            "boss_keys": bool(self.options.boss_keys.value),
             "death_link": bool(self.options.death_link.value),
         }

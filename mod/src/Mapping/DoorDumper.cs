@@ -35,9 +35,26 @@ public static class DoorDumper
         public SortedSet<string> levels = new();  // union of hole scenes (dedup, stable order)
     }
 
-    private class DoorsFile { public Dictionary<string, AreaRec> areas = new(); }
+    // Per computer-door (OverworldMainDoorRobot). Keyed by bossLevelName so it
+    // accumulates/dedups across passes. bossLevelID is the REAL identifier the
+    // door loads (map it to a scene via wtg_levels.json id->scene) — the missing
+    // link between a computer door and the boss hole it actually gates.
+    private class DoorRec
+    {
+        public string boss_level_id;      // OverworldMainDoorRobot.bossLevelID
+        public string boss_level_name;    // OverworldMainDoorRobot.bossLevelName
+        public int chamber = -1;          // from the door's plates' sub-areas
+        public SortedSet<string> plate_areas = new();  // sub-area enum names on this door
+    }
+
+    private class DoorsFile
+    {
+        public Dictionary<string, AreaRec> areas = new();
+        public Dictionary<string, DoorRec> doors = new();
+    }
 
     private static readonly Dictionary<string, AreaRec> Areas = new();
+    private static readonly Dictionary<string, DoorRec> Doors = new();
     private static bool _loaded;
     private static int _runs;
 
@@ -99,12 +116,52 @@ public static class DoorDumper
                 catch { }
             }
 
+            // Per computer-door records (bossLevelID is the key new datum).
+            var robots = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldMainDoorRobot>();
+            for (int i = 0; i < robots.Length; i++)
+            {
+                var r = robots[i];
+                if (r == null) continue;
+                string bid, bname;
+                try { bid = r.bossLevelID; bname = r.bossLevelName; }
+                catch { continue; }
+                string key = !string.IsNullOrEmpty(bname) ? bname
+                           : (!string.IsNullOrEmpty(bid) ? bid : null);
+                if (key == null) continue;
+
+                if (!Doors.TryGetValue(key, out var dr))
+                {
+                    dr = new DoorRec { boss_level_id = bid, boss_level_name = bname };
+                    Doors[key] = dr;
+                    changed = true;
+                }
+                if (dr.boss_level_id != bid && !string.IsNullOrEmpty(bid)) { dr.boss_level_id = bid; changed = true; }
+
+                try
+                {
+                    var dplates = r.plates;
+                    if (dplates != null)
+                        for (int j = 0; j < dplates.Count; j++)
+                        {
+                            var info = dplates[j] != null ? dplates[j].plateInfo : null;
+                            if (info == null) continue;
+                            string an;
+                            try { an = info.Name.ToString(); } catch { continue; }
+                            if (string.IsNullOrEmpty(an)) continue;
+                            if (dr.plate_areas.Add(an)) changed = true;
+                            ParseName(an, out int c, out _);
+                            if (c >= 0 && dr.chamber != c) { dr.chamber = c; changed = true; }
+                        }
+                }
+                catch { }
+            }
+
             if (changed)
             {
                 Write();
                 int totalLevels = Areas.Values.SelectMany(a => a.levels).Distinct().Count();
                 int withLevels = Areas.Values.Count(a => a.levels.Count > 0);
-                Plugin.Log.LogInfo($"[DOORS] {Areas.Count} sub-areas ({withLevels} w/levels), {totalLevels} holes -> {OutPath}");
+                Plugin.Log.LogInfo($"[DOORS] {Areas.Count} sub-areas ({withLevels} w/levels), {totalLevels} holes, {Doors.Count} doors -> {OutPath}");
             }
             else if (++_runs % 4 == 0)
             {
@@ -122,13 +179,19 @@ public static class DoorDumper
         {
             if (!File.Exists(OutPath)) return;
             var root = JsonConvert.DeserializeObject<DoorsFile>(File.ReadAllText(OutPath));
-            if (root?.areas == null) return;
-            foreach (var kv in root.areas)
-            {
-                kv.Value.levels ??= new SortedSet<string>();
-                Areas[kv.Key] = kv.Value;
-            }
-            Plugin.Log.LogInfo($"[DOORS] loaded {Areas.Count} sub-areas from existing {OutPath}");
+            if (root?.areas != null)
+                foreach (var kv in root.areas)
+                {
+                    kv.Value.levels ??= new SortedSet<string>();
+                    Areas[kv.Key] = kv.Value;
+                }
+            if (root?.doors != null)
+                foreach (var kv in root.doors)
+                {
+                    kv.Value.plate_areas ??= new SortedSet<string>();
+                    Doors[kv.Key] = kv.Value;
+                }
+            Plugin.Log.LogInfo($"[DOORS] loaded {Areas.Count} sub-areas, {Doors.Count} doors from existing {OutPath}");
         }
         catch (Exception e) { Plugin.Log.LogWarning($"DoorDumper.LoadOnce: {e}"); }
     }
@@ -147,7 +210,7 @@ public static class DoorDumper
 
     private static void Write()
     {
-        var file = new DoorsFile { areas = Areas };
+        var file = new DoorsFile { areas = Areas, doors = Doors };
         File.WriteAllText(OutPath, JsonConvert.SerializeObject(file, Formatting.Indented));
     }
 }

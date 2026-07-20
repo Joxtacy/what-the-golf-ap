@@ -57,29 +57,50 @@ becomes teleport-reachable → hop there and play.
 unlocks when its **`unlockTriggerId`** is registered as an open door. The save
 stores these in `OPEN_DOORS` (regular, e.g. `door_platformer_00`, `Z4UZC`) and
 `OPEN_MAIN_DOORS` (computer, e.g. `YX3NO`, `9DSBG`, `OS8GA`). So the mod
-(`mod/src/Mapping/ChamberUnlock.cs`) does, per section of the unlocked chamber:
-`SaveGame.SetDoorOpen(trig)` + `SaveGame.SetMainDoorOpen(trig)` then
-`OverworldManager2d.RefreshDoorsAndGoals()`. `SaveGame.GetStringList(key,slot)` /
-`AddToSet(key,elems,slot)` are the generic save accessors. `ItemApplier` calls
-`ChamberUnlock.Request(N)`; `Mod.OnUpdate` re-applies pending unlocks once an
-overworld is loaded (items can arrive at connect before the overworld exists).
+(`mod/src/Mapping/ChamberUnlock.cs`) opens the exact trigger(s) an Access item
+maps to (from `unlocks_by_item` in wtg_ids.json) via `SaveGame.SetDoorOpen(trig)`
++ `SaveGame.SetMainDoorOpen(trig)` then `OverworldManager2d.RefreshDoorsAndGoals()`.
+`SaveGame.GetStringList(key,slot)` / `AddToSet(key,elems,slot)` are the generic
+save accessors. `ItemApplier` calls `ChamberUnlock.RequestItem(name)`;
+`Mod.OnUpdate` re-applies pending unlocks once an overworld is loaded (items can
+arrive at connect before the overworld exists). LIVE-VALIDATED 2026-07-20 in
+section mode: `08C: Space Access` → opened `door_space_00`, Space reachable.
 
-AP logic is non-linear: each chamber is an independent region gated by its own
-`Chamber NN Access` (Regions.py connects all from Menu; chamber 10 = free start).
-NOTE physical looseness: chamber 09 is walk-reachable from the intro (no computer
-door there) so it's not hard-gated — harmless (checks can send out-of-logic; no
-softlock). `mod/src/Mapping/UnlockProbe.cs` = the read-only save-vocabulary probe
-(toggle `Mod.ProbeEnabled`). ChamberGate/EntryGate/GoalGate/DoorDumper are now
-dead/secondary (door-suppression approach abandoned in favour of teleport unlock).
+AP logic is non-linear: each gate (chamber OR sub-area, per `area_access`) is an
+independent region gated by its own Access item (Regions.py connects all from
+Menu; chamber 10 = free start).
+
+**PHYSICAL LOOSENESS (known, accepted, 2026-07-20).** The game hard-gates
+chamber↔chamber via the computer/boss doors, but sub-areas WITHIN one chamber
+share an open overworld room — opening one sub-area's door lets you *walk* to
+locked siblings (confirmed in-game: unlocking Space let you reach the rest of
+chamber 08). So `area_access: section` is physically loose within the
+multi-sub-area chambers (03/04/07/08/09); also chamber 09 is walk-reachable from
+the intro. This is **out-of-logic but never a softlock** — logic still requires
+each key; the player merely *can* play ahead. DECISION: keep `section` as default
+and document (done: `Options.AreaAccess` docstring); optionally pursue a
+within-chamber hard-lock later (see roadmap). `chamber` granularity has no
+looseness (computer doors are hard walls). `mod/src/Mapping/UnlockProbe.cs` = the
+read-only save-vocabulary probe (`Mod.ProbeEnabled`). ChamberGate/EntryGate/
+GoalGate are dead; DoorDumper is being revived for boss-key work.
 
 ## ROADMAP — richer progression (agreed 2026-07-19)
 
-Current: only ~10 progression items (chamber access) vs 251 locations — too few.
 Planned, several as **apworld Options**:
-1. **Section-level access (~17 items).** Gate per section, not per chamber — the
-   mod already unlocks per section. CEILING is 17: chambers 05 (Kitchen/Gravity/FPG
-   share `9DSBG`) and 06 (Portal/Superhot share `YX3NO`) unlock as one unit; all
-   other sections have distinct triggers (08 = 4 separate!). Name by theme.
+1. **Section-level access (~17 items). ✅ DONE (2026-07-20).** New `area_access`
+   option: `section` (17 gate-unit keys, default) or `chamber` (10 keys, prior
+   model). A "gate unit" = a unique section `unlockTriggerId`; sections sharing a
+   trigger open together (Portal+Super Putt = `YX3NO`; Kitchen+Gravity+FPG =
+   `9DSBG`), all others distinct (08 = 4 separate) → 17. `build_levels.py` emits
+   `gate_units` + per-level `trigger` in levels.json; `data.py` exposes both
+   granularities (item ID table holds the union so IDs stay stable); Options/Items/
+   Regions/Rules branch on `area_access`. `export_ids.py` emits `unlocks_by_item`
+   (Access-item name → trigger ids). Mod: `ChamberUnlock` now opens triggers
+   straight from that map (granularity-agnostic); `ItemApplier` routes any
+   "* Access" → `ChamberUnlock.RequestItem(name)`. VALIDATED: 4-player matrix
+   (section/chamber × campaign/door) generates solvable on 0.6.7 — section = 17
+   access keys, chamber = 10, both 132 flags. Mod builds + deploys. **Live in-game
+   test of section unlocking still pending.**
 2. **Computer boss keys (9 items).** Gate each of the 9 boss doors behind a key,
    using the VALIDATED `OverworldMainDoorPlate.SetState` lever. Bosses become gates.
 3. **Chests as locations (~24 checks).** Save tracks 24 overworld chests

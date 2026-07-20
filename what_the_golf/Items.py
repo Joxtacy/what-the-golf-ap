@@ -1,6 +1,10 @@
 from BaseClasses import Item, ItemClassification
 
-from .data import item_name_to_id, access_item_names, FLAG_ITEM, FILLER_ITEMS, num_holes
+from .data import (
+    item_name_to_id, access_item_names, chamber_access_names,
+    section_access_names, boss_key_names, FLAG_ITEM, FILLER_ITEMS, num_holes,
+    CHAMBER, SECTION,
+)
 
 IC = ItemClassification
 
@@ -9,13 +13,23 @@ class WTGItem(Item):
     game = "WHAT THE GOLF?"
 
 
-# One Access key per area (except the start area). Receiving a key unlocks that
-# area in the randomizer -- the game mod is meant to gate the area until then.
+# The full universe of Access keys (both granularities). item_name_to_id holds
+# them all so IDs stay stable; a seed only CREATES the subset its option needs.
+# Receiving a key unlocks that gate in the randomizer (the game mod opens the
+# matching in-game door(s) -- see tools/export_ids.py unlocks_by_item).
 ACCESS_ITEMS = access_item_names()
+
+# Computer boss keys (added to the pool only when the boss_keys option is on).
+BOSS_KEY_ITEMS = boss_key_names()
+
+
+def access_items_for(mode: str) -> list:
+    """The Access keys to actually put in the pool for the chosen granularity."""
+    return section_access_names() if mode == SECTION else chamber_access_names()
 
 
 def item_classification(name: str) -> ItemClassification:
-    if name in ACCESS_ITEMS:
+    if name in ACCESS_ITEMS or name in BOSS_KEY_ITEMS:
         return IC.progression
     if name == FLAG_ITEM:
         # Counted for the % goals -> progression, no cross-player balancing.
@@ -29,4 +43,5 @@ def flag_pool() -> int:
 
 
 __all__ = ["WTGItem", "item_name_to_id", "item_classification",
-           "ACCESS_ITEMS", "FLAG_ITEM", "FILLER_ITEMS", "flag_pool"]
+           "ACCESS_ITEMS", "BOSS_KEY_ITEMS", "access_items_for", "FLAG_ITEM",
+           "FILLER_ITEMS", "flag_pool", "CHAMBER", "SECTION"]

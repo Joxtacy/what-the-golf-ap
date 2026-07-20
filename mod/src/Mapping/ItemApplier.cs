@@ -4,8 +4,8 @@ namespace WtgArchipelago.Mapping;
 
 /// <summary>
 /// Applies a received Archipelago item. Runs on the main thread (queued from
-/// ArchipelagoClient). Access items unlock areas (GoalGate then reveals their
-/// overworld goals); Flags count toward the % goals; the rest is filler.
+/// ArchipelagoClient). Access items open the matching in-game door(s) so their
+/// holes become teleport-reachable; Flags count toward the % goals; rest = filler.
 /// </summary>
 public static class ItemApplier
 {
@@ -17,13 +17,18 @@ public static class ItemApplier
         {
             AreaState.AddFlag();
         }
+        else if (BossGate.Handles(name))
+        {
+            // Computer boss key: stop holding that computer's door shut.
+            BossGate.Unlock(name);
+            MelonLoader.MelonLogger.Msg($"Boss unlocked: {name}");
+        }
         else if (name.EndsWith(" Access"))
         {
-            string area = name.Substring(0, name.Length - " Access".Length);
-            AreaState.Unlock(area);   // legacy scene->area tracking
-            if (ChamberGate.TryParseChamber(area, out int chamber))
-                ChamberUnlock.Request(chamber);   // make it teleport-reachable
-            MelonLoader.MelonLogger.Msg($"Chamber unlocked: {area}");
+            // Open the exact in-game door(s) this Access item maps to. Works for
+            // both chamber- and section-granularity seeds (unlocks_by_item).
+            ChamberUnlock.RequestItem(name);
+            MelonLoader.MelonLogger.Msg($"Access unlocked: {name}");
         }
         // else: filler / cosmetic -- nothing to apply.
 

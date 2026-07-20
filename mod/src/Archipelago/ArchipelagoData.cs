@@ -26,4 +26,6 @@ public class ArchipelagoData
     // Slot data delivered by the apworld's fill_slot_data().
     public bool DeathLinkEnabled;
     public int Goal;
+    public string AreaAccess = "section";
+    public bool BossKeysEnabled;
 }

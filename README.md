@@ -8,55 +8,62 @@ integration for [WHAT THE GOLF?](https://store.steampowered.com/app/785790/WHAT_
 An AP integration is two separate projects, both here:
 
 1. **The apworld** (`what_the_golf/`, Python) — the "brain": items, locations,
-   regions, logic, options, goals. Generates seeds. **Scaffold complete**, built
-   from the real game structure (data still has placeholder hole counts/names).
-2. **The game mod** (`mod/`, C#) — a [BepInEx 6 **IL2CPP**](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_il2cpp.html)
-   plugin that hooks the game to detect level clears and apply received items.
-   **Scaffold complete**; the game-specific method names are `TODO` (see `mod/README.md`).
+   regions, logic, options, goals. Generates seeds. Built from the **real game
+   structure** (dumped in-game — see below), generates solvable seeds on
+   Archipelago 0.6.7.
+2. **The game mod** (`mod/`, C#) — a [**MelonLoader**](https://melonwiki.xyz/)
+   plugin that hooks the running game to detect level clears/crowns, send checks,
+   and apply received items (unlock areas). Loads and runs end-to-end in-game.
 
 Confirmed engine: **Unity 2020.3.48f1, IL2CPP** (inspected in the installed game).
+(We use MelonLoader rather than BepInEx 6 because BepInEx's Dobby detour
+hard-crashes this game at graphics init — see `STATUS.md`.)
 
 ## How the game maps onto Archipelago
 
-- **Locations (checks):** every hole `- Clear`, every hole `- Crown`, each
-  `Defeat Computer NN`, and 17 `Terminal N`.
-- **Items** — progression is *decoupled* from the game's native gating:
-  - **Access keys** (`"Level 07 Access"`, …, `"Sporty Sports Access"`) — one per
-    chamber. The mod opens a chamber when its key arrives, ignoring the native
-    "all flags collected" door rule.
-  - **Flag** — a *counted* token; collecting X of them satisfies the 50/75/100%
-    completion-door goals. (This is how the game's area-local Flags become items.)
+- **Locations (checks):** every hole `<scene> - Clear`, plus `<scene> - Crown`
+  for holes with mini-challenges. **251 locations** (132 clears + 119 crowns).
+- **Items** — progression is *decoupled* from the game's native gating; the mod
+  opens the matching in-game door(s) when an Access key arrives:
+  - **Access keys** — gate the themed areas. Granularity is the `area_access`
+    option: `section` (17 keys, one per in-game sub-area unlock — default) or
+    `chamber` (10 keys, one per chamber). See the looseness note below.
+  - **Flag** — a *counted* token (one per hole); collecting X% satisfies the
+    50/75/100% completion-door goals.
   - **Filler** — cosmetics/trophies to pad the pool.
-- **Goals** (option): `campaign` (defeat the final Computer) or
-  `door_50 / door_75 / door_100`.
+- **Goals** (option): `campaign` (reach the Final boss) or
+  `door_50 / door_75 / door_100` (Flag %).
 
-### Real structure encoded (from cross-checked trophy guides)
+### Real structure (dumped from the game)
 
-- 10 campaign chambers: **Levels 09 → 00** (counting down), plus a separate
-  **Sporty Sports** DLC chamber. **9 Computer bosses** — Level 02 has none (real).
-- Each chamber has 1–4 named **sub-areas** (theme names are the game's own door
-  labels: 2D Golf, Livingroom Golf, Boom/Space/Foot/Golf Game, Portal Golf,
-  Super Putt, Gravity/First-Person/Kitchen, Musical/Stealthy, Jungle/Motorized,
-  Sandy/Desert, Biomass, plus secrets El Duderino / Secret Saw).
-- **114 holes** main / **124** with DLC → **274** possible location checks,
-  **17** item types.
+The campaign is **11 chambers** counting **10 → 00** (10 = free intro, 00 =
+finale) containing **132 holes**, read from the game's own `OverworldLevelData`
+asset. Chambers subdivide into **21 sub-areas** which collapse to **17 unlockable
+"gate units"** (some sub-areas share one in-game door: `05A/B/C` and `06A/B`).
+Level names are the game's real scene names. See `mod/harvested-levels.md` and the
+dumped `mod/wtg_*.json`.
 
-> Placeholder data: per-sub-area **hole counts** are mostly not publicly
-> documented, and individual **hole names** aren't documented at all, so those
-> are synthetic/estimated. Everything is generated from one file —
-> `what_the_golf/data.py` — so correcting them is a single-file edit.
+> **Section-access looseness:** the game hard-gates chamber↔chamber (the
+> computer/boss doors), but sub-areas *within* a chamber share an open overworld
+> room, so with `area_access: section` you *can* walk to a locked sibling sub-area
+> once any sub-area of that chamber is reachable. It's out-of-logic (logic still
+> requires each key) but never a softlock. `area_access: chamber` has no looseness.
 
 ## Layout
 
 ```
 what_the_golf/          the apworld (Python)
-  data.py               <-- SINGLE SOURCE OF TRUTH: chambers/sub-areas/holes + ID maps
+  data.py               <-- loads levels.json; exposes chambers/gate-units + ID maps
+  levels.json           the real campaign structure (built from the game dump)
   __init__.py Options.py Items.py Locations.py Regions.py Rules.py
   docs/setup_en.md
-mod/                    the BepInEx 6 (IL2CPP) game mod (C#)
+mod/                    the MelonLoader (IL2CPP) game mod (C#)
   src/... WtgArchipelago.csproj NuGet.Config README.md
-  ids.json              generated ID table shared with the apworld
-tools/export_ids.py     dumps data.py's ID maps to mod/ids.json (framework-free)
+  ids.json              generated ID table (+ unlock map) shared with the apworld
+  wtg_*.json            in-game dumps (levels, sections, doors, goals)
+tools/
+  build_levels.py       builds what_the_golf/levels.json from the game dump
+  export_ids.py         dumps data.py's ID maps + unlock map to mod/ids.json
 ```
 
 ## Roadmap

@@ -15,7 +15,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "10",
-     "theme": "Intro"
+     "theme": "Intro",
+     "trigger": ""
     },
     {
      "id": "DI3JRA",
@@ -23,7 +24,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "10",
-     "theme": "Intro"
+     "theme": "Intro",
+     "trigger": ""
     },
     {
      "id": "KBCBVH",
@@ -31,7 +33,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "10",
-     "theme": "Intro"
+     "theme": "Intro",
+     "trigger": ""
     }
    ]
   },
@@ -49,7 +52,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "09A",
-     "theme": "Easy 2D"
+     "theme": "Easy 2D",
+     "trigger": "DOOR_easy2d_00"
     },
     {
      "id": "4IKB2M",
@@ -57,7 +61,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "09A",
-     "theme": "Easy 2D"
+     "theme": "Easy 2D",
+     "trigger": "DOOR_easy2d_00"
     },
     {
      "id": "TSEWKN",
@@ -65,7 +70,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "09A",
-     "theme": "Easy 2D"
+     "theme": "Easy 2D",
+     "trigger": "DOOR_easy2d_00"
     },
     {
      "id": "3ZTTCV",
@@ -73,7 +79,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "09A",
-     "theme": "Easy 2D"
+     "theme": "Easy 2D",
+     "trigger": "DOOR_easy2d_00"
     },
     {
      "id": "I1QFFG",
@@ -81,7 +88,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "09B",
-     "theme": "Living Room"
+     "theme": "Living Room",
+     "trigger": "Z4UZC"
     },
     {
      "id": "P5HS2I",
@@ -89,7 +97,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "09B",
-     "theme": "Living Room"
+     "theme": "Living Room",
+     "trigger": "Z4UZC"
     },
     {
      "id": "9QTFG6",
@@ -97,7 +106,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "09B",
-     "theme": "Living Room"
+     "theme": "Living Room",
+     "trigger": "Z4UZC"
     },
     {
      "id": "WA1KWB",
@@ -105,7 +115,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "09B",
-     "theme": "Living Room"
+     "theme": "Living Room",
+     "trigger": "Z4UZC"
     },
     {
      "id": "JEDKJB",
@@ -113,7 +124,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "09B",
-     "theme": "Living Room"
+     "theme": "Living Room",
+     "trigger": "Z4UZC"
     },
     {
      "id": "WZXCF8",
@@ -121,7 +133,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "09B",
-     "theme": "Living Room"
+     "theme": "Living Room",
+     "trigger": "Z4UZC"
     }
    ]
   },
@@ -141,7 +154,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "08A",
-     "theme": "Platformers"
+     "theme": "Platformers",
+     "trigger": "door_platformer_00"
     },
     {
      "id": "4EYR4I",
@@ -149,7 +163,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "08A",
-     "theme": "Platformers"
+     "theme": "Platformers",
+     "trigger": "door_platformer_00"
     },
     {
      "id": "IG0RZ5",
@@ -157,7 +172,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08A",
-     "theme": "Platformers"
+     "theme": "Platformers",
+     "trigger": "door_platformer_00"
     },
     {
      "id": "K051NY",
@@ -165,7 +181,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "08A",
-     "theme": "Platformers"
+     "theme": "Platformers",
+     "trigger": "door_platformer_00"
     },
     {
      "id": "349CM9",
@@ -173,7 +190,8 @@
      "boss": true,
      "challenges": 0,
      "subarea": "08A",
-     "theme": "Platformers"
+     "theme": "Platformers",
+     "trigger": "door_platformer_00"
     },
     {
      "id": "AWAVEI",
@@ -181,7 +199,8 @@
      "boss": false,
      "challenges": 0,
      "subarea": "08B",
-     "theme": "Soccer"
+     "theme": "Soccer",
+     "trigger": "NLABA"
     },
     {
      "id": "MQA5DJ",
@@ -189,7 +208,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "08B",
-     "theme": "Soccer"
+     "theme": "Soccer",
+     "trigger": "NLABA"
     },
     {
      "id": "M6PSLB",
@@ -197,7 +217,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08B",
-     "theme": "Soccer"
+     "theme": "Soccer",
+     "trigger": "NLABA"
     },
     {
      "id": "KM556V",
@@ -205,7 +226,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08B",
-     "theme": "Soccer"
+     "theme": "Soccer",
+     "trigger": "NLABA"
     },
     {
      "id": "I4SCOY",
@@ -213,7 +235,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08B",
-     "theme": "Soccer"
+     "theme": "Soccer",
+     "trigger": "NLABA"
     },
     {
      "id": "SXIG32",
@@ -221,7 +244,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08B",
-     "theme": "Soccer"
+     "theme": "Soccer",
+     "trigger": "NLABA"
     },
     {
      "id": "6QIHRJ",
@@ -229,7 +253,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08C",
-     "theme": "Space"
+     "theme": "Space",
+     "trigger": "door_space_00"
     },
     {
      "id": "TJZWUA",
@@ -237,7 +262,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "08C",
-     "theme": "Space"
+     "theme": "Space",
+     "trigger": "door_space_00"
     },
     {
      "id": "9LAGY7",
@@ -245,7 +271,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "08C",
-     "theme": "Space"
+     "theme": "Space",
+     "trigger": "door_space_00"
     },
     {
      "id": "P2AECH",
@@ -253,7 +280,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "08C",
-     "theme": "Space"
+     "theme": "Space",
+     "trigger": "door_space_00"
     },
     {
      "id": "ACVM56",
@@ -261,7 +289,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "08C",
-     "theme": "Space"
+     "theme": "Space",
+     "trigger": "door_space_00"
     },
     {
      "id": "1J680F",
@@ -269,7 +298,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08D",
-     "theme": "Explosion"
+     "theme": "Explosion",
+     "trigger": "VJ69W"
     },
     {
      "id": "0W9AYR",
@@ -277,7 +307,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08D",
-     "theme": "Explosion"
+     "theme": "Explosion",
+     "trigger": "VJ69W"
     },
     {
      "id": "SFY5S4",
@@ -285,7 +316,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08D",
-     "theme": "Explosion"
+     "theme": "Explosion",
+     "trigger": "VJ69W"
     },
     {
      "id": "1PPLOS",
@@ -293,7 +325,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08D",
-     "theme": "Explosion"
+     "theme": "Explosion",
+     "trigger": "VJ69W"
     },
     {
      "id": "BICZL1",
@@ -301,7 +334,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08D",
-     "theme": "Explosion"
+     "theme": "Explosion",
+     "trigger": "VJ69W"
     },
     {
      "id": "KQDNSY",
@@ -309,7 +343,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08D",
-     "theme": "Explosion"
+     "theme": "Explosion",
+     "trigger": "VJ69W"
     },
     {
      "id": "92YY4L",
@@ -317,7 +352,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08D",
-     "theme": "Explosion"
+     "theme": "Explosion",
+     "trigger": "VJ69W"
     },
     {
      "id": "DR5GKB",
@@ -325,7 +361,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08D",
-     "theme": "Explosion"
+     "theme": "Explosion",
+     "trigger": "VJ69W"
     },
     {
      "id": "BNDXX0",
@@ -333,7 +370,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "08D",
-     "theme": "Explosion"
+     "theme": "Explosion",
+     "trigger": "VJ69W"
     }
    ]
   },
@@ -351,7 +389,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "07A",
-     "theme": "OL"
+     "theme": "OL",
+     "trigger": "door_ol_00"
     },
     {
      "id": "SVWJSP",
@@ -359,7 +398,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "07A",
-     "theme": "OL"
+     "theme": "OL",
+     "trigger": "door_ol_00"
     },
     {
      "id": "RDQ5U4",
@@ -367,7 +407,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "07A",
-     "theme": "OL"
+     "theme": "OL",
+     "trigger": "door_ol_00"
     },
     {
      "id": "W1KA1P",
@@ -375,7 +416,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "07A",
-     "theme": "OL"
+     "theme": "OL",
+     "trigger": "door_ol_00"
     },
     {
      "id": "9ZBIZC",
@@ -383,7 +425,8 @@
      "boss": true,
      "challenges": 0,
      "subarea": "07A",
-     "theme": "OL"
+     "theme": "OL",
+     "trigger": "door_ol_00"
     },
     {
      "id": "ZWZXI3",
@@ -391,7 +434,8 @@
      "boss": false,
      "challenges": 0,
      "subarea": "07B",
-     "theme": "Lebowski"
+     "theme": "Lebowski",
+     "trigger": "CROWN_MAIN1"
     },
     {
      "id": "0A6P6X",
@@ -399,7 +443,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "07B",
-     "theme": "Lebowski"
+     "theme": "Lebowski",
+     "trigger": "CROWN_MAIN1"
     },
     {
      "id": "BLNH2O",
@@ -407,7 +452,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "07B",
-     "theme": "Lebowski"
+     "theme": "Lebowski",
+     "trigger": "CROWN_MAIN1"
     },
     {
      "id": "H29VWE",
@@ -415,7 +461,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "07B",
-     "theme": "Lebowski"
+     "theme": "Lebowski",
+     "trigger": "CROWN_MAIN1"
     },
     {
      "id": "W0QBY9",
@@ -423,7 +470,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "07B",
-     "theme": "Lebowski"
+     "theme": "Lebowski",
+     "trigger": "CROWN_MAIN1"
     }
    ]
   },
@@ -441,7 +489,8 @@
      "boss": false,
      "challenges": 0,
      "subarea": "06A",
-     "theme": "Portal"
+     "theme": "Portal",
+     "trigger": "YX3NO"
     },
     {
      "id": "CGIMO6",
@@ -449,7 +498,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "06A",
-     "theme": "Portal"
+     "theme": "Portal",
+     "trigger": "YX3NO"
     },
     {
      "id": "0ME12P",
@@ -457,7 +507,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "06A",
-     "theme": "Portal"
+     "theme": "Portal",
+     "trigger": "YX3NO"
     },
     {
      "id": "O5PB6R",
@@ -465,7 +516,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "06A",
-     "theme": "Portal"
+     "theme": "Portal",
+     "trigger": "YX3NO"
     },
     {
      "id": "3GXNUI",
@@ -473,7 +525,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "06A",
-     "theme": "Portal"
+     "theme": "Portal",
+     "trigger": "YX3NO"
     },
     {
      "id": "2OTMFO",
@@ -481,7 +534,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "06A",
-     "theme": "Portal"
+     "theme": "Portal",
+     "trigger": "YX3NO"
     },
     {
      "id": "C1C9DS",
@@ -489,7 +543,8 @@
      "boss": true,
      "challenges": 0,
      "subarea": "06A",
-     "theme": "Portal"
+     "theme": "Portal",
+     "trigger": "YX3NO"
     },
     {
      "id": "XUOB63",
@@ -497,7 +552,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "06B",
-     "theme": "Super Putt"
+     "theme": "Super Putt",
+     "trigger": "YX3NO"
     },
     {
      "id": "AFIE0W",
@@ -505,7 +561,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "06B",
-     "theme": "Super Putt"
+     "theme": "Super Putt",
+     "trigger": "YX3NO"
     },
     {
      "id": "3HGCVU",
@@ -513,7 +570,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "06B",
-     "theme": "Super Putt"
+     "theme": "Super Putt",
+     "trigger": "YX3NO"
     },
     {
      "id": "ITFCWE",
@@ -521,7 +579,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "06B",
-     "theme": "Super Putt"
+     "theme": "Super Putt",
+     "trigger": "YX3NO"
     },
     {
      "id": "IFJCGG",
@@ -529,7 +588,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "06B",
-     "theme": "Super Putt"
+     "theme": "Super Putt",
+     "trigger": "YX3NO"
     }
    ]
   },
@@ -548,7 +608,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05A",
-     "theme": "Kitchen"
+     "theme": "Kitchen",
+     "trigger": "9DSBG"
     },
     {
      "id": "3VGKO4",
@@ -556,7 +617,8 @@
      "boss": true,
      "challenges": 0,
      "subarea": "05A",
-     "theme": "Kitchen"
+     "theme": "Kitchen",
+     "trigger": "9DSBG"
     },
     {
      "id": "6S527A",
@@ -564,7 +626,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05A",
-     "theme": "Kitchen"
+     "theme": "Kitchen",
+     "trigger": "9DSBG"
     },
     {
      "id": "ZNMSS0",
@@ -572,7 +635,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05A",
-     "theme": "Kitchen"
+     "theme": "Kitchen",
+     "trigger": "9DSBG"
     },
     {
      "id": "6JL9XD",
@@ -580,7 +644,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05B",
-     "theme": "Gravity"
+     "theme": "Gravity",
+     "trigger": "9DSBG"
     },
     {
      "id": "MVIJEC",
@@ -588,7 +653,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05B",
-     "theme": "Gravity"
+     "theme": "Gravity",
+     "trigger": "9DSBG"
     },
     {
      "id": "VEQZ1E",
@@ -596,7 +662,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05B",
-     "theme": "Gravity"
+     "theme": "Gravity",
+     "trigger": "9DSBG"
     },
     {
      "id": "ZEBYHS",
@@ -604,7 +671,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05B",
-     "theme": "Gravity"
+     "theme": "Gravity",
+     "trigger": "9DSBG"
     },
     {
      "id": "Z7RZ1R",
@@ -612,7 +680,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05B",
-     "theme": "Gravity"
+     "theme": "Gravity",
+     "trigger": "9DSBG"
     },
     {
      "id": "F1A3HC",
@@ -620,7 +689,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05B",
-     "theme": "Gravity"
+     "theme": "Gravity",
+     "trigger": "9DSBG"
     },
     {
      "id": "HWMZR7",
@@ -628,7 +698,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05B",
-     "theme": "Gravity"
+     "theme": "Gravity",
+     "trigger": "9DSBG"
     },
     {
      "id": "NHNB1L",
@@ -636,7 +707,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05B",
-     "theme": "Gravity"
+     "theme": "Gravity",
+     "trigger": "9DSBG"
     },
     {
      "id": "F4EM1H",
@@ -644,7 +716,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05C",
-     "theme": "FPG"
+     "theme": "FPG",
+     "trigger": "9DSBG"
     },
     {
      "id": "DNKBY1",
@@ -652,7 +725,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05C",
-     "theme": "FPG"
+     "theme": "FPG",
+     "trigger": "9DSBG"
     },
     {
      "id": "Y7RHZH",
@@ -660,7 +734,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05C",
-     "theme": "FPG"
+     "theme": "FPG",
+     "trigger": "9DSBG"
     },
     {
      "id": "6BHOJB",
@@ -668,7 +743,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05C",
-     "theme": "FPG"
+     "theme": "FPG",
+     "trigger": "9DSBG"
     },
     {
      "id": "037L5B",
@@ -676,7 +752,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05C",
-     "theme": "FPG"
+     "theme": "FPG",
+     "trigger": "9DSBG"
     },
     {
      "id": "IF6FKB",
@@ -684,7 +761,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "05C",
-     "theme": "FPG"
+     "theme": "FPG",
+     "trigger": "9DSBG"
     }
    ]
   },
@@ -702,7 +780,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04A",
-     "theme": "Music"
+     "theme": "Music",
+     "trigger": "door_music_00"
     },
     {
      "id": "YW006F",
@@ -710,7 +789,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04A",
-     "theme": "Music"
+     "theme": "Music",
+     "trigger": "door_music_00"
     },
     {
      "id": "B7K5DY",
@@ -718,7 +798,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04A",
-     "theme": "Music"
+     "theme": "Music",
+     "trigger": "door_music_00"
     },
     {
      "id": "XE4AHA",
@@ -726,7 +807,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04B",
-     "theme": "Stealth"
+     "theme": "Stealth",
+     "trigger": "0PMM9"
     },
     {
      "id": "5J8NLI",
@@ -734,7 +816,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04B",
-     "theme": "Stealth"
+     "theme": "Stealth",
+     "trigger": "0PMM9"
     },
     {
      "id": "2ETQ6Q",
@@ -742,7 +825,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04B",
-     "theme": "Stealth"
+     "theme": "Stealth",
+     "trigger": "0PMM9"
     },
     {
      "id": "QZUS32",
@@ -750,7 +834,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04B",
-     "theme": "Stealth"
+     "theme": "Stealth",
+     "trigger": "0PMM9"
     },
     {
      "id": "Z63NAO",
@@ -758,7 +843,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04B",
-     "theme": "Stealth"
+     "theme": "Stealth",
+     "trigger": "0PMM9"
     },
     {
      "id": "NMN3E2",
@@ -766,7 +852,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04B",
-     "theme": "Stealth"
+     "theme": "Stealth",
+     "trigger": "0PMM9"
     },
     {
      "id": "I8IBDK",
@@ -774,7 +861,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "04B",
-     "theme": "Stealth"
+     "theme": "Stealth",
+     "trigger": "0PMM9"
     }
    ]
   },
@@ -792,7 +880,8 @@
      "boss": false,
      "challenges": 0,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "RGUEMY",
@@ -800,7 +889,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "ERYWJ2",
@@ -808,7 +898,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "OC2JBO",
@@ -816,7 +907,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "RCO2X6",
@@ -824,7 +916,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "AI0UHJ",
@@ -832,7 +925,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "78L44H",
@@ -840,7 +934,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "MNAVZG",
@@ -848,7 +943,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "Y5F4KJ",
@@ -856,7 +952,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "ABHRY5",
@@ -864,7 +961,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03A",
-     "theme": "Jungle"
+     "theme": "Jungle",
+     "trigger": "RVQTA"
     },
     {
      "id": "8B7JY0",
@@ -872,7 +970,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     },
     {
      "id": "AEPGWL",
@@ -880,7 +979,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     },
     {
      "id": "KH2Y5W",
@@ -888,7 +988,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     },
     {
      "id": "URYM1G",
@@ -896,7 +997,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     },
     {
      "id": "9L69DA",
@@ -904,7 +1006,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     },
     {
      "id": "DQ9PHI",
@@ -912,7 +1015,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     },
     {
      "id": "GIUB1I",
@@ -920,7 +1024,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     },
     {
      "id": "R9XQ98",
@@ -928,7 +1033,8 @@
      "boss": false,
      "challenges": 1,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     },
     {
      "id": "O9CW2I",
@@ -936,7 +1042,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     },
     {
      "id": "DSCVS",
@@ -944,7 +1051,8 @@
      "boss": true,
      "challenges": 0,
      "subarea": "03B",
-     "theme": "Cars"
+     "theme": "Cars",
+     "trigger": "CROWN_MAIN2"
     }
    ]
   },
@@ -961,7 +1069,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "02",
-     "theme": "Water"
+     "theme": "Water",
+     "trigger": "P3I4O"
     },
     {
      "id": "CTMOYG",
@@ -969,7 +1078,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "02",
-     "theme": "Water"
+     "theme": "Water",
+     "trigger": "P3I4O"
     },
     {
      "id": "QXE006",
@@ -977,7 +1087,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "02",
-     "theme": "Water"
+     "theme": "Water",
+     "trigger": "P3I4O"
     },
     {
      "id": "K04MWO",
@@ -985,7 +1096,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "02",
-     "theme": "Water"
+     "theme": "Water",
+     "trigger": "P3I4O"
     },
     {
      "id": "6SXVJW",
@@ -993,7 +1105,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "02",
-     "theme": "Water"
+     "theme": "Water",
+     "trigger": "P3I4O"
     }
    ]
   },
@@ -1010,7 +1123,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "CFXC91",
@@ -1018,7 +1132,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "PA1XRO",
@@ -1026,7 +1141,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "P226OF",
@@ -1034,7 +1150,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "CAWMQ4",
@@ -1042,7 +1159,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "43V4BS",
@@ -1050,7 +1168,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "X7KRW9",
@@ -1058,7 +1177,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "6NRVED",
@@ -1066,7 +1186,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "8TV0B0",
@@ -1074,7 +1195,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "J61H50",
@@ -1082,7 +1204,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "YBN74R",
@@ -1090,7 +1213,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "2834C4",
@@ -1098,7 +1222,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "B3P25D",
@@ -1106,7 +1231,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "HCTG3X",
@@ -1114,7 +1240,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "GX5I6L",
@@ -1122,7 +1249,8 @@
      "boss": false,
      "challenges": 0,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "V4A05X",
@@ -1130,7 +1258,8 @@
      "boss": false,
      "challenges": 2,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     },
     {
      "id": "AXCX7",
@@ -1138,7 +1267,8 @@
      "boss": true,
      "challenges": 0,
      "subarea": "01",
-     "theme": "Western"
+     "theme": "Western",
+     "trigger": "8LARX"
     }
    ]
   },
@@ -1155,7 +1285,8 @@
      "boss": true,
      "challenges": 0,
      "subarea": "00",
-     "theme": "Finale"
+     "theme": "Finale",
+     "trigger": "OS8GA"
     },
     {
      "id": "IKCV7",
@@ -1163,8 +1294,313 @@
      "boss": true,
      "challenges": 0,
      "subarea": "00",
-     "theme": "Finale"
+     "theme": "Finale",
+     "trigger": "OS8GA"
     }
+   ]
+  }
+ ],
+ "gate_units": [
+  {
+   "trigger": "DOOR_easy2d_00",
+   "name": "09A: Easy 2D",
+   "chamber": 9,
+   "sections": [
+    "09A"
+   ],
+   "scenes": [
+    "2DBall many balls 1",
+    "2DBall Simple 0",
+    "2D Rubber 1",
+    "2D Sticky 1"
+   ]
+  },
+  {
+   "trigger": "Z4UZC",
+   "name": "09B: Living Room",
+   "chamber": 9,
+   "sections": [
+    "09B"
+   ],
+   "scenes": [
+    "Livingroom couch",
+    "Livingroom tv",
+    "LivingroomChair",
+    "Livingroom Arrow ball",
+    "Livingroom vase",
+    "SquareBall"
+   ]
+  },
+  {
+   "trigger": "door_platformer_00",
+   "name": "08A: Platformers",
+   "chamber": 8,
+   "sections": [
+    "08A"
+   ],
+   "scenes": [
+    "2DBall mario 1",
+    "2D Football",
+    "AngryGolf",
+    "2DBall Flabby Golf",
+    "2D HoleInOne 01 basic"
+   ]
+  },
+  {
+   "trigger": "NLABA",
+   "name": "08B: Soccer",
+   "chamber": 8,
+   "sections": [
+    "08B"
+   ],
+   "scenes": [
+    "GoalInOne",
+    "SoccerBall tutorial",
+    "SoccerBall",
+    "SoccerBall 1",
+    "SoccerBall 2",
+    "SoccerBall 3"
+   ]
+  },
+  {
+   "trigger": "door_space_00",
+   "name": "08C: Space",
+   "chamber": 8,
+   "sections": [
+    "08C"
+   ],
+   "scenes": [
+    "2D Moon Lander",
+    "SpaceGolf1",
+    "SpaceGolf3",
+    "SpaceGolf5",
+    "SpaceGolf6"
+   ]
+  },
+  {
+   "trigger": "VJ69W",
+   "name": "08D: Explosion",
+   "chamber": 8,
+   "sections": [
+    "08D"
+   ],
+   "scenes": [
+    "Explosion2",
+    "Explosion3",
+    "Explosion4",
+    "Explosion5",
+    "Explosion6",
+    "Explosion rolling",
+    "Explosion barrel flying",
+    "Manball 3",
+    "Explosion barrel"
+   ]
+  },
+  {
+   "trigger": "door_ol_00",
+   "name": "07A: OL",
+   "chamber": 7,
+   "sections": [
+    "07A"
+   ],
+   "scenes": [
+    "2D 100meter",
+    "2D Bow And Arrow",
+    "2D Golf Olympics Start",
+    "2D 150meter",
+    "2D HoleInOne 2 basic"
+   ]
+  },
+  {
+   "trigger": "CROWN_MAIN1",
+   "name": "07B: Lebowski",
+   "chamber": 7,
+   "sections": [
+    "07B"
+   ],
+   "scenes": [
+    "Bowling 3",
+    "Bowling",
+    "Bowling 6 - white hat",
+    "ManyBowlings",
+    "Bowling MoonGolf 0"
+   ]
+  },
+  {
+   "trigger": "YX3NO",
+   "name": "06A/B: Portal & Super Putt",
+   "chamber": 6,
+   "sections": [
+    "06A",
+    "06B"
+   ],
+   "scenes": [
+    "2D Rope Portal 1",
+    "2D Rope Portal 2",
+    "2DBall Portal 1",
+    "2D Portal Gun 1",
+    "2D Player Portal 1 3",
+    "2D Player Portal 1",
+    "2D HoleInOne 03 frogger",
+    "SUPERGOLF0",
+    "SUPERGOLF6",
+    "SUPERGOLF - tutorial 1",
+    "SUPERGOLF dodge",
+    "EvilFlag 3 Circle"
+   ]
+  },
+  {
+   "trigger": "9DSBG",
+   "name": "05A/B/C: Kitchen, Gravity & FPG",
+   "chamber": 5,
+   "sections": [
+    "05A",
+    "05B",
+    "05C"
+   ],
+   "scenes": [
+    "EvilFlag move then stop",
+    "2D HoleInOne 04 peggle",
+    "Livingroom Egg",
+    "Livingroom champagne",
+    "2D Gravity Change On Aim",
+    "2D Super Golf Boy 0",
+    "2D Super Golf Boy 1",
+    "2D Super Golf Boy 2",
+    "2D Super Golf Boy 3",
+    "2D Custom Gravity",
+    "2D Bouncyboy",
+    "2D Bouncyboy 2",
+    "FPG Ordinary Golf 0",
+    "FPG Ordinary Golf 1",
+    "FPG Swinging Golf Clubs",
+    "FPG Targets",
+    "FPG Targets 2",
+    "FPG Ordinary Golf 3"
+   ]
+  },
+  {
+   "trigger": "door_music_00",
+   "name": "04A: Music",
+   "chamber": 4,
+   "sections": [
+    "04A"
+   ],
+   "scenes": [
+    "2D Music Imitation 1",
+    "Golf Hero 1",
+    "2D Music Karaoke 1"
+   ]
+  },
+  {
+   "trigger": "0PMM9",
+   "name": "04B: Stealth",
+   "chamber": 4,
+   "sections": [
+    "04B"
+   ],
+   "scenes": [
+    "Manball Stealth",
+    "SneakTutorial",
+    "MetalGearSolid01",
+    "GolfClubObstacles",
+    "SoccerBallStealth",
+    "Harmonikadyr",
+    "SquareBallSneak"
+   ]
+  },
+  {
+   "trigger": "RVQTA",
+   "name": "03A: Jungle",
+   "chamber": 3,
+   "sections": [
+    "03A"
+   ],
+   "scenes": [
+    "EvilFlag Magic 0",
+    "2D Explosions Rubber 0",
+    "2D Explosions Rubber 1",
+    "2D Explosions Sticky 1",
+    "2D Arrow Is Club 0",
+    "2D Arrow Is Club 1",
+    "2D Explosions Egg 0",
+    "2D Explosions Egg 1",
+    "2D Explosions Egg 2",
+    "2D Explosions Simple 0"
+   ]
+  },
+  {
+   "trigger": "CROWN_MAIN2",
+   "name": "03B: Cars",
+   "chamber": 3,
+   "sections": [
+    "03B"
+   ],
+   "scenes": [
+    "CarCompetition",
+    "car tutorial",
+    "car zigzag",
+    "car windmill",
+    "car explosions",
+    "car but actual car",
+    "Car bicycle",
+    "car monstertruck",
+    "car opponents",
+    "2D HoleInOne 07 basic"
+   ]
+  },
+  {
+   "trigger": "P3I4O",
+   "name": "02: Water",
+   "chamber": 2,
+   "sections": [
+    "02"
+   ],
+   "scenes": [
+    "Beach",
+    "Beach 1",
+    "Water Rising 0",
+    "Water Rising 1",
+    "BeachVolleyGolf"
+   ]
+  },
+  {
+   "trigger": "8LARX",
+   "name": "01: Western",
+   "chamber": 1,
+   "sections": [
+    "01"
+   ],
+   "scenes": [
+    "2D Western Train",
+    "2D Western Bottle Shooting 0",
+    "2D Western Bottle Shooting 1",
+    "Western Horse Shoe Throwing",
+    "RouletteGolf",
+    "DiceFlagGolf Normal Level",
+    "Saloon Piano",
+    "FPG Western Bottle Shooting 0",
+    "FPG Western Shooting Gallery 0",
+    "2D Banjo",
+    "Western Drunk Cowboy 0",
+    "Horse Jumping",
+    "2D Horse On Train",
+    "2D Katamari",
+    "Spitting with fan 0",
+    "Spitting 1",
+    "2D HoleInOne 08 flying ball"
+   ]
+  },
+  {
+   "trigger": "OS8GA",
+   "name": "00: Finale",
+   "chamber": 0,
+   "sections": [
+    "00"
+   ],
+   "scenes": [
+    "Final boss",
+    "2D HoleInOne 09 3d"
    ]
   }
  ]

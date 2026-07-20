@@ -251,5 +251,78 @@
         "2D Explosions Sticky 1"
       ]
     }
+  },
+  "doors": {
+    "ID_2D_HOLEINONE_1": {
+      "boss_level_id": "349CM9",
+      "boss_level_name": "ID_2D_HOLEINONE_1",
+      "chamber": 3,
+      "plate_areas": [
+        "CARS_03B",
+        "EASY2D_09A",
+        "LIVINGROOM_09B"
+      ]
+    },
+    "ID_2D_HOLEINONE_5": {
+      "boss_level_id": "0WUALV",
+      "boss_level_name": "ID_2D_HOLEINONE_5",
+      "chamber": 5,
+      "plate_areas": [
+        "FPG_05C",
+        "GRAVITY_05B"
+      ]
+    },
+    "ID_2D_HOLEINONE_9": {
+      "boss_level_id": "IKCV7",
+      "boss_level_name": "ID_2D_HOLEINONE_9",
+      "chamber": -1,
+      "plate_areas": []
+    },
+    "ID_2D_HOLEINONE_8": {
+      "boss_level_id": "AXCX7",
+      "boss_level_name": "ID_2D_HOLEINONE_8",
+      "chamber": 1,
+      "plate_areas": [
+        "WETERN_01"
+      ]
+    },
+    "ID_2D_HOLEINONE_7": {
+      "boss_level_id": "DSCVS",
+      "boss_level_name": "ID_2D_HOLEINONE_7",
+      "chamber": 4,
+      "plate_areas": [
+        "MUSIC_04A",
+        "STEALTH_04B"
+      ]
+    },
+    "ID_2D_HOLEINONE_3": {
+      "boss_level_id": "C1C9DS",
+      "boss_level_name": "ID_2D_HOLEINONE_3",
+      "chamber": 7,
+      "plate_areas": [
+        "LEBOWSKI_07B",
+        "OL_07A"
+      ]
+    },
+    "ID_2D_HOLEINONE_4": {
+      "boss_level_id": "3VGKO4",
+      "boss_level_name": "ID_2D_HOLEINONE_4",
+      "chamber": 6,
+      "plate_areas": [
+        "PORTAL_06A",
+        "SUPERPUTT_06B"
+      ]
+    },
+    "ID_2D_HOLEINONE_2": {
+      "boss_level_id": "9ZBIZC",
+      "boss_level_name": "ID_2D_HOLEINONE_2",
+      "chamber": 8,
+      "plate_areas": [
+        "EXPLOSION_08D",
+        "PLATFORMERS_08A",
+        "SOCCER_08B",
+        "SPACE_08C"
+      ]
+    }
   }
 }

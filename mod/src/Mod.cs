@@ -20,11 +20,19 @@ public class Mod : MelonMod
     // Read-only save-vocabulary diagnostic (UnlockProbe). Off outside R&D.
     public const bool ProbeEnabled = false;
 
+    // Periodic data-harvesting dumpers (LevelDumper/GoalDumper/etc.). These call
+    // Resources.FindObjectsOfTypeAll (scans ALL loaded objects) + write JSON every
+    // few seconds -> a visible frame stall. We already have the data (mod/wtg_*.json),
+    // so keep OFF; flip to true + rebuild only when re-capturing game data.
+    public const bool DumpersEnabled = false;
+
     public override void OnInitializeMelon()
     {
         Plugin.Client = new ArchipelagoClient();
         Mapping.LocationMap.Load();
         Mapping.AreaState.Load();
+        Mapping.ChamberUnlock.Load();
+        Mapping.BossGate.Load();
         GamePatches.Apply(HarmonyInstance);
         Plugin.Log.LogInfo($"WtgArchipelago loaded (game: {Plugin.GameName}).");
 
@@ -36,6 +44,7 @@ public class Mod : MelonMod
     private int _dumpTimer;
     private int _gateTimer;
     private int _unlockTimer;
+    private int _bossTimer;
 
     // Runs every frame on Unity's main thread -> ideal main-thread pump.
     public override void OnUpdate()
@@ -58,6 +67,14 @@ public class Mod : MelonMod
             Mapping.ChamberUnlock.TryApply();
         }
 
+        // Boss gating: hold still-locked computer doors shut (~6x/sec; no-op when
+        // the seed didn't enable boss keys).
+        if (++_bossTimer >= 10)
+        {
+            _bossTimer = 0;
+            Mapping.BossGate.Tick();
+        }
+
         if (LegacyGatingEnabled)
         {
             // Hard gate: kick the player out of a locked level (every frame).
@@ -71,8 +88,9 @@ public class Mod : MelonMod
             }
         }
 
-        // Periodically harvest level/goal data (accumulates). ~every 5s.
-        if (++_dumpTimer >= 300)
+        // Periodically harvest level/goal data (accumulates). ~every 5s. OFF by
+        // default (DumpersEnabled) — this scan+write is the main source of lag.
+        if (DumpersEnabled && ++_dumpTimer >= 300)
         {
             _dumpTimer = 0;
             Mapping.LevelDumper.Dump();

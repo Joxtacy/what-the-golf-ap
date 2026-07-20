@@ -12,13 +12,37 @@
     "Chamber 02 Access": 78579007,
     "Chamber 01 Access": 78579008,
     "Chamber 00 Access": 78579009,
-    "Flag": 78579010,
-    "Silly Hat": 78579011,
-    "Golf Ball Skin": 78579012,
-    "Confetti Burst": 78579013,
-    "Trophy": 78579014,
-    "Extra Putt": 78579015,
-    "Rubber Duck": 78579016
+    "09A: Easy 2D Access": 78579010,
+    "09B: Living Room Access": 78579011,
+    "08A: Platformers Access": 78579012,
+    "08B: Soccer Access": 78579013,
+    "08C: Space Access": 78579014,
+    "08D: Explosion Access": 78579015,
+    "07A: OL Access": 78579016,
+    "07B: Lebowski Access": 78579017,
+    "06A/B: Portal & Super Putt Access": 78579018,
+    "05A/B/C: Kitchen, Gravity & FPG Access": 78579019,
+    "04A: Music Access": 78579020,
+    "04B: Stealth Access": 78579021,
+    "03A: Jungle Access": 78579022,
+    "03B: Cars Access": 78579023,
+    "02: Water Access": 78579024,
+    "01: Western Access": 78579025,
+    "00: Finale Access": 78579026,
+    "Computer 1 Key": 78579027,
+    "Computer 2 Key": 78579028,
+    "Computer 3 Key": 78579029,
+    "Computer 4 Key": 78579030,
+    "Computer 7 Key": 78579031,
+    "Computer 8 Key": 78579032,
+    "Computer 9 Key": 78579033,
+    "Flag": 78579034,
+    "Silly Hat": 78579035,
+    "Golf Ball Skin": 78579036,
+    "Confetti Burst": 78579037,
+    "Trophy": 78579038,
+    "Extra Putt": 78579039,
+    "Rubber Duck": 78579040
   },
   "locations": {
     "ClubBallMany - Clear": 78584000,
@@ -406,5 +430,104 @@
     "2D HoleInOne 08 flying ball": "Chamber 01",
     "Final boss": "Chamber 00",
     "2D HoleInOne 09 3d": "Chamber 00"
+  },
+  "unlocks_by_item": {
+    "Chamber 09 Access": [
+      "DOOR_easy2d_00",
+      "Z4UZC"
+    ],
+    "Chamber 08 Access": [
+      "door_platformer_00",
+      "NLABA",
+      "door_space_00",
+      "VJ69W"
+    ],
+    "Chamber 07 Access": [
+      "door_ol_00",
+      "CROWN_MAIN1"
+    ],
+    "Chamber 06 Access": [
+      "YX3NO"
+    ],
+    "Chamber 05 Access": [
+      "9DSBG"
+    ],
+    "Chamber 04 Access": [
+      "door_music_00",
+      "0PMM9"
+    ],
+    "Chamber 03 Access": [
+      "RVQTA",
+      "CROWN_MAIN2"
+    ],
+    "Chamber 02 Access": [
+      "P3I4O"
+    ],
+    "Chamber 01 Access": [
+      "8LARX"
+    ],
+    "Chamber 00 Access": [
+      "OS8GA"
+    ],
+    "09A: Easy 2D Access": [
+      "DOOR_easy2d_00"
+    ],
+    "09B: Living Room Access": [
+      "Z4UZC"
+    ],
+    "08A: Platformers Access": [
+      "door_platformer_00"
+    ],
+    "08B: Soccer Access": [
+      "NLABA"
+    ],
+    "08C: Space Access": [
+      "door_space_00"
+    ],
+    "08D: Explosion Access": [
+      "VJ69W"
+    ],
+    "07A: OL Access": [
+      "door_ol_00"
+    ],
+    "07B: Lebowski Access": [
+      "CROWN_MAIN1"
+    ],
+    "06A/B: Portal & Super Putt Access": [
+      "YX3NO"
+    ],
+    "05A/B/C: Kitchen, Gravity & FPG Access": [
+      "9DSBG"
+    ],
+    "04A: Music Access": [
+      "door_music_00"
+    ],
+    "04B: Stealth Access": [
+      "0PMM9"
+    ],
+    "03A: Jungle Access": [
+      "RVQTA"
+    ],
+    "03B: Cars Access": [
+      "CROWN_MAIN2"
+    ],
+    "02: Water Access": [
+      "P3I4O"
+    ],
+    "01: Western Access": [
+      "8LARX"
+    ],
+    "00: Finale Access": [
+      "OS8GA"
+    ]
+  },
+  "boss_by_item": {
+    "Computer 1 Key": "349CM9",
+    "Computer 2 Key": "9ZBIZC",
+    "Computer 3 Key": "C1C9DS",
+    "Computer 4 Key": "3VGKO4",
+    "Computer 7 Key": "DSCVS",
+    "Computer 8 Key": "AXCX7",
+    "Computer 9 Key": "IKCV7"
   }
 }

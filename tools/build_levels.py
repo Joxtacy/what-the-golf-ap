@@ -5,11 +5,17 @@ wtg_sections.json is the AUTHORITATIVE campaign structure, read straight from th
 game's OverworldLevelData ScriptableObject: 21 ordered sections (sub-areas) with
 their exact hole membership, grouped into the real chambers (10 -> 00, counting
 down; 10 = intro/start, 00 = finale). We group the sections into chambers and
-emit the schema data.py already consumes ({final_boss_scene, start_area, areas}),
-so nothing downstream changes -- an "area" is now a real chamber.
+emit the schema data.py consumes ({final_boss_scene, start_area, areas,
+gate_units}), so an "area" is a real chamber.
 
-Chamber gating: chamber 10 is the free start; every other chamber gets an Access
-item. Run: python tools/build_levels.py [--write]
+Two levels of gating are emitted so the apworld can offer either granularity:
+  * chambers  (areas)      -- 10 unlockable chambers (09..00; 10 is free).
+  * gate_units             -- the finer unit the GAME actually unlocks: each is a
+    unique section unlockTriggerId (17 total). Sections that share a trigger open
+    as one unit (e.g. Portal+Super Putt = YX3NO; Kitchen+Gravity+FPG = 9DSBG).
+Each level also carries its section's `trigger` so downstream can regroup freely.
+
+Run: python tools/build_levels.py [--write]
 """
 
 import json
@@ -51,8 +57,12 @@ def build():
     meta = {x["scene"]: x for x in json.load(open(LEVELS, encoding="utf-8"))}
 
     # Group sections into chambers, preserving progression order of first sight.
+    # In parallel, group sections into gate_units keyed by their unlockTriggerId
+    # (the atomic unit the game actually unlocks -- some sections share a trigger).
     chambers = {}       # num -> {"themes": [...], "levels": [...]}
     order = []
+    gate_units = {}     # trigger -> {"name", "chamber", "sections", "scenes"}
+    gate_order = []
     for sec in sections:
         code = sec["name"].strip()
         num = chamber_num(code)
@@ -64,16 +74,30 @@ def build():
         theme = SECTION_THEME.get(code, code)
         if theme not in chambers[num]["themes"]:
             chambers[num]["themes"].append(theme)
+        trigger = sec.get("unlockTriggerId", "") or ""
+        if trigger:     # empty trigger == chamber 10, the free start (no gate)
+            if trigger not in gate_units:
+                gate_units[trigger] = {"chamber": num, "themes": [],
+                                       "sections": [], "scenes": []}
+                gate_order.append(trigger)
+            g = gate_units[trigger]
+            g["sections"].append(code)
+            if theme not in g["themes"]:
+                g["themes"].append(theme)
         for scene in sec["levels"]:
             m = meta.get(scene, {})
-            chambers[num]["levels"].append({
+            level = {
                 "id": m.get("id", ""),
                 "scene": scene,
                 "boss": bool(m.get("boss", False)),
                 "challenges": int(m.get("challenges", 0)),
                 "subarea": code,
                 "theme": theme,
-            })
+                "trigger": trigger,
+            }
+            chambers[num]["levels"].append(level)
+            if trigger:
+                gate_units[trigger]["scenes"].append(scene)
 
     areas = []
     for num in order:
@@ -90,11 +114,46 @@ def build():
     if FINAL_BOSS_SCENE not in final_scenes:
         raise SystemExit(f"final boss scene '{FINAL_BOSS_SCENE}' not found in sections")
 
+    # Finalise gate units: name = "<section code(s)>: <themes>", so the section
+    # is easy to identify and fused units (shared trigger) read as e.g.
+    # "05A/B/C: Kitchen, Gravity & FPG".
+    units = []
+    for trig in gate_order:
+        g = gate_units[trig]
+        units.append({
+            "trigger": trig,
+            "name": f"{_section_label(g['sections'])}: {_join_themes(g['themes'])}",
+            "chamber": g["chamber"],
+            "sections": g["sections"],
+            "scenes": g["scenes"],
+        })
+
     return {
         "final_boss_scene": FINAL_BOSS_SCENE,
         "start_area": start_area,
         "areas": areas,
+        "gate_units": units,
     }
+
+
+def _join_themes(themes):
+    """['Portal', 'Super Putt'] -> 'Portal & Super Putt'; three+ use commas."""
+    if len(themes) <= 1:
+        return themes[0] if themes else ""
+    if len(themes) == 2:
+        return f"{themes[0]} & {themes[1]}"
+    return ", ".join(themes[:-1]) + f" & {themes[-1]}"
+
+
+def _section_label(sections):
+    """['05A','05B','05C'] -> '05A/B/C'; ['08D'] -> '08D'; ['02'] -> '02'.
+
+    All sections in a gate unit share a chamber (they share a trigger), so we
+    show the 2-digit chamber once and join the sub-area letters.
+    """
+    chamber = sections[0][:2]
+    letters = [s[2:] for s in sections if s[2:]]
+    return chamber + "/".join(letters) if letters else chamber
 
 
 def main():
@@ -108,6 +167,11 @@ def main():
         b = sum(1 for l in a["levels"] if l["boss"])
         themes = ", ".join(a["themes"])
         print(f"  {a['name']}  ({len(a['levels']):2d} holes)  {themes}" + (f"  [+{b} boss]" if b else ""))
+
+    print(f"\ngate units (section granularity): {len(world['gate_units'])}")
+    for g in world["gate_units"]:
+        print(f"  {g['name']:24} ({len(g['scenes']):2d} holes)  "
+              f"ch{g['chamber']:02d} {g['trigger']}  <- {'/'.join(g['sections'])}")
 
     if "--write" in sys.argv:
         with open(OUT, "w", encoding="utf-8") as f:
