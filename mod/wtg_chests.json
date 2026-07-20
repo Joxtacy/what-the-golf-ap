@@ -1,0 +1,640 @@
+{
+  "chests": {
+    "CHEST_LIVINGROOM": {
+      "id": "CHEST_LIVINGROOM",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -0.081,
+        5.8600006,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Living room"
+      ]
+    },
+    "CHEST_HOLOROOM": {
+      "id": "CHEST_HOLOROOM",
+      "type": "OverworldIslandChest",
+      "unlocked": false,
+      "pos": [
+        10.612434,
+        150.93428,
+        0.0
+      ],
+      "parents": [
+        "Island (Hidden 2)",
+        "Interactive things",
+        "Container"
+      ]
+    },
+    "CHEST_EXPLOSION": {
+      "id": "CHEST_EXPLOSION",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        16.915,
+        42.86,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Explosion"
+      ]
+    },
+    "CHEST_EASY2D": {
+      "id": "CHEST_EASY2D",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -55.084,
+        5.861,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Easy 2D PC"
+      ]
+    },
+    "CHEST_CARS": {
+      "id": "CHEST_CARS",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -20.079,
+        224.05,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Cars"
+      ]
+    },
+    "CHEST_KITCHEN": {
+      "id": "CHEST_KITCHEN",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -42.0,
+        129.36,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Kitchen"
+      ]
+    },
+    "CHEST_GRAVITY_MAIN": {
+      "id": "CHEST_GRAVITY_MAIN",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -99.13742,
+        166.00046,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Gravity"
+      ]
+    },
+    "CHEST_GRAVITY_SIDE": {
+      "id": "CHEST_GRAVITY_SIDE",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -98.149994,
+        104.99967,
+        0.0
+      ],
+      "parents": [
+        "Chests (1)",
+        "Container",
+        "Hub Section - Gravity"
+      ]
+    },
+    "CHEST_FPG": {
+      "id": "CHEST_FPG",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -24.086,
+        160.86,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - FPG"
+      ]
+    },
+    "CHEST_JUNGLE": {
+      "id": "CHEST_JUNGLE",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -49.083,
+        233.989,
+        0.0
+      ],
+      "parents": [
+        "WinRoom",
+        "Decoration",
+        "Container"
+      ]
+    },
+    "CHEST_DESERT2": {
+      "id": "CHEST_DESERT2",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -40.0,
+        308.0,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Desert Mobile"
+      ]
+    },
+    "CHEST_SAWABLE": {
+      "id": "CHEST_SAWABLE",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -28.098,
+        196.357,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - 03 area"
+      ]
+    },
+    "CHEST_PORTAL": {
+      "id": "CHEST_PORTAL",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -74.825,
+        103.30299,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Portals PC"
+      ]
+    },
+    "CHEST_OL": {
+      "id": "CHEST_OL",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -61.5,
+        61.107,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - OL - Mobile"
+      ]
+    },
+    "CHEST_STEALTH": {
+      "id": "CHEST_STEALTH",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -2.0820003,
+        188.011,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Stealth"
+      ]
+    },
+    "CHEST_SPACE": {
+      "id": "CHEST_SPACE",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -109.083,
+        30.86,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - SPACE - PC"
+      ]
+    },
+    "CHEST_SOCCER2": {
+      "id": "CHEST_SOCCER2",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        5.925,
+        15.919998,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Soccer"
+      ]
+    },
+    "CHEST_DESERT1": {
+      "id": "CHEST_DESERT1",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -10.0,
+        308.0,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Desert Mobile"
+      ]
+    },
+    "CHEST_PLATFORMER": {
+      "id": "CHEST_PLATFORMER",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -65.5,
+        10.0,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Platformers Mobile"
+      ]
+    },
+    "CHEST_SOCCER1": {
+      "id": "CHEST_SOCCER1",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -6.081,
+        23.86,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Soccer"
+      ]
+    },
+    "CHEST_SUPERPUTT": {
+      "id": "CHEST_SUPERPUTT",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -1.081,
+        114.938,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Superhot"
+      ]
+    },
+    "CHEST_LEBOWSKI": {
+      "id": "CHEST_LEBOWSKI",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        20.957,
+        70.89,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Big Lebowski"
+      ]
+    },
+    "CHEST_MUSIC": {
+      "id": "CHEST_MUSIC",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        -86.0,
+        181.86,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Music"
+      ]
+    },
+    "CHEST_LEBOWSKI_SECRET": {
+      "id": "CHEST_LEBOWSKI_SECRET",
+      "type": "Chest",
+      "unlocked": false,
+      "pos": [
+        68.93,
+        64.041,
+        0.0
+      ],
+      "parents": [
+        "Chests",
+        "Container",
+        "Hub Section - Minor room: Toilets"
+      ]
+    }
+  },
+  "crown_doors": {
+    "CROWN_WESTERN2": {
+      "id": "CROWN_WESTERN2",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -10.5,
+        306.5,
+        0.0
+      ]
+    },
+    "CROWN_PLATFORMERS": {
+      "id": "CROWN_PLATFORMERS",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -68.0,
+        21.5,
+        0.0
+      ]
+    },
+    "CROWN_OL": {
+      "id": "CROWN_OL",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -58.84,
+        61.0,
+        0.0
+      ]
+    },
+    "CROWN_MUSIC": {
+      "id": "CROWN_MUSIC",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -51.5,
+        191.0,
+        0.0
+      ]
+    },
+    "CROWN_MAIN2": {
+      "id": "CROWN_MAIN2",
+      "name": "Overworld2d button Main Crown Door Variant",
+      "can_open": true,
+      "pos": [
+        -32.5,
+        206.5,
+        0.0
+      ]
+    },
+    "CROWN_PORTALS": {
+      "id": "CROWN_PORTALS",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -106.0,
+        96.5,
+        0.0
+      ]
+    },
+    "CROWN_JUNGLE": {
+      "id": "CROWN_JUNGLE",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -38.000015,
+        228.49997,
+        0.0
+      ]
+    },
+    "CROWN_EXPLOSIONS": {
+      "id": "CROWN_EXPLOSIONS",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        17.0,
+        41.5,
+        0.0
+      ]
+    },
+    "CROWN_EASY2D": {
+      "id": "CROWN_EASY2D",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -46.0,
+        -14.0,
+        0.0
+      ]
+    },
+    "CROWN_SOCCER": {
+      "id": "CROWN_SOCCER",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -6.0,
+        22.5,
+        0.0
+      ]
+    },
+    "CROWN_MAIN1": {
+      "id": "CROWN_MAIN1",
+      "name": "Overworld2d button Main Crown Door",
+      "can_open": true,
+      "pos": [
+        -32.5,
+        53.0,
+        0.0
+      ]
+    },
+    "CROWN_GRAVITY": {
+      "id": "CROWN_GRAVITY",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -99.0,
+        164.5,
+        0.0
+      ]
+    },
+    "CROWN_FPG": {
+      "id": "CROWN_FPG",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -24.0,
+        159.5,
+        0.0
+      ]
+    },
+    "CROWN_WESTERN1": {
+      "id": "CROWN_WESTERN1",
+      "name": "Overworld2d button Crowns Only Variant (1)",
+      "can_open": true,
+      "pos": [
+        -40.5,
+        306.5,
+        0.0
+      ]
+    },
+    "CROWN_LEBOWSKI": {
+      "id": "CROWN_LEBOWSKI",
+      "name": "Overworld2d button Crowns Only Variant (1)",
+      "can_open": true,
+      "pos": [
+        21.0,
+        69.5,
+        0.0
+      ]
+    },
+    "CROWN_SPACE": {
+      "id": "CROWN_SPACE",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -113.5,
+        29.0,
+        0.0
+      ]
+    },
+    "CROWN_SUPERPUTT": {
+      "id": "CROWN_SUPERPUTT",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -1.0,
+        113.5,
+        0.0
+      ]
+    },
+    "CROWN_CARS": {
+      "id": "CROWN_CARS",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -20.0,
+        222.5,
+        0.0
+      ]
+    },
+    "CROWN_LIVINGROOM": {
+      "id": "CROWN_LIVINGROOM",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        0.0,
+        4.5,
+        0.0
+      ]
+    },
+    "CROWN_STEALTH": {
+      "id": "CROWN_STEALTH",
+      "name": "Overworld2d button Crowns Only Variant",
+      "can_open": true,
+      "pos": [
+        -2.0,
+        186.5,
+        0.0
+      ]
+    }
+  },
+  "areas": {
+    "STEALTH_04B": {
+      "area": "STEALTH_04B",
+      "chest": "CHEST_STEALTH"
+    },
+    "WETERN_01": {
+      "area": "WETERN_01",
+      "chest": "CHEST_DESERT1"
+    },
+    "JUNGLE_03A": {
+      "area": "JUNGLE_03A",
+      "chest": "CHEST_JUNGLE"
+    },
+    "CARS_03B": {
+      "area": "CARS_03B",
+      "chest": "CHEST_CARS"
+    },
+    "MUSIC_04A": {
+      "area": "MUSIC_04A",
+      "chest": "CHEST_MUSIC"
+    },
+    "GRAVITY_05B": {
+      "area": "GRAVITY_05B",
+      "chest": "CHEST_GRAVITY_MAIN"
+    },
+    "FPG_05C": {
+      "area": "FPG_05C",
+      "chest": "CHEST_FPG"
+    },
+    "OL_07A": {
+      "area": "OL_07A",
+      "chest": "CHEST_OL"
+    },
+    "INTRO_10": {
+      "area": "INTRO_10",
+      "chest": "CHEST_CARS"
+    },
+    "SUPERPUTT_06B": {
+      "area": "SUPERPUTT_06B",
+      "chest": "CHEST_SUPERPUTT"
+    },
+    "LIVINGROOM_09B": {
+      "area": "LIVINGROOM_09B",
+      "chest": "CHEST_LIVINGROOM"
+    },
+    "LEBOWSKI_07B": {
+      "area": "LEBOWSKI_07B",
+      "chest": "CHEST_LEBOWSKI"
+    },
+    "PORTAL_06A": {
+      "area": "PORTAL_06A",
+      "chest": "CHEST_PORTAL"
+    },
+    "PLATFORMERS_08A": {
+      "area": "PLATFORMERS_08A",
+      "chest": "CHEST_PLATFORMER"
+    },
+    "EXPLOSION_08D": {
+      "area": "EXPLOSION_08D",
+      "chest": "CHEST_EXPLOSION"
+    },
+    "SPACE_08C": {
+      "area": "SPACE_08C",
+      "chest": "CHEST_SPACE"
+    },
+    "EASY2D_09A": {
+      "area": "EASY2D_09A",
+      "chest": "CHEST_EASY2D"
+    },
+    "SOCCER_08B": {
+      "area": "SOCCER_08B",
+      "chest": "CHEST_SOCCER1"
+    }
+  }
+}

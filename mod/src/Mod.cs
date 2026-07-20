@@ -39,6 +39,13 @@ public class Mod : MelonMod
     // LogDoors) to locate a hard-to-find boss. Keep OFF in normal builds.
     public const bool BossLocateEnabled = false;
 
+    // DEV SPIKE for the "crowns" option (roadmap #3/#4): ChestProbe logs the live
+    // chest/crown-door inventory + polls chest-open detection. ChestBlockTest also
+    // forces every crown door shut (canOpen=false) to prove the block lever on
+    // "Main Crown Door" variants. Keep both OFF in normal builds.
+    public const bool ChestProbeEnabled = false;   // DEV: crowns spike. Superseded by ChestGate.
+    public const bool ChestBlockTest = false;       // DEV pass 2 (done): force crown doors shut.
+
     public override void OnInitializeMelon()
     {
         Plugin.Client = new ArchipelagoClient();
@@ -47,6 +54,7 @@ public class Mod : MelonMod
         Mapping.ChamberUnlock.Load();
         Mapping.BossGate.Load();
         Mapping.BossGoal.Load();
+        Mapping.ChestGate.Load();
         GamePatches.Apply(HarmonyInstance);
 
         // Passive until connected: load persisted connection settings + the in-game
@@ -75,6 +83,8 @@ public class Mod : MelonMod
     private int _unlockTimer;
     private int _bossTimer;
     private int _walkTimer;
+    private int _chestTimer;
+    private int _chestDumpTimer;
 
     // Runs every frame on Unity's main thread -> ideal main-thread pump.
     public override void OnUpdate()
@@ -102,6 +112,14 @@ public class Mod : MelonMod
 
         if (ProbeEnabled) Mapping.UnlockProbe.RunOnce();
 
+        // DEV SPIKE (crowns option): chest/crown-door probe. Read-mostly; runs
+        // regardless of connection like the other diagnostics. ~6x/sec.
+        if (ChestProbeEnabled && ++_chestTimer >= 10)
+        {
+            _chestTimer = 0;
+            Mapping.ChestProbe.Tick(ChestBlockTest);
+        }
+
         // PASSIVE UNTIL CONNECTED: everything below writes game/save state, so it
         // runs only while an AP session is live. With no connection the mod has no
         // side effects (installed == vanilla). The dev ForceUnlockTrigger path is
@@ -123,11 +141,13 @@ public class Mod : MelonMod
         // Gate holding (~6x/sec; each self-no-ops when its option is off):
         //  - BossGate: hold still-locked computer doors shut (boss_keys).
         //  - SectionGate: hold locked within-chamber connectors shut (hard_sections).
+        //  - ChestGate: hold locked crown-chest doors shut (crowns).
         if (connected && ++_bossTimer >= 10)
         {
             _bossTimer = 0;
             Mapping.BossGate.Tick();
             Mapping.SectionGate.Tick();
+            Mapping.ChestGate.Tick();
             if (BossLocateEnabled) Mapping.BossGate.LogDoors();
         }
 
@@ -154,6 +174,14 @@ public class Mod : MelonMod
             Mapping.BridgeDumper.Dump();
             Mapping.DoorDumper.Dump();
             Mapping.SectionDumper.Dump();
+        }
+
+        // Chest capture can run alone (under the crowns spike) without paying the
+        // full dumper-suite lag; also runs as part of the suite when enabled.
+        if ((DumpersEnabled || ChestProbeEnabled) && ++_chestDumpTimer >= 300)
+        {
+            _chestDumpTimer = 0;
+            Mapping.ChestDumper.Dump();
         }
     }
 }

@@ -36,4 +36,5 @@ public class ArchipelagoData
     public string AreaAccess = "section";
     public bool BossKeysEnabled;
     public bool HardSectionsEnabled;
+    public bool CrownsEnabled;
 }

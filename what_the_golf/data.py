@@ -56,6 +56,17 @@ class GateUnit:
     levels: tuple    # tuple[Level, ...]
 
 
+@dataclass(frozen=True)
+class Chest:
+    """An overworld crown chest (the "crowns" option)."""
+    id: str          # OverworldID.ID (e.g. "CHEST_CARS") -- the mod matches on this
+    display: str     # human name (e.g. "Cars", "Gravity Main")
+    chamber: int
+    trigger: str     # its sub-area's unlockTriggerId (places it in that region)
+    gated: bool      # True = behind a crown door (needs a key); False = free
+    door: str        # the crown-door OverworldID.ID to hold shut ("" if free)
+
+
 def _load():
     with open(_LEVELS_PATH, encoding="utf-8") as f:
         w = json.load(f)
@@ -75,10 +86,17 @@ def _load():
     # Keyable computer boss doors (built from wtg_doors.json by build_levels.py):
     # doors with plate areas AND a real campaign hole. See boss_holes() below.
     boss_doors = tuple(dict(d) for d in w.get("boss_doors", ()))
-    return areas, gate_units, w["start_area"], w["final_boss_scene"], boss_doors
+    # Overworld crown chests (the "crowns" option). See build_levels.py CHESTS.
+    chests = tuple(
+        Chest(c["id"], c["display"], int(c["chamber"]), c.get("trigger", ""),
+              bool(c["gated"]), c.get("door") or "")
+        for c in w.get("chests", ())
+    )
+    return (areas, gate_units, w["start_area"], w["final_boss_scene"],
+            boss_doors, chests)
 
 
-AREAS, GATE_UNITS, START_AREA, FINAL_BOSS_SCENE, BOSS_DOORS = _load()
+AREAS, GATE_UNITS, START_AREA, FINAL_BOSS_SCENE, BOSS_DOORS, CHESTS = _load()
 
 _BY_SCENE = {lv.scene: lv for a in AREAS for lv in a.levels}
 
@@ -98,6 +116,16 @@ def access_item(gate_name: str) -> str:
 def boss_key_item(n: int) -> str:
     """Boss-key item name for computer N (e.g. "Computer 3 Key")."""
     return f"Computer {n} Key"
+
+
+def chest_loc(display: str) -> str:
+    """AP location name for a crown chest (e.g. "Cars Chest")."""
+    return f"{display} Chest"
+
+
+def chest_key_item(display: str) -> str:
+    """AP key item name for a crown-gated chest (e.g. "Cars Chest Key")."""
+    return f"{display} Chest Key"
 
 
 def clear_loc(scene: str) -> str:
@@ -181,6 +209,40 @@ def boss_key_to_level_id():
     return {boss_key_item(n): lv.id for lv, n in BOSS_HOLES}
 
 
+# --- Crown chests / keys (the "crowns" option) -------------------------------
+def chest_key_names():
+    """Key item names for the crown-GATED chests only (free chests need no key)."""
+    return [chest_key_item(c.display) for c in CHESTS if c.gated]
+
+
+def chest_location_names():
+    """AP location names for every chest (gated + free)."""
+    return [chest_loc(c.display) for c in CHESTS]
+
+
+def chest_region(chest: "Chest", mode: str) -> str:
+    """Region a chest's location belongs to -- its sub-area's gate, so the region's
+    Access rule gates reaching the chest (a gated chest also needs its key)."""
+    if mode == SECTION:
+        for g in GATE_UNITS:
+            if g.trigger == chest.trigger:
+                return g.name
+        return START_AREA
+    return f"Chamber {chest.chamber:02d}"
+
+
+def chest_doors_by_item():
+    """Gated chest key name -> the crown-door OverworldID.ID the mod holds shut
+    (canOpen=false) until the key arrives."""
+    return {chest_key_item(c.display): c.door for c in CHESTS if c.gated}
+
+
+def chest_loc_by_oid():
+    """Chest OverworldID.ID -> its AP location name (the mod resolves the just-
+    opened chest to this and sends the check)."""
+    return {c.id: chest_loc(c.display) for c in CHESTS}
+
+
 # --- Region layout per granularity option ------------------------------------
 # A "gate" is one region: (region_name, access_item_or_None, levels). The start
 # region has access None (reachable for free). Both layouts cover all 132 holes.
@@ -254,9 +316,10 @@ def access_item_names():
 
 def all_item_names():
     # Universe of every item any option can produce (IDs must stay stable): all
-    # access keys (both granularities) + all boss keys + Flag + filler.
+    # access keys (both granularities) + all boss keys + crown-chest keys + Flag +
+    # filler. A seed only CREATES the subset its options need.
     return (list(access_item_names()) + list(boss_key_names())
-            + [FLAG_ITEM] + list(FILLER_ITEMS))
+            + list(chest_key_names()) + [FLAG_ITEM] + list(FILLER_ITEMS))
 
 
 def all_location_names():
@@ -265,6 +328,9 @@ def all_location_names():
         names.append(clear_loc(level.scene))
         if level.challenges > 0:
             names.append(crown_loc(level.scene))
+    # Chest locations always in the ID table (stable IDs); Regions.py only CREATES
+    # them when the crowns option is on.
+    names += chest_location_names()
     return names
 
 

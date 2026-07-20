@@ -4,6 +4,7 @@ from worlds.generic.Rules import set_rule
 
 from .data import (
     gates, BOSS_HOLES, boss_key_item, clear_loc, crown_loc, all_boss_scenes,
+    CHESTS, chest_loc, chest_key_item,
 )
 from .Items import flag_pool
 
@@ -31,6 +32,17 @@ def set_rules(world) -> None:
             for loc_name in names:
                 loc = multiworld.get_location(loc_name, player)
                 set_rule(loc, lambda state, k=key: state.has(k, player))
+
+    # Crown-chest gating: a crown-locked chest's location also needs its
+    # "<Area> Chest Key" (on top of its region's Access rule). Free chests have no
+    # key -- they're reachable as soon as their region is.
+    if world.options.crowns.value:
+        for chest in CHESTS:
+            if not chest.gated:
+                continue
+            key = chest_key_item(chest.display)
+            loc = multiworld.get_location(chest_loc(chest.display), player)
+            set_rule(loc, lambda state, k=key: state.has(k, player))
 
     # Completion condition depends on the chosen goal.
     goal = world.options.goal

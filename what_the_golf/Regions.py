@@ -1,6 +1,8 @@
 from BaseClasses import Region, ItemClassification
 
-from .data import gates, final_boss_gate, clear_loc, crown_loc
+from .data import (
+    gates, final_boss_gate, clear_loc, crown_loc, CHESTS, chest_loc, chest_region,
+)
 from .Items import WTGItem
 from .Locations import WTGLocation, location_name_to_id
 
@@ -35,6 +37,14 @@ def create_regions(world) -> None:
                 _add_location(region, crown_loc(level.scene))
 
         menu.connect(region, f"To {name}")
+
+    # Crown chests (crowns option): each chest is a location in its sub-area's
+    # region, so the region's Access rule gates reaching it. Gated chests get an
+    # extra key requirement in Rules.py.
+    if world.options.crowns.value:
+        for chest in CHESTS:
+            region = multiworld.get_region(chest_region(chest, mode), player)
+            _add_location(region, chest_loc(chest.display))
 
     # Campaign victory: an internal event placed in the Final boss region, so it's
     # reachable exactly when that region is accessible.

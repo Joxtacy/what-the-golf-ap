@@ -4,7 +4,8 @@ from worlds.AutoWorld import World, WebWorld
 from .Options import WTGOptions
 from .Items import (
     WTGItem, item_name_to_id, item_classification,
-    access_items_for, BOSS_KEY_ITEMS, FLAG_ITEM, FILLER_ITEMS, flag_pool,
+    access_items_for, BOSS_KEY_ITEMS, CHEST_KEY_ITEMS, FLAG_ITEM, FILLER_ITEMS,
+    flag_pool,
 )
 from .data import CHAMBER, SECTION
 from .Locations import location_name_to_id
@@ -65,6 +66,11 @@ class WTGWorld(World):
             for name in BOSS_KEY_ITEMS:
                 pool.append(self.create_item(name))
 
+        # Progression: crown-chest keys (only when the crowns option is enabled).
+        if self.options.crowns.value:
+            for name in CHEST_KEY_ITEMS:
+                pool.append(self.create_item(name))
+
         # Progression: one Flag per hole (counted for the % goals).
         for _ in range(flag_pool()):
             pool.append(self.create_item(FLAG_ITEM))
@@ -92,5 +98,6 @@ class WTGWorld(World):
             "area_access": self.area_access_mode(),
             "boss_keys": bool(self.options.boss_keys.value),
             "hard_sections": bool(self.options.hard_sections.value),
+            "crowns": bool(self.options.crowns.value),
             "death_link": bool(self.options.death_link.value),
         }

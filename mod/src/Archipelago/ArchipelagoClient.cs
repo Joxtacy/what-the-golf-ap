@@ -147,6 +147,8 @@ public class ArchipelagoClient
         BossGate.SetEnabled(Data.BossKeysEnabled);
         if (slotData.TryGetValue("hard_sections", out var hs)) Data.HardSectionsEnabled = Convert.ToBoolean(hs);
         SectionGate.SetEnabled(Data.HardSectionsEnabled);
+        if (slotData.TryGetValue("crowns", out var cr)) Data.CrownsEnabled = Convert.ToBoolean(cr);
+        ChestGate.SetEnabled(Data.CrownsEnabled);
     }
 
     // --- Location checks -----------------------------------------------------

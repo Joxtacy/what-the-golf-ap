@@ -63,6 +63,84 @@ INJECT_LEVELS = [
 ]
 
 
+# Overworld crown chests (the "crowns" option). Authored from the in-game chest
+# dump (mod/wtg_chests.json) + live pass-2 validation (2026-07-20): each chest's
+# OverworldID.ID -> (sub-area code, crown-door id | None). A chest WITH a door is
+# crown-gated -- the mod holds that door's OverworldButton2D shut (canOpen=false,
+# the validated lever) until the AP "<name> Chest Key" arrives. door=None means
+# the chest is freely reachable (a check only, no key). Each chest becomes an AP
+# location placed in its sub-area's region (so area access gates reaching it); the
+# gated ones additionally require their key (Rules.py).
+#
+# The two "Main Crown Door" variants CROWN_MAIN1/CROWN_MAIN2 are NOT chest doors:
+# they are the unlockTriggerId of sections 07B (Lebowski) and 03B (Cars) -- i.e.
+# the crown-gated ACCESS doors to those sub-areas, already opened by the normal
+# section-access key (ChamberUnlock). The Lebowski/Cars CHESTS sit behind their own
+# separate doors (CROWN_LEBOWSKI / CROWN_CARS), which is what we key here.
+# CHEST_HOLOROOM's area is a best guess (a hidden island; enum-adjacent to the
+# chamber-5 chests) -- it's free, so a slightly-off gating key is harmless; confirm
+# + correct later.
+CHESTS = [
+    # id,                    sub-area, crown-door (None = free)
+    ("CHEST_EASY2D",          "09A", "CROWN_EASY2D"),
+    ("CHEST_LIVINGROOM",      "09B", "CROWN_LIVINGROOM"),
+    ("CHEST_PLATFORMER",      "08A", "CROWN_PLATFORMERS"),
+    ("CHEST_SOCCER1",         "08B", "CROWN_SOCCER"),
+    ("CHEST_SPACE",           "08C", "CROWN_SPACE"),
+    ("CHEST_EXPLOSION",       "08D", "CROWN_EXPLOSIONS"),
+    ("CHEST_OL",              "07A", "CROWN_OL"),
+    ("CHEST_LEBOWSKI",        "07B", "CROWN_LEBOWSKI"),
+    ("CHEST_PORTAL",          "06A", "CROWN_PORTALS"),
+    ("CHEST_SUPERPUTT",       "06B", "CROWN_SUPERPUTT"),
+    ("CHEST_GRAVITY_MAIN",    "05B", "CROWN_GRAVITY"),
+    ("CHEST_FPG",             "05C", "CROWN_FPG"),
+    ("CHEST_MUSIC",           "04A", "CROWN_MUSIC"),
+    ("CHEST_STEALTH",         "04B", "CROWN_STEALTH"),
+    ("CHEST_JUNGLE",          "03A", "CROWN_JUNGLE"),
+    ("CHEST_CARS",            "03B", "CROWN_CARS"),
+    ("CHEST_DESERT1",         "01",  "CROWN_WESTERN1"),
+    ("CHEST_DESERT2",         "01",  "CROWN_WESTERN2"),
+    # Free chests (no crown door):
+    ("CHEST_KITCHEN",         "05A", None),
+    ("CHEST_SAWABLE",         "03A", None),
+    ("CHEST_SOCCER2",         "08B", None),
+    ("CHEST_GRAVITY_SIDE",    "05B", None),
+    ("CHEST_LEBOWSKI_SECRET", "07B", None),
+    ("CHEST_HOLOROOM",        "05C", None),
+]
+
+
+def chest_display(cid):
+    """CHEST_GRAVITY_MAIN -> 'Gravity Main'; CHEST_EASY2D -> 'Easy2D'."""
+    return cid[len("CHEST_"):].replace("_", " ").title()
+
+
+def build_chests(sections, chambers_by_num):
+    """Resolve each chest to {id, display, chamber, subarea, trigger, gated, door}.
+
+    trigger comes from the chest's sub-area section (so the chest lands in the same
+    region as that sub-area's holes). Fails loudly if a sub-area is unknown.
+    """
+    sec_trigger = {s["name"].strip(): (s.get("unlockTriggerId") or "") for s in sections}
+    out = []
+    for cid, subarea, door in CHESTS:
+        if subarea not in sec_trigger:
+            raise SystemExit(f"chest {cid}: sub-area '{subarea}' not in sections")
+        chamber = chamber_num(subarea)
+        if chamber not in chambers_by_num:
+            raise SystemExit(f"chest {cid}: chamber {chamber} missing")
+        out.append({
+            "id": cid,
+            "display": chest_display(cid),
+            "chamber": chamber,
+            "subarea": subarea,
+            "trigger": sec_trigger[subarea],
+            "gated": door is not None,
+            "door": door,
+        })
+    return out
+
+
 def chamber_num(section_name):
     m = re.match(r"(\d+)", section_name.strip())
     return int(m.group(1)) if m else None
@@ -207,6 +285,7 @@ def build():
 
     campaign_scenes = {l["scene"] for a in areas for l in a["levels"]}
     boss_doors = keyable_boss_doors(campaign_scenes)
+    chests = build_chests(sections, chambers)
 
     return {
         "final_boss_scene": FINAL_BOSS_SCENE,
@@ -214,6 +293,7 @@ def build():
         "areas": areas,
         "gate_units": units,
         "boss_doors": boss_doors,
+        "chests": chests,
     }
 
 
@@ -259,6 +339,14 @@ def main():
           f"-> {[d['computer'] for d in bd]}")
     for d in bd:
         print(f"  Computer {d['computer']}  {d['boss_level_id']:8} {d['scene']}")
+
+    ch = world["chests"]
+    gated = [c for c in ch if c["gated"]]
+    print(f"\ncrown chests (crowns option): {len(ch)} locations, "
+          f"{len(gated)} keyed / {len(ch) - len(gated)} free")
+    for c in ch:
+        tag = f"key -> {c['door']}" if c["gated"] else "free"
+        print(f"  {c['display']:16} ch{c['chamber']:02d} {c['subarea']:4} {c['trigger']:6} {tag}")
 
     if "--write" in sys.argv:
         with open(OUT, "w", encoding="utf-8") as f:

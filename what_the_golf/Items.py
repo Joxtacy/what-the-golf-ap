@@ -2,8 +2,8 @@ from BaseClasses import Item, ItemClassification
 
 from .data import (
     item_name_to_id, access_item_names, chamber_access_names,
-    section_access_names, boss_key_names, FLAG_ITEM, FILLER_ITEMS, num_holes,
-    CHAMBER, SECTION,
+    section_access_names, boss_key_names, chest_key_names,
+    FLAG_ITEM, FILLER_ITEMS, num_holes, CHAMBER, SECTION,
 )
 
 IC = ItemClassification
@@ -22,6 +22,9 @@ ACCESS_ITEMS = access_item_names()
 # Computer boss keys (added to the pool only when the boss_keys option is on).
 BOSS_KEY_ITEMS = boss_key_names()
 
+# Crown-chest keys (added to the pool only when the crowns option is on).
+CHEST_KEY_ITEMS = chest_key_names()
+
 
 def access_items_for(mode: str) -> list:
     """The Access keys to actually put in the pool for the chosen granularity."""
@@ -29,7 +32,7 @@ def access_items_for(mode: str) -> list:
 
 
 def item_classification(name: str) -> ItemClassification:
-    if name in ACCESS_ITEMS or name in BOSS_KEY_ITEMS:
+    if name in ACCESS_ITEMS or name in BOSS_KEY_ITEMS or name in CHEST_KEY_ITEMS:
         return IC.progression
     if name == FLAG_ITEM:
         # Counted for the % goals -> progression, no cross-player balancing.
@@ -43,5 +46,5 @@ def flag_pool() -> int:
 
 
 __all__ = ["WTGItem", "item_name_to_id", "item_classification",
-           "ACCESS_ITEMS", "BOSS_KEY_ITEMS", "access_items_for", "FLAG_ITEM",
-           "FILLER_ITEMS", "flag_pool", "CHAMBER", "SECTION"]
+           "ACCESS_ITEMS", "BOSS_KEY_ITEMS", "CHEST_KEY_ITEMS", "access_items_for",
+           "FLAG_ITEM", "FILLER_ITEMS", "flag_pool", "CHAMBER", "SECTION"]

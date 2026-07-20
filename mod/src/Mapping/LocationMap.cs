@@ -42,6 +42,11 @@ public static class LocationMap
     public static long ClearId(string scene) => Lookup(scene, " - Clear");
     public static long CrownId(string scene) => Lookup(scene, " - Crown");
 
+    /// <summary>Resolve a full AP location name to its id (-1 if unknown). Used by
+    /// ChestGate, whose locations aren't scene+suffix.</summary>
+    public static long IdByName(string name) =>
+        name != null && _nameToId.TryGetValue(name, out var id) ? id : Missing;
+
     private static long Lookup(string scene, string suffix)
     {
         if (scene == null) return Missing;

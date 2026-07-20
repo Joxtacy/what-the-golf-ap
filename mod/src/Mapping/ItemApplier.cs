@@ -23,6 +23,12 @@ public static class ItemApplier
             BossGate.Unlock(name);
             MelonLoader.MelonLogger.Msg($"Boss unlocked: {name}");
         }
+        else if (ChestGate.Handles(name))
+        {
+            // Crown-chest key: stop holding that chest's crown door shut.
+            ChestGate.Unlock(name);
+            MelonLoader.MelonLogger.Msg($"Chest unlocked: {name}");
+        }
         else if (name.EndsWith(" Access"))
         {
             // Open the exact in-game door(s) this Access item maps to. Works for

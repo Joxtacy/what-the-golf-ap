@@ -1650,5 +1650,223 @@
    "boss_level_id": "AXCX7",
    "scene": "2D HoleInOne 08 flying ball"
   }
+ ],
+ "chests": [
+  {
+   "id": "CHEST_EASY2D",
+   "display": "Easy2D",
+   "chamber": 9,
+   "subarea": "09A",
+   "trigger": "DOOR_easy2d_00",
+   "gated": true,
+   "door": "CROWN_EASY2D"
+  },
+  {
+   "id": "CHEST_LIVINGROOM",
+   "display": "Livingroom",
+   "chamber": 9,
+   "subarea": "09B",
+   "trigger": "Z4UZC",
+   "gated": true,
+   "door": "CROWN_LIVINGROOM"
+  },
+  {
+   "id": "CHEST_PLATFORMER",
+   "display": "Platformer",
+   "chamber": 8,
+   "subarea": "08A",
+   "trigger": "door_platformer_00",
+   "gated": true,
+   "door": "CROWN_PLATFORMERS"
+  },
+  {
+   "id": "CHEST_SOCCER1",
+   "display": "Soccer1",
+   "chamber": 8,
+   "subarea": "08B",
+   "trigger": "NLABA",
+   "gated": true,
+   "door": "CROWN_SOCCER"
+  },
+  {
+   "id": "CHEST_SPACE",
+   "display": "Space",
+   "chamber": 8,
+   "subarea": "08C",
+   "trigger": "door_space_00",
+   "gated": true,
+   "door": "CROWN_SPACE"
+  },
+  {
+   "id": "CHEST_EXPLOSION",
+   "display": "Explosion",
+   "chamber": 8,
+   "subarea": "08D",
+   "trigger": "VJ69W",
+   "gated": true,
+   "door": "CROWN_EXPLOSIONS"
+  },
+  {
+   "id": "CHEST_OL",
+   "display": "Ol",
+   "chamber": 7,
+   "subarea": "07A",
+   "trigger": "door_ol_00",
+   "gated": true,
+   "door": "CROWN_OL"
+  },
+  {
+   "id": "CHEST_LEBOWSKI",
+   "display": "Lebowski",
+   "chamber": 7,
+   "subarea": "07B",
+   "trigger": "CROWN_MAIN1",
+   "gated": true,
+   "door": "CROWN_LEBOWSKI"
+  },
+  {
+   "id": "CHEST_PORTAL",
+   "display": "Portal",
+   "chamber": 6,
+   "subarea": "06A",
+   "trigger": "YX3NO",
+   "gated": true,
+   "door": "CROWN_PORTALS"
+  },
+  {
+   "id": "CHEST_SUPERPUTT",
+   "display": "Superputt",
+   "chamber": 6,
+   "subarea": "06B",
+   "trigger": "YX3NO",
+   "gated": true,
+   "door": "CROWN_SUPERPUTT"
+  },
+  {
+   "id": "CHEST_GRAVITY_MAIN",
+   "display": "Gravity Main",
+   "chamber": 5,
+   "subarea": "05B",
+   "trigger": "9DSBG",
+   "gated": true,
+   "door": "CROWN_GRAVITY"
+  },
+  {
+   "id": "CHEST_FPG",
+   "display": "Fpg",
+   "chamber": 5,
+   "subarea": "05C",
+   "trigger": "9DSBG",
+   "gated": true,
+   "door": "CROWN_FPG"
+  },
+  {
+   "id": "CHEST_MUSIC",
+   "display": "Music",
+   "chamber": 4,
+   "subarea": "04A",
+   "trigger": "door_music_00",
+   "gated": true,
+   "door": "CROWN_MUSIC"
+  },
+  {
+   "id": "CHEST_STEALTH",
+   "display": "Stealth",
+   "chamber": 4,
+   "subarea": "04B",
+   "trigger": "0PMM9",
+   "gated": true,
+   "door": "CROWN_STEALTH"
+  },
+  {
+   "id": "CHEST_JUNGLE",
+   "display": "Jungle",
+   "chamber": 3,
+   "subarea": "03A",
+   "trigger": "RVQTA",
+   "gated": true,
+   "door": "CROWN_JUNGLE"
+  },
+  {
+   "id": "CHEST_CARS",
+   "display": "Cars",
+   "chamber": 3,
+   "subarea": "03B",
+   "trigger": "CROWN_MAIN2",
+   "gated": true,
+   "door": "CROWN_CARS"
+  },
+  {
+   "id": "CHEST_DESERT1",
+   "display": "Desert1",
+   "chamber": 1,
+   "subarea": "01",
+   "trigger": "8LARX",
+   "gated": true,
+   "door": "CROWN_WESTERN1"
+  },
+  {
+   "id": "CHEST_DESERT2",
+   "display": "Desert2",
+   "chamber": 1,
+   "subarea": "01",
+   "trigger": "8LARX",
+   "gated": true,
+   "door": "CROWN_WESTERN2"
+  },
+  {
+   "id": "CHEST_KITCHEN",
+   "display": "Kitchen",
+   "chamber": 5,
+   "subarea": "05A",
+   "trigger": "9DSBG",
+   "gated": false,
+   "door": null
+  },
+  {
+   "id": "CHEST_SAWABLE",
+   "display": "Sawable",
+   "chamber": 3,
+   "subarea": "03A",
+   "trigger": "RVQTA",
+   "gated": false,
+   "door": null
+  },
+  {
+   "id": "CHEST_SOCCER2",
+   "display": "Soccer2",
+   "chamber": 8,
+   "subarea": "08B",
+   "trigger": "NLABA",
+   "gated": false,
+   "door": null
+  },
+  {
+   "id": "CHEST_GRAVITY_SIDE",
+   "display": "Gravity Side",
+   "chamber": 5,
+   "subarea": "05B",
+   "trigger": "9DSBG",
+   "gated": false,
+   "door": null
+  },
+  {
+   "id": "CHEST_LEBOWSKI_SECRET",
+   "display": "Lebowski Secret",
+   "chamber": 7,
+   "subarea": "07B",
+   "trigger": "CROWN_MAIN1",
+   "gated": false,
+   "door": null
+  },
+  {
+   "id": "CHEST_HOLOROOM",
+   "display": "Holoroom",
+   "chamber": 5,
+   "subarea": "05C",
+   "trigger": "9DSBG",
+   "gated": false,
+   "door": null
+  }
  ]
 }

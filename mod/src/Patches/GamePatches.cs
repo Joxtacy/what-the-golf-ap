@@ -32,6 +32,11 @@ public static class GamePatches
         // Campaign goal: final Computer defeated.
         TryPatch(harmony, "GameAnalytics:OnFinalBossCompleted", nameof(FinalBossPostfix));
 
+        // Crown chest opened (crowns option) -> send that chest's AP check. Fires
+        // once per chest on first open; the Chest arg (reference type -> safe to
+        // inject) gives us its OverworldID.ID (CHEST_*).
+        TryPatch(harmony, "ChestManager:Chest_OnPostChestOpenFirst", nameof(ChestOpenedPostfix));
+
         // NOTE: DeathLink (a Level.Fail hook) is deferred -- Fail also has a
         // tricky signature; wire it when implementing DeathLink, carefully.
         // The main-thread pump lives in Mod.OnUpdate, which runs every frame.
@@ -84,6 +89,20 @@ public static class GamePatches
         // Scene isn't known yet here; arm a deferred check (see EntryGate).
         try { Mapping.EntryGate.Arm(); }
         catch (Exception e) { Plugin.Log.LogError($"LevelBeginPostfix: {e}"); }
+    }
+
+    // __1 = the second parameter of Chest_OnPostChestOpenFirst(ChestTrophee, Chest)
+    // -- i.e. the opened Chest. Index-based injection avoids relying on interop
+    // preserving the original parameter name.
+    private static void ChestOpenedPostfix(Il2Cpp.Chest __1)
+    {
+        try
+        {
+            string oid = null;
+            try { oid = (__1 != null && __1.id != null) ? __1.id.ID : null; } catch { }
+            Mapping.ChestGate.ReportOpened(oid);
+        }
+        catch (Exception e) { Plugin.Log.LogError($"ChestOpenedPostfix: {e}"); }
     }
 
     private static void FinalBossPostfix()

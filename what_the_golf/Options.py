@@ -74,10 +74,25 @@ class HardSections(Toggle):
     display_name = "Hard Sub-area Locks"
 
 
+class Crowns(Toggle):
+    """Add the overworld crown chests as checks.
+
+    When on, every crown chest in the overworld becomes an AP location (24 checks).
+    Most of them are crown-locked behind a door in the vanilla game; for those the
+    mod holds the door shut and instead hands you a "<Area> Chest Key" through the
+    multiworld -- so the chest opens on the KEY, not on a crown count. The handful
+    of chests that are freely reachable in vanilla (Kitchen, the sawable chest, a
+    couple of secret ones) stay free: they're checks, but need no key. Adds 18
+    progression keys spread across the multiworld.
+    """
+    display_name = "Crown Chests"
+
+
 @dataclass
 class WTGOptions(PerGameCommonOptions):
     goal: Goal
     area_access: AreaAccess
     boss_keys: BossKeys
     hard_sections: HardSections
+    crowns: Crowns
     death_link: DeathLink
