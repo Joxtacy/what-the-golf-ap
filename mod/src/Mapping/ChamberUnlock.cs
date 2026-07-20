@@ -32,10 +32,13 @@ public static class ChamberUnlock
 {
     // AP Access-item name -> in-game trigger ids it opens (from wtg_ids.json).
     private static Dictionary<string, List<string>> _unlocksByItem = new();
-    // Trigger ids requested (union across all received Access items) and applied.
+    // Trigger ids requested (union across all received Access items). We do NOT keep a
+    // permanent "applied" set: the game reloads the save from disk when the campaign
+    // overworld loads (e.g. after the intro), which discards any door we opened too
+    // early. So every tick we VERIFY each requested trigger against the live save
+    // (GetIsDoorOpen/GetIsMainDoorOpen) and re-open any that isn't set — self-healing.
     private static readonly HashSet<string> Requested = new();
-    private static readonly HashSet<string> Applied = new();
-    private static readonly HashSet<string> Available = new();  // sections confirmed teleport-available
+    private static readonly HashSet<string> Available = new();  // sections we've logged as available (once)
 
     private class IdsFile
     {
@@ -53,7 +56,7 @@ public static class ChamberUnlock
         return set;
     }
 
-    /// <summary>Has this section trigger been unlocked by an AP key this session?</summary>
+    /// <summary>Has this section trigger been requested by an AP key this session?</summary>
     public static bool IsTriggerUnlocked(string trigger)
         => !string.IsNullOrEmpty(trigger) && Requested.Contains(trigger);
 
@@ -69,6 +72,18 @@ public static class ChamberUnlock
             Plugin.Log.LogInfo($"ChamberUnlock: {_unlocksByItem.Count} access->door maps loaded.");
         }
         catch (Exception e) { Plugin.Log.LogError($"ChamberUnlock.Load: {e}"); }
+    }
+
+    /// <summary>DEV/TEST: force one raw trigger id open, bypassing the AP item map.
+    /// Used to cleanly test teleport-reachability of a specific unreached section on a
+    /// fresh save (e.g. "door_platformer_00" for 08A Platformers) without needing the
+    /// server to send that section's Access item. Off unless Mod.ForceUnlockTrigger set.</summary>
+    public static void ForceTrigger(string trigger)
+    {
+        if (string.IsNullOrEmpty(trigger)) return;
+        if (Requested.Add(trigger))
+            Plugin.Log.LogInfo($"[UNLOCK] FORCE trigger '{trigger}' (dev test)");
+        TryApply();
     }
 
     /// <summary>Request the doors for a received "&lt;X&gt; Access" item to open.</summary>
@@ -87,58 +102,60 @@ public static class ChamberUnlock
         TryApply();
     }
 
-    /// <summary>Apply any requested-but-not-yet-applied triggers if we're in an
-    /// overworld. Cheap no-op otherwise. Call periodically from OnUpdate.</summary>
+    /// <summary>Ensure every requested trigger is registered as an open door in the
+    /// LIVE save, re-applying any the game has dropped (e.g. after a save reload on
+    /// overworld load). Cheap no-op when everything is already open. Call periodically
+    /// from OnUpdate.
+    ///
+    /// GATING MECHANISM (confirmed by disassembling the game, 2026-07-20):
+    /// OverworldLevelSection.Refresh() sets isAvailable = IsNullOrWhiteSpace(trigger)
+    /// || SaveGame.GetIsDoorOpen(trigger) || SaveGame.GetIsMainDoorOpen(trigger). The
+    /// pause-menu teleporter (PopulateMainCampaignSections) shows a button for EVERY
+    /// section and only sets isLocked = !isAvailable -- there is NO saveSpotId /
+    /// TELEPORT_ filtering. So a section is teleport-reachable iff its trigger is an
+    /// open door. Nothing else to do.</summary>
     public static void TryApply()
     {
         try
         {
-            // Keep running until every requested trigger is opened AND its section
-            // is confirmed teleport-available (the level data can load a few frames
-            // after the manager, so a one-shot apply may miss the sections).
-            if (Requested.Count == Applied.Count && Available.Count == Applied.Count) return;
+            if (Requested.Count == 0) return;
 
-            // Need an overworld loaded for RefreshDoorsAndGoals to matter.
+            // Need an overworld loaded for the door state / RefreshDoorsAndGoals to matter.
             var mgrs = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldManager2d>();
             if (mgrs.Length == 0) return;
 
-            int newlyApplied = 0;
+            int opened = 0;
             foreach (var trig in Requested)
             {
-                if (Applied.Contains(trig)) continue;
+                bool isOpen = false;
+                try { isOpen = Il2Cpp.SaveGame.GetIsDoorOpen(trig) || Il2Cpp.SaveGame.GetIsMainDoorOpen(trig); }
+                catch { }
+                if (isOpen) continue;   // already registered (or persisted from a prior write)
                 try { Il2Cpp.SaveGame.SetDoorOpen(trig); } catch { }
                 try { Il2Cpp.SaveGame.SetMainDoorOpen(trig); } catch { }
-                Applied.Add(trig);
-                newlyApplied++;
+                opened++;
             }
 
-            if (newlyApplied > 0)
+            if (opened > 0)
             {
-                Plugin.Log.LogInfo($"[UNLOCK] opened {newlyApplied} door trigger(s)");
+                Plugin.Log.LogInfo($"[UNLOCK] (re)opened {opened} door trigger(s) in live save");
                 for (int m = 0; m < mgrs.Length; m++)
                     if (mgrs[m] != null) { try { mgrs[m].RefreshDoorsAndGoals(); } catch { } }
+                RefreshUnlockedSections();
             }
-
-            // Refresh each unlocked SECTION so its isAvailable recomputes from the
-            // now-open door flag -- otherwise the pause-menu teleporter
-            // (PopulateMainCampaignSections filters by isAvailable) won't list it.
-            // Retried each tick until confirmed, because OverworldLevelData can load
-            // after the manager. (Prior saves "worked" only because the section was
-            // already available from earlier play.)
-            RefreshUnlockedSections();
         }
         catch (Exception e) { Plugin.Log.LogError($"ChamberUnlock.TryApply: {e}"); }
     }
 
-    /// <summary>Recompute isAvailable for every section whose trigger we've opened,
-    /// so the teleporter lists it. Belt-and-suspenders: call Refresh(), and if it's
-    /// still not available, force isAvailable = true.</summary>
+    /// <summary>Recompute isAvailable for each section whose trigger we've opened, so
+    /// the overworld/teleporter reflects it immediately (the menu re-derives it too,
+    /// but this updates goal visuals now). isAvailable is purely door-derived, so a
+    /// plain Refresh() is sufficient -- no forcing.</summary>
     private static void RefreshUnlockedSections()
     {
         try
         {
             var datas = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldLevelData>();
-            int sectionsSeen = 0;
             for (int a = 0; a < datas.Length; a++)
             {
                 var secs = datas[a] != null ? datas[a].Sections : null;
@@ -147,16 +164,12 @@ public static class ChamberUnlock
                 {
                     var sec = secs[s];
                     if (sec == null || string.IsNullOrEmpty(sec.unlockTriggerId)) continue;
-                    sectionsSeen++;
-                    if (!Applied.Contains(sec.unlockTriggerId)) continue;
+                    if (!Requested.Contains(sec.unlockTriggerId)) continue;
                     try { sec.Refresh(); } catch { }
-                    if (!sec.isAvailable) sec.isAvailable = true;
                     if (sec.isAvailable && Available.Add(sec.unlockTriggerId))
                         Plugin.Log.LogInfo($"[UNLOCK] section '{sec.name}' ({sec.unlockTriggerId}) now teleport-available");
                 }
             }
-            // Nothing to refresh against yet (level data not loaded) -> stays retryable.
-            if (sectionsSeen == 0) return;
         }
         catch (Exception e) { Plugin.Log.LogError($"ChamberUnlock.RefreshUnlockedSections: {e}"); }
     }

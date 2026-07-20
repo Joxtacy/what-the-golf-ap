@@ -20,6 +20,11 @@ public class Mod : MelonMod
     // Read-only save-vocabulary diagnostic (UnlockProbe). Off outside R&D.
     public const bool ProbeEnabled = false;
 
+    // DEV/TEST (teleporter thread, now SOLVED): force one raw section trigger open on
+    // load, bypassing AP, to test teleport-reachability of an unreached section on a
+    // fresh save. "" = off (normal). Left here as a diagnostic lever; keep "".
+    public const string ForceUnlockTrigger = "";
+
     // Periodic data-harvesting dumpers (LevelDumper/GoalDumper/etc.). These call
     // Resources.FindObjectsOfTypeAll (scans ALL loaded objects) + write JSON every
     // few seconds -> a visible frame stall. We already have the data (mod/wtg_*.json),
@@ -83,6 +88,9 @@ public class Mod : MelonMod
         if (++_unlockTimer >= 30)
         {
             _unlockTimer = 0;
+            // DEV/TEST: force a chosen section trigger open (teleporter thread).
+            if (!string.IsNullOrEmpty(ForceUnlockTrigger))
+                Mapping.ChamberUnlock.ForceTrigger(ForceUnlockTrigger);
             Mapping.ChamberUnlock.TryApply();
         }
 

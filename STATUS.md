@@ -99,39 +99,57 @@ overwrites the poke (this fooled earlier same-save tests into a premature
 `Mod.ActiveGateTestEnabled`/`WalkProbeEnabled` (both OFF). TODO: productionize as a
 `SectionGate` (sibling to `BossGate`) behind a `hard_sections` apworld option.
 
-### Teleporter / reachability — OPEN THREAD (resume here, 2026-07-20)
+### Teleporter / reachability — SOLVED (2026-07-20)
 
-Big open issue for the non-linear model. On a **fresh save** a keyed-but-unvisited
-chamber may not be teleport-reachable, so "receive a chamber key → teleport there"
-can fail. Investigation so far (all prior success was on progressed saves where
-everything was already reached, which masked this):
+Verified in-game on a fresh save: receive a chamber/section key → that section
+becomes an **unlocked** teleport destination → hop there and play. The long-standing
+"keyed-but-unvisited section won't teleport" worry was a single bug, not a design
+gap. Both a `TELEPORT_` section (08A Platformers) and a `SAVE_` section (08C Space)
+teleported.
 
-- **`ChamberUnlock` fix already made (kept):** after `SetDoorOpen`/`SetMainDoorOpen`
-  it now calls each unlocked `OverworldLevelSection.Refresh()` and sets
-  `isAvailable=true`, **retried each tick** until `OverworldLevelData` loads (logs
-  `section 'X' now teleport-available`). This made **Easy 2D (09A)** teleportable
-  on a fresh save. Necessary but not sufficient in all cases (below).
-- **Space (08C) still didn't list** — but 08C is a bad test target: its
-  `saveSpotId='SAVE_space_01'` while every sibling is `TELEPORT_*`
-  (`TELEPORT_PLATFORMERS`/`_SOCCER`/`_EXPLOSION`/`_EASY2D`/…). Space may simply not
-  be a teleport destination (walk-in + save point only). **Re-test with a real
-  `TELEPORT_` section that's unreached (e.g. 08A Platformers).**
-- **`ACCESSIBLE_LEVELS` save set is EMPTY yet teleport-to-reached works** → it is
-  NOT the teleport gate. Gate is likely the game's **SaveSpot "reached" system**
-  (`SaveSpot`/`OnEnterSaveSpot`, section `saveSpotId`). There may be a
-  "reached save spots" save key `UnlockProbe` doesn't dump yet.
-- **Levers on hand:** `SaveGame.AddToSet(key, elem, slot)` (generic set writer),
-  `SetLevelCompleted(id)`, `SaveGame.currentOverworld.*` set keys. `UnlockProbe`
-  (`Mod.ProbeEnabled`) dumps OPEN_DOORS/OPEN_MAIN_DOORS/CONSOLES_HIT/
-  COMPLETED_LEVELS/ACCESSIBLE_LEVELS/UNLOCKED_CHESTS + section state.
+**Root cause found by DISASSEMBLING `GameAssembly.dll`** (dump.cs has no method
+bodies; used `objdump` + an RVA→name index — see `tools/disq_objdump.py`). The
+teleport gate is far simpler than assumed:
 
-**NEXT (fresh thread):** (1) extend `UnlockProbe` to dump *all* `currentOverworld`
-keys → find the "reached save spots" set; (2) clean re-test on a fresh save with a
-`TELEPORT_` unreached section, probe timed AFTER unlock; (3) decide the design fork
-(see task): (A) mod marks keyed sections reached/teleportable via that set, or (B)
-rework apworld into a chamber progression chain, or (C) hybrid. NOTE the committed
-non-linear "teleport anywhere keyed" claim (below) is **only verified on progressed
-saves** — treat as unconfirmed for fresh saves until this thread closes.
+- `OverworldLevelSection.Refresh()` sets
+  `isAvailable = IsNullOrWhiteSpace(unlockTriggerId) || SaveGame.GetIsDoorOpen(trig)
+  || SaveGame.GetIsMainDoorOpen(trig)`. That is the *entire* availability rule.
+- The pause-menu teleporter (`OverworldTeleportMenu.PopulateMainCampaignSections`)
+  creates a button for **every** section and only sets `isLocked = !isAvailable`.
+  **There is NO `saveSpotId` / `TELEPORT_` filtering** — the `TELEPORT_`-vs-`SAVE_`
+  prefix only chooses where the ball is placed on arrival, not whether you can go.
+- So a section is teleport-reachable **iff its `unlockTriggerId` is an open door**
+  (`OPEN_DOORS` or `OPEN_MAIN_DOORS`). Nothing else — no reached-spots set (there
+  isn't one), no `isAvailable` forcing, no `TELEPORT_` requirement. The earlier
+  "Space won't teleport", "reached-spots gate", and "Water/Western have no anchor"
+  conclusions were **all symptoms of the doors being empty**, not real gates.
+
+**The actual bug:** `SetDoorOpen(id)` = `AddToSet(currentOverworld.OPEN_DOORS, id)`,
+an **in-memory** write to `campaignDatas[currentCampaign]`. `ChamberUnlock` applied
+it *during the intro*, the campaign overworld load then **reloaded the save from
+disk** (discarding the write), and a sticky `Applied` set stopped it ever re-writing.
+Confirmed live: the mod logged `(re)opened 3 door trigger(s)` twice ~4s apart — the
+reload wiped the doors and the new self-heal re-applied them; `OPEN_DOORS` then held
+`door_platformer_00`/`door_space_00`/`DOOR_easy2d_00` stably.
+
+**The fix (in `ChamberUnlock.TryApply`, built + deployed):** no permanent "applied"
+set — every tick, for each requested trigger, check `GetIsDoorOpen || GetIsMainDoorOpen`
+and re-`SetDoorOpen`+`SetMainDoorOpen` any that got dropped, then
+`RefreshDoorsAndGoals()` + `section.Refresh()`. Self-healing against the reload; a
+cheap no-op once everything is open. Removed the `isAvailable=true` forcing (futile —
+the menu re-derives it from the door flag anyway).
+
+**Dev levers (left in place, OFF):** `UnlockProbe` (`Mod.ProbeEnabled`) now dumps
+every save set + `SavePosition` + all loaded `SaveSpot` ids + per-section availability;
+`ChamberUnlock.ForceTrigger(id)` + `Mod.ForceUnlockTrigger` ("") force one trigger open
+without AP for fresh-save reachability tests. `tools/disq_objdump.py` disassembles any
+method by dump offset/VA with resolved call targets — reusable for future RE.
+
+**Implication for the roadmap:** the `area_access: section` "physical looseness"
+(walking to locked siblings) is unchanged, but there is now **no teleport-reachability
+caveat** — any keyed section (TELEPORT_ or SAVE_) is directly teleport-reachable. The
+within-chamber hard-lock (`SectionGate`) remains the optional way to remove the walk
+looseness.
 
 ## ROADMAP — richer progression (agreed 2026-07-19)
 
