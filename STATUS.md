@@ -373,6 +373,12 @@ skip this next time). See the mod-UX section above.
   (e.g. `Level.Complete`) — the interop trampoline crashes. Hook the static
   `GameAnalytics.OnLevelComplete` (reference param) and read state via `GameState`.
 - **Server needs `websockets==13.1`** for AP 0.6.7.
+- **Never send to AP from the game's main thread.** `SendCheck`/`SendVictory` run
+  the network send on a `ThreadPool` thread and gate on `Connected` (not just a
+  non-null `Session` — the object lingers after a socket close). A synchronous send
+  into a dead socket blocks the caller; from an `OnLevelComplete` postfix that is
+  Unity's main thread → the whole game freezes (with the socket-close exception
+  logged from the background receive thread while frozen — the tell).
 
 ## Suggested next steps
 

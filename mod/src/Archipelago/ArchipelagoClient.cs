@@ -154,10 +154,25 @@ public class ArchipelagoClient
     /// <summary>Report an AP location as checked (safe to call from any thread).</summary>
     public void SendCheck(long locationId)
     {
-        if (Session == null || locationId < 0) return;
+        // Gate on Connected, NOT just a non-null Session: after a socket close the
+        // Session object lingers but its socket is dead. Sending into a dead socket
+        // can BLOCK the calling thread -- and this is called from a game postfix on
+        // Unity's main thread, so that would freeze the game. (Dedup on this thread.)
+        if (Session == null || !Connected || locationId < 0) return;
         if (!Data.CheckedLocations.Add(locationId)) return;   // already sent
-        Session.Locations.CompleteLocationChecks(locationId);
-        Plugin.Log.LogInfo($"AP check sent: {locationId}");
+
+        // Do the actual network send OFF the main thread so a slow/dead socket can
+        // never stall the game. MultiClient.Net's send path is thread-safe.
+        var session = Session;
+        ThreadPool.QueueUserWorkItem(_ =>
+        {
+            try
+            {
+                session.Locations.CompleteLocationChecks(locationId);
+                Plugin.Log.LogInfo($"AP check sent: {locationId}");
+            }
+            catch (Exception e) { Plugin.Log.LogError($"AP check {locationId} not sent: {e.Message}"); }
+        });
     }
 
     /// <summary>Resolve a level's scene name to its Clear location and send it.</summary>
@@ -169,9 +184,17 @@ public class ArchipelagoClient
     /// <summary>Tell the server this slot reached its goal (campaign complete).</summary>
     public void SendVictory()
     {
-        if (Session == null) return;
-        Session.Socket.SendPacket(new StatusUpdatePacket { Status = ArchipelagoClientState.ClientGoal });
-        Plugin.Log.LogInfo("AP goal reported.");
+        if (Session == null || !Connected) return;
+        var session = Session;
+        ThreadPool.QueueUserWorkItem(_ =>
+        {
+            try
+            {
+                session.Socket.SendPacket(new StatusUpdatePacket { Status = ArchipelagoClientState.ClientGoal });
+                Plugin.Log.LogInfo("AP goal reported.");
+            }
+            catch (Exception e) { Plugin.Log.LogError($"AP victory not sent: {e.Message}"); }
+        });
     }
 
     // --- Item receipt --------------------------------------------------------

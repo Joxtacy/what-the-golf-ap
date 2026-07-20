@@ -54,7 +54,10 @@ public static class ConnectionUI
             }
             else if (!Visible && _paused)
             {
-                UnityEngine.Time.timeScale = _prevTimeScale;
+                // Never restore a frozen scale: if the game happened to be at 0 when
+                // we opened (its own pause / a load), restoring 0 would leave the game
+                // stuck. Fall back to normal speed in that case.
+                UnityEngine.Time.timeScale = _prevTimeScale > 0f ? _prevTimeScale : 1f;
                 _paused = false;
             }
         }
