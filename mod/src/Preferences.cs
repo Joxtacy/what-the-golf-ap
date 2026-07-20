@@ -25,6 +25,9 @@ public static class Preferences
         Slot = Category.CreateEntry("slot", "Player1", "Slot name");
         Password = Category.CreateEntry("password", "", "Password");
         AutoConnect = Category.CreateEntry("autoConnect", false, "Auto-connect on launch");
+        // NOTE: the DeathLink outgoing throttle (wipes per sent death) is NOT a client
+        // preference -- it's the apworld's `death_link_amnesty` option, delivered via
+        // slot data (see ArchipelagoData.DeathLinkAmnesty), so the seed owns it.
     }
 
     public static void Save() => MelonPreferences.Save();

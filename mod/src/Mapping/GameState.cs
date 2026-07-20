@@ -32,6 +32,28 @@ public static class GameState
         return ld != null ? ld.SceneName : null;
     }
 
+    /// <summary>Are we currently playing a hole (vs. the overworld/menu)? Used to
+    /// decide whether an incoming DeathLink has anything to kill.</summary>
+    public static bool IsInLevel()
+    {
+        var level = Il2CppCore.Level.Instance;
+        var lm = level != null ? level.levelManager : null;
+        try { return lm != null && lm.IsInLevel(); }
+        catch { return false; }
+    }
+
+    /// <summary>Restart the current hole from the start (resets the ball, wipes hole
+    /// progress). The param-less Restart() is safe to invoke via interop -- unlike
+    /// Level.Fail, whose Nullable/by-value signature crashes the trampoline. Used to
+    /// apply an incoming DeathLink. Returns true if invoked.</summary>
+    public static bool RestartLevel()
+    {
+        var level = Il2CppCore.Level.Instance;
+        if (level == null) return false;
+        level.Restart();
+        return true;
+    }
+
     /// <summary>Leave the current level and return to the overworld, via the
     /// pause menu's Abandon action. Returns true if it was invoked.</summary>
     public static bool AbortLevel()

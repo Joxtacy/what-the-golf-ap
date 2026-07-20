@@ -107,7 +107,20 @@ public class Mod : MelonMod
 
         if (client?.DeathLink != null && client.DeathLink.ConsumePending())
         {
-            // TODO: reset/kill the ball on an incoming DeathLink.
+            // Incoming DeathLink. If we're in a hole, restart it (kills the ball,
+            // wipes hole progress). In the overworld there's nothing to kill, so we
+            // drop it. BeginInducedDeath() stops the resulting reset from being
+            // re-broadcast as our own wipe (loop suppression).
+            if (GameState.IsInLevel())
+            {
+                client.DeathLink.BeginInducedDeath();
+                bool killed = GameState.RestartLevel();
+                Plugin.Log.LogInfo($"[DEATHLINK] received -> restart hole (killed={killed})");
+            }
+            else
+            {
+                Plugin.Log.LogInfo("[DEATHLINK] received in overworld -> dropped (nothing to kill)");
+            }
         }
 
         if (ProbeEnabled) Mapping.UnlockProbe.RunOnce();

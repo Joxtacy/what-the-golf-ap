@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, Toggle, DeathLink, PerGameCommonOptions
+from Options import Choice, Range, Toggle, DeathLink, PerGameCommonOptions
 
 
 class Goal(Choice):
@@ -88,6 +88,23 @@ class Crowns(Toggle):
     display_name = "Crown Chests"
 
 
+class DeathLinkAmnesty(Range):
+    """How many of your own wipes it takes to send one DeathLink (Death Link Amnesty).
+
+    Only matters when Death Link is on. "Death" in WTG = a level FAILURE (ball out
+    of bounds / in water / lost); manual restarts and quits don't count. Because
+    wiping is constant in this game, sending every wipe would spam the multiworld,
+    so the mod broadcasts one DeathLink per this many local wipes (e.g. 30 = only
+    every 30th wipe sends). 1 = every wipe sends a death. A wipe caused by an
+    INCOMING death is never counted, so received deaths can't feed back. No effect
+    on generation logic.
+    """
+    display_name = "Death Link Amnesty"
+    range_start = 1
+    range_end = 30
+    default = 10
+
+
 @dataclass
 class WTGOptions(PerGameCommonOptions):
     goal: Goal
@@ -95,9 +112,11 @@ class WTGOptions(PerGameCommonOptions):
     boss_keys: BossKeys
     hard_sections: HardSections
     crowns: Crowns
-    # NOT YET IMPLEMENTED in the game mod: the option generates and is sent in slot
-    # data, but the mod does nothing with it yet -- incoming deaths don't kill the
-    # ball and player deaths aren't sent out (the Level.Fail hook is deferred). It
-    # has no effect on generation logic; it simply won't do anything in-game until
-    # wired up. Left in so seeds/IDs stay stable when it's implemented.
+    # Implemented in the game mod. "Death" = a level FAILURE (ball out of bounds /
+    # in water / lost), reported via GameAnalytics.OnLevelReset -- manual restarts
+    # and quits are excluded. The mod broadcasts one DeathLink per `death_link_amnesty`
+    # local wipes (see that option); a wipe caused by an incoming death is never
+    # re-broadcast. An incoming death restarts your current hole (or is dropped if
+    # you're in the overworld). No effect on generation logic.
     death_link: DeathLink
+    death_link_amnesty: DeathLinkAmnesty

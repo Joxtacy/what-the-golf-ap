@@ -95,7 +95,8 @@ Access key arrives).
 | Level clear → AP Clear check | `Core.Level:Complete` | read `LevelManager.currentLevel.ID` |
 | Crown (all challenges) → AP Crown check | `Core.Level:Complete` | when `CompletedChallenges.Count == levelChallenges.Count` |
 | Campaign goal | `GameAnalytics:OnFinalBossCompleted` | send Victory |
-| DeathLink send | `Core.Level:Fail` | decide which fails count |
+| DeathLink send | `GameAnalytics:OnLevelReset` | the AUTOMATIC reset = a real death (OOB/water/lost ball). Static no-arg → safe. **NOT** `Core.Level:Fail` (bad sig). Distinct from `OnLevelManualReset` (player restart) and `OnLevelAbort` (quit) — those must not count. Count-based throttle: broadcast every Nth wipe. |
+| DeathLink receive (kill) | invoke `Core.Level.Instance.Restart()` | param-less → safe to invoke via interop; restarts the hole (kills ball). Guard with a suppression window so the induced reset isn't re-broadcast. |
 | Main-thread pump | `GameAnalytics:OnLevelStroke` + the above | frequent enough; see note |
 
 ## Reading fields at runtime (important IL2CPP caveat)

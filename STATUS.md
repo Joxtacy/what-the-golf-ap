@@ -317,8 +317,8 @@ The mod no longer hard-codes `Connect(...)` or writes state on load. It is now
 **VALIDATED (2026-07-20):** builds + deploys clean; launched in-game — mod loads,
 all data + 3 patches bind, logs `Press F8 for the Archipelago panel`, and **makes
 no connection attempt** (passive). `OnGUI` runs per-frame with no errors.
-**Interactive F8 test (type fields, Connect/Disconnect) — pending a human at the
-keyboard.**
+**Interactive F8 test (type fields, Connect/Disconnect) — DONE, verified by the
+user in-game (2026-07-20). Looks good; the mod-UX work is fully complete.**
 
 ## How to resume
 
@@ -385,8 +385,34 @@ skip this next time). See the mod-UX section above.
 1. **Content options** (all additive, apworld Options): chests as ~24 locations
    (`OPEN_CHESTS`/`SetChestUnlocked`); crown-gating (Crown as a counted progression
    item); DLC Sporty Sports; ball shapes / Transmogrif (stretch, needs RE).
-2. **DeathLink** — the `Level.Fail` hook was deferred (tricky signature); wire the
-   death semantics (kill/reset the ball on an incoming DeathLink).
+2. **DeathLink — DONE + LIVE-VALIDATED (2026-07-20).** "Death" = a level
+   FAILURE (ball OOB/water/lost), hooked via the safe static no-arg
+   `GameAnalytics:OnLevelReset` (NOT `Level.Fail` — bad sig; and distinct from
+   `OnLevelManualReset`/`OnLevelAbort`, which are excluded). Because wiping is
+   constant in WTG, outgoing uses a **count-based throttle** (user's design): one
+   DeathLink broadcast per Nth local wipe. **`N` = the apworld `death_link_amnesty`
+   option** (Celeste-style `Range` 1..30, default 10), delivered via slot data →
+   `ArchipelagoData.DeathLinkAmnesty` (the seed owns it; it is NOT a client pref).
+   A wipe caused by an INCOMING death is suppressed
+   from the count (`DeathLinkHandler.BeginInducedDeath`, ~30-frame window) so received
+   deaths never feed back — no ping-pong loops. Incoming (consumed in `Mod.OnUpdate`):
+   if `GameState.IsInLevel()` → `Level.Instance.Restart()` (kills ball, wipes hole
+   progress); in the overworld → dropped. A runtime **F8 on/off toggle**
+   (`DeathLinkHandler.SetEnabled`, per-session — re-reads the seed's `death_link` on
+   each connect) enables/disables via the AP service's DeathLink tag. Files:
+   `DeathLinkHandler.cs`, `GamePatches.LevelResetPostfix`,
+   `GameState.IsInLevel`/`RestartLevel`, apworld `Options.DeathLinkAmnesty` +
+   `fill_slot_data`, `ConnectionUI` (HUD + toggle). An on-screen HUD
+   (`ConnectionUI.DrawHud`, always-on while DeathLink active + connected) shows the
+   wipe counter `x/N`, looping to 0 on each broadcast. **LIVE-VALIDATED 2026-07-20**:
+   `OnLevelReset` binds + fires on real wipes and NOT on manual restart/quit; counter
+   broadcasts at N and loops; incoming death (fired via `tools/send_deathlink.py`,
+   a 2nd DeathLink-tagged connection) restarts the current hole (`killed=True`) and is
+   dropped in the overworld; loop-suppression held; HUD confirmed; the
+   `death_link_amnesty` option flows to the mod (log `per 5 wipes` from a
+   `death_link_amnesty: 5` seed). Remaining: interactive F8-toggle check + cosmetic
+   HUD polish (user has feedback, deferred). `send_deathlink.py` = reusable
+   incoming-death test tool.
 3. Polish: friendlier area/section display names.
 4. Optional: rebuild `data.py` from the **real hub sections** (`wtg_goals.json`)
    for authentic, spatially-coherent areas.

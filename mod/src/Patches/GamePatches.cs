@@ -37,8 +37,14 @@ public static class GamePatches
         // inject) gives us its OverworldID.ID (CHEST_*).
         TryPatch(harmony, "ChestManager:Chest_OnPostChestOpenFirst", nameof(ChestOpenedPostfix));
 
-        // NOTE: DeathLink (a Level.Fail hook) is deferred -- Fail also has a
-        // tricky signature; wire it when implementing DeathLink, carefully.
+        // DeathLink (outgoing): a level FAILURE -> maybe broadcast a death. We hook
+        // the static, no-arg GameAnalytics.OnLevelReset (the AUTOMATIC reset the game
+        // fires on out-of-bounds/water/lost-ball) -- safe like the other statics, and
+        // it excludes OnLevelManualReset (player pressed restart) and OnLevelAbort
+        // (quit to overworld), which must NOT count as deaths. We avoid Level.Fail:
+        // its Nullable/by-value signature crashes the interop trampoline.
+        TryPatch(harmony, "GameAnalytics:OnLevelReset", nameof(LevelResetPostfix));
+
         // The main-thread pump lives in Mod.OnUpdate, which runs every frame.
     }
 
@@ -89,6 +95,16 @@ public static class GamePatches
         // Scene isn't known yet here; arm a deferred check (see EntryGate).
         try { Mapping.EntryGate.Arm(); }
         catch (Exception e) { Plugin.Log.LogError($"LevelBeginPostfix: {e}"); }
+    }
+
+    // Automatic level reset = a failure (out of bounds / water / lost ball). Feed
+    // it to the DeathLink throttle, which broadcasts only every Nth wipe and ignores
+    // resets it induced itself. Manual restart / quit route through different
+    // GameAnalytics methods, so they never reach here.
+    private static void LevelResetPostfix()
+    {
+        try { Plugin.Client?.DeathLink?.OnLocalWipe(); }
+        catch (Exception e) { Plugin.Log.LogError($"LevelResetPostfix: {e}"); }
     }
 
     // __1 = the second parameter of Chest_OnPostChestOpenFirst(ChestTrophee, Chest)

@@ -100,4 +100,5 @@ class WTGWorld(World):
             "hard_sections": bool(self.options.hard_sections.value),
             "crowns": bool(self.options.crowns.value),
             "death_link": bool(self.options.death_link.value),
+            "death_link_amnesty": int(self.options.death_link_amnesty.value),
         }
