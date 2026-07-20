@@ -48,6 +48,21 @@ SECTION_THEME = {
 }
 
 
+# Campaign bosses that exist + are reachable in-game but are ABSENT from the
+# OverworldLevelData section dump, so we inject them into their chamber by hand.
+# Computer 5's boss "2D HoleInOne 05 basic" (LevelData.ID 0WUALV) is the only one:
+# it has a real plate-lit door (plates FPG_05C + GRAVITY_05B) but is in no section.
+# LIVE-VERIFIED in-game (2026-07-20, via C5Probe): reachable, and beating it fires
+# GameAnalytics.OnLevelComplete with this scene (so a Clear check works). It's
+# fought in the chamber-5 overworld and lit by the FPG + Gravity holes, so we gate
+# it behind the shared chamber-5 trigger 9DSBG (the "05A/B/C" gate unit). No crown
+# (0 challenges). Once added it becomes keyable (7th boss key) + part of all_bosses.
+INJECT_LEVELS = [
+    {"scene": "2D HoleInOne 05 basic", "chamber": 5, "subarea": "05A",
+     "theme": "Kitchen", "trigger": "9DSBG"},
+]
+
+
 def chamber_num(section_name):
     m = re.match(r"(\d+)", section_name.strip())
     return int(m.group(1)) if m else None
@@ -133,6 +148,33 @@ def build():
             chambers[num]["levels"].append(level)
             if trigger:
                 gate_units[trigger]["scenes"].append(scene)
+
+    # Inject the section-less-but-real campaign bosses (see INJECT_LEVELS).
+    present = {l["scene"] for c in chambers.values() for l in c["levels"]}
+    for inj in INJECT_LEVELS:
+        scene, num, trigger = inj["scene"], inj["chamber"], inj["trigger"]
+        theme, code = inj["theme"], inj["subarea"]
+        if scene in present:
+            continue        # already in a section (e.g. a future dump adds it)
+        if num not in chambers:
+            raise SystemExit(f"inject: chamber {num} missing for {scene!r}")
+        m = meta.get(scene)
+        if not m:
+            raise SystemExit(f"inject: scene {scene!r} not in wtg_levels.json")
+        chambers[num]["levels"].append({
+            "id": m.get("id", ""), "scene": scene,
+            "boss": bool(m.get("boss", False)),
+            "challenges": int(m.get("challenges", 0)),
+            "subarea": code, "theme": theme, "trigger": trigger,
+        })
+        if theme not in chambers[num]["themes"]:
+            chambers[num]["themes"].append(theme)
+        if trigger:     # attach to the (existing) gate unit for this trigger
+            if trigger not in gate_units:
+                gate_units[trigger] = {"chamber": num, "themes": [theme],
+                                       "sections": [code], "scenes": []}
+                gate_order.append(trigger)
+            gate_units[trigger]["scenes"].append(scene)
 
     areas = []
     for num in order:

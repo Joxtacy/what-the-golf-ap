@@ -201,24 +201,29 @@ Planned, several as **apworld Options**:
    lever can actually hold them shut — AND (b) map to a real campaign hole — so a
    `<scene> - Clear` location exists to gate. It emits `boss_doors` into
    `levels.json`; `data.BOSS_HOLES` reads that (no more regex on scene names).
-   **Result: computers 1,2,3,4,7,8** (6 keys). This drops **Computer 9** (the
-   plateless finale-special `IKCV7`, chamber -1 — `SetState` has no plates to
-   toggle, so it could never be gated) and **does NOT add Computer 5**: its boss
-   `2D HoleInOne 05 basic` (`0WUALV`) is in no `wtg_sections.json` section, so it
-   has no campaign location — inventing one for a hole whose in-game reachability
-   is unverified would risk an unreachable location (softlock). This keeps
-   `all_boss_scenes` (the `all_bosses` goal, live-validated at 7) unchanged and
-   consistent — its non-final bosses are exactly these 6. Touched
-   `tools/build_levels.py`, `what_the_golf/data.py`; regenerated `levels.json` +
-   `mod/ids.json` (40 items / 251 locs / 6 boss keys). **VALIDATED:** 3-player
-   seed (all_bosses×section / campaign×chamber / door_100×section, all boss_keys
-   on) generates solvable on 0.6.7; spoiler shows exactly `Computer {1,2,3,4,7,8}
-   Key`. The mod needs no code change (`BossGate`/`BossGoal` read `boss_by_item` /
-   `boss_scenes` from `wtg_ids.json`, which a rebuild redeploys). **Open sub-item
-   (deferred, needs a live run):** if Computer 5's boss `0WUALV` turns out to be a
-   normally reachable boss in-game, adding it as a campaign location (a Clear check
-   + a 7th key + inclusion in `all_bosses`) would be the natural follow-up — but
-   only after confirming the scene actually loads/completes in a real session.
+   It drops **Computer 9** (the plateless finale-special `IKCV7`, chamber -1 —
+   `SetState` has no plates to toggle, so it could never be gated). Initially it
+   also excluded **Computer 5** (its boss `2D HoleInOne 05 basic` / `0WUALV` was in
+   no `wtg_sections.json` section), giving 6 keys — but C5 has since been added
+   (below), so **the result is now computers 1,2,3,4,5,7,8 (7 keys)**.
+
+   **✅ COMPUTER 5 ADDED + LIVE-VERIFIED (2026-07-20).** `0WUALV` is a real
+   plate-lit boss (plates `FPG_05C` + `GRAVITY_05B`) that the section dump simply
+   omits. Confirmed in-game via a throwaway `C5Probe` diagnostic (now removed): it
+   IS reachable, and beating it fires `GameAnalytics.OnLevelComplete` with scene
+   `2D HoleInOne 05 basic` (boss, 0 challenges → Clear only, no Crown). It's fought
+   in the chamber-5 overworld, lit by the FPG + Gravity holes, so `build_levels.py`
+   now injects it into **chamber 5** gated by the shared chamber-5 trigger `9DSBG`
+   (see `INJECT_LEVELS`). It flows through automatically: `keyable_boss_doors()`
+   now includes it (7th key `Computer 5 Key` → `0WUALV`), and `all_boss_scenes()`
+   includes it → **`all_bosses` now requires 8 bosses** (7 computers + Final).
+   Regenerated `levels.json` (133 holes) + `mod/ids.json` (**41 items / 252 locs /
+   7 boss keys / 8 boss scenes**). The mod needs no code change (`BossGate`/
+   `BossGoal` read `boss_by_item` / `boss_scenes` from `wtg_ids.json`, redeployed
+   on rebuild). **VALIDATED:** 3-player seed (all_bosses×section / campaign×chamber
+   / door_100×section, all boss_keys on) generates solvable on 0.6.7; spoiler shows
+   `Computer {1,2,3,4,5,7,8} Key` with the C5 key placed + used in the playthrough,
+   and the `2D HoleInOne 05 basic - Clear` location present.
 3. **Chests as locations (~24 checks).** Save tracks 24 overworld chests
    (`CHEST_KITCHEN`…, key `OPEN_CHESTS` / `SetChestUnlocked`). More checks = better
    spread. (Option.)

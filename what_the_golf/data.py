@@ -136,10 +136,11 @@ def final_boss_area() -> str:
 # AND maps to a real campaign hole (so a "<scene> - Clear" location exists to gate).
 # The door's bossLevelID equals the boss hole's LevelData.ID (Level.id), and its
 # ID_2D_HOLEINONE_N gives the computer number. This EXCLUDES the plateless finale
-# computer 9 (chamber -1, a scripted encounter -- can't be SetState-gated) and
-# computer 5 (its boss "2D HoleInOne 05 basic" is in no section, so has no
-# location). Result today: computers 1,2,3,4,7,8. The Final boss is never keyed
-# (no door; gated by the campaign goal).
+# computer 9 (chamber -1, a scripted encounter -- can't be SetState-gated). It
+# includes computer 5, whose boss "2D HoleInOne 05 basic" is in no section dump
+# but is a real reachable plate-lit boss (live-verified 2026-07-20) that
+# build_levels.py injects into chamber 5. Result today: computers 1,2,3,4,5,7,8.
+# The Final boss is never keyed (no door; gated by the campaign goal).
 def boss_holes():
     """Yield (level, computer_number) for each keyable campaign boss hole."""
     for bd in BOSS_DOORS:

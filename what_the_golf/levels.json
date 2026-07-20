@@ -763,6 +763,15 @@
      "subarea": "05C",
      "theme": "FPG",
      "trigger": "9DSBG"
+    },
+    {
+     "id": "0WUALV",
+     "scene": "2D HoleInOne 05 basic",
+     "boss": true,
+     "challenges": 0,
+     "subarea": "05A",
+     "theme": "Kitchen",
+     "trigger": "9DSBG"
     }
    ]
   },
@@ -1476,7 +1485,8 @@
     "FPG Swinging Golf Clubs",
     "FPG Targets",
     "FPG Targets 2",
-    "FPG Ordinary Golf 3"
+    "FPG Ordinary Golf 3",
+    "2D HoleInOne 05 basic"
    ]
   },
   {
@@ -1624,6 +1634,11 @@
    "computer": 4,
    "boss_level_id": "3VGKO4",
    "scene": "2D HoleInOne 04 peggle"
+  },
+  {
+   "computer": 5,
+   "boss_level_id": "0WUALV",
+   "scene": "2D HoleInOne 05 basic"
   },
   {
    "computer": 7,
