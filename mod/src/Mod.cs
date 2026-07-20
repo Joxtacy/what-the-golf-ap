@@ -35,6 +35,10 @@ public class Mod : MelonMod
     // diagnostic from the spike, kept OFF.
     public const bool WalkProbeEnabled = false;      // read-only gating probe
 
+    // DEV/DIAGNOSTIC: one-shot dump of computer-door world positions (BossGate.
+    // LogDoors) to locate a hard-to-find boss. Keep OFF in normal builds.
+    public const bool BossLocateEnabled = false;
+
     public override void OnInitializeMelon()
     {
         Plugin.Client = new ArchipelagoClient();
@@ -98,6 +102,7 @@ public class Mod : MelonMod
             _bossTimer = 0;
             Mapping.BossGate.Tick();
             Mapping.SectionGate.Tick();
+            if (BossLocateEnabled) Mapping.BossGate.LogDoors();
         }
 
         if (LegacyGatingEnabled)

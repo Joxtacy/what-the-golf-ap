@@ -26,7 +26,7 @@ public static class BossGate
     private static Dictionary<string, string> _bossByItem = new();  // item -> levelId
     private static readonly HashSet<string> Gated = new();          // all boss levelIds
     private static readonly HashSet<string> Unlocked = new();       // keys received
-    private static readonly HashSet<string> ToActivate = new();     // just-unlocked, need plates re-lit
+    private static readonly HashSet<string> _loggedActivate = new();// unlocked doors we've logged lighting
     private static readonly HashSet<string> _loggedSuppress = new();// doors we've logged suppressing
     private static readonly HashSet<string> _loggedSeen = new();    // gated doors we've logged seeing
 
@@ -58,13 +58,44 @@ public static class BossGate
 
     public static bool Handles(string itemName) => _bossByItem.ContainsKey(itemName);
 
+    // DEV/DIAGNOSTIC: one-shot dump of every computer door's world position +
+    // parent + active + plate state, to locate a hard-to-find boss (e.g. Computer
+    // 9 in the finale). Gated by Mod.BossLocateEnabled; keep OFF in normal builds.
+    private static bool _loggedDoors;
+    public static void LogDoors()
+    {
+        if (_loggedDoors) return;
+        try
+        {
+            var doors = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldMainDoorRobot>();
+            if (doors == null || doors.Length == 0) return;
+            _loggedDoors = true;
+            Plugin.Log.LogInfo($"[BOSSLOC] {doors.Length} computer door(s) found:");
+            for (int i = 0; i < doors.Length; i++)
+            {
+                var d = doors[i];
+                if (d == null) continue;
+                string bid; try { bid = d.bossLevelID; } catch { bid = "?"; }
+                var t = d.transform;
+                var pos = t != null ? t.position : new UnityEngine.Vector3();
+                string parent = (t != null && t.parent != null) ? t.parent.name : "?";
+                bool active = false; try { active = d.gameObject.activeInHierarchy; } catch { }
+                int on = 0, tot = 0; var pl = d.plates;
+                if (pl != null) { tot = pl.Count; for (int j = 0; j < tot; j++) { var p = pl[j]; if (p != null && p.isOn) on++; } }
+                Plugin.Log.LogInfo($"[BOSSLOC] {bid} pos=({pos.x:F1},{pos.y:F1},{pos.z:F1}) parent='{parent}' active={active} plates={on}/{tot}");
+            }
+        }
+        catch (Exception e) { Plugin.Log.LogError($"BossGate.LogDoors: {e}"); }
+    }
+
     /// <summary>Mark a boss unlocked from a received "Computer N Key" item.</summary>
     public static void Unlock(string itemName)
     {
         if (_bossByItem.TryGetValue(itemName, out var id) && !string.IsNullOrEmpty(id)
             && Unlocked.Add(id))
         {
-            ToActivate.Add(id);   // re-light its plates (we forced them off while locked)
+            // Tick() lights this boss's plates every frame from now on (self-healing
+            // across the door reloads that happen when you teleport into its chamber).
             Plugin.Log.LogInfo($"[BOSS] '{itemName}' -> door {id} unlocked");
         }
     }
@@ -90,19 +121,20 @@ public static class BossGate
 
                 if (Unlocked.Contains(bid))
                 {
-                    // Just unlocked: re-light every plate once (we forced them off
-                    // while locked, and the game won't re-light them itself).
-                    if (ToActivate.Contains(bid))
+                    // Keep the computer lit EVERY tick, not just once. The overworld
+                    // reloads a chamber's door objects when you teleport in, so a
+                    // one-shot re-light misses any door reached after its key arrived
+                    // (Western/finale) -> that computer stays dark and unfightable.
+                    // Re-lighting continuously is cheap and self-heals across reloads
+                    // (same fix as ChamberUnlock's per-tick door re-open).
+                    int lit = 0;
+                    for (int j = 0; j < plates.Count; j++)
                     {
-                        int lit = 0;
-                        for (int j = 0; j < plates.Count; j++)
-                        {
-                            var p = plates[j];
-                            if (p != null && !p.isOn) { try { p.SetState(true, false); lit++; } catch { } }
-                        }
-                        ToActivate.Remove(bid);
-                        Plugin.Log.LogInfo($"[BOSS] re-lit door {bid} ({lit} plate(s) on — key received)");
+                        var p = plates[j];
+                        if (p != null && !p.isOn) { try { p.SetState(true, false); lit++; } catch { } }
                     }
+                    if (lit > 0 && _loggedActivate.Add(bid))
+                        Plugin.Log.LogInfo($"[BOSS] lit door {bid} ({lit} plate(s) on — key received)");
                     continue;
                 }
 

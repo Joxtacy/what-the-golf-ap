@@ -65,6 +65,24 @@ public static class BossGoal
     /// <summary>Register the final boss defeat (from OnFinalBossCompleted).</summary>
     public static void RegisterFinalBoss() => RegisterDefeat(_finalBossScene);
 
+    /// <summary>Reconcile against the server's already-checked locations on connect,
+    /// so a reconnect (or a relaunch mid-run) re-counts bosses beaten in a previous
+    /// session -- a boss's Clear check is its defeat. Without this, BossGoal only
+    /// knows about bosses beaten since the process started. Fires victory if all
+    /// bosses were already down.</summary>
+    public static void Reconcile(IEnumerable<long> checkedLocationIds)
+    {
+        if (!_enabled || checkedLocationIds == null) return;
+        var checkedSet = new HashSet<long>(checkedLocationIds);
+        // Copy: RegisterDefeat mutates _defeated while we iterate _required.
+        foreach (var scene in new List<string>(_required))
+        {
+            long id = LocationMap.ClearId(scene);
+            if (id >= 0 && checkedSet.Contains(id))
+                RegisterDefeat(scene);
+        }
+    }
+
     /// <summary>Register a boss defeat by scene. No-op unless all_bosses is the
     /// goal and the scene is a known boss. Reports victory once every boss is down.</summary>
     public static void RegisterDefeat(string scene)

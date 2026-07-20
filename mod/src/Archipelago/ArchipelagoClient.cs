@@ -73,6 +73,16 @@ public class ArchipelagoClient
             var success = (LoginSuccessful)result;
             ReadSlotData(success.SlotData);
 
+            // Re-count bosses already beaten in a prior session (all_bosses goal),
+            // on the main thread. A boss's Clear check = its defeat.
+            var checkedIds = new System.Collections.Generic.List<long>(
+                Session.Locations.AllLocationsChecked);
+            _mainThread.Enqueue(() =>
+            {
+                try { BossGoal.Reconcile(checkedIds); }
+                catch (Exception e) { Plugin.Log.LogError($"BossGoal.Reconcile: {e}"); }
+            });
+
             DeathLink = new DeathLinkHandler(this, Data.DeathLinkEnabled);
             Connected = true;
             Plugin.Log.LogInfo($"AP connected as {Data.SlotName}.");
