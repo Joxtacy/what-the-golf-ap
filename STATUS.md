@@ -104,8 +104,12 @@ HardSectionsEnabled`, `ReadSlotData` wires `SectionGate.SetEnabled`. The old spi
 file `ActiveGateTest.cs` was removed (superseded); read-only `WalkGateProbe.cs`
 (`Mod.WalkProbeEnabled`, OFF) kept. **VALIDATED:** mod builds + deploys; seed with
 `hard_sections: true` generates solvable on 0.6.7 (slot data + spoiler carry it).
-**Live in-game test of SectionGate itself still pending** (mechanism already proven
-by the spike). NOTE: like all door pokes, only reliable on a FRESH save.
+**LIVE-VALIDATED in-game (2026-07-20, fresh save):** keyed only Easy 2D (09A) →
+walked into Easy 2D fine (a keyed section's door is already open — the AP key sets its
+door-open flag, so the key IS the opener; no console button-push needed) while
+Living Room (09B/`Z4UZC`) stayed hard-locked. Log showed `[SECTIONGATE] opened
+connector 'DOOR_easy2d_00'` + `holding connector 'Z4UZC' shut`. NOTE: like all door
+pokes, only reliable on a FRESH save.
 
 **Caveat — only reliable on a FRESH save:** on a progressed/contaminated save the
 game re-derives door state from persistent `OPEN_DOORS` each frame and can overwrite

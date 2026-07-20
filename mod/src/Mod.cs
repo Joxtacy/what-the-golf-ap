@@ -20,9 +20,8 @@ public class Mod : MelonMod
     // Read-only save-vocabulary diagnostic (UnlockProbe). Off outside R&D.
     public const bool ProbeEnabled = false;
 
-    // DEV/TEST (teleporter thread, now SOLVED): force one raw section trigger open on
-    // load, bypassing AP, to test teleport-reachability of an unreached section on a
-    // fresh save. "" = off (normal). Left here as a diagnostic lever; keep "".
+    // DEV/TEST: force one raw section trigger open on load, bypassing AP, for
+    // fresh-save reachability/gating tests. "" = off (normal). Keep "".
     public const string ForceUnlockTrigger = "";
 
     // Periodic data-harvesting dumpers (LevelDumper/GoalDumper/etc.). These call
