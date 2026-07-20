@@ -32,6 +32,23 @@ LOC_BASE = BASE_ID + 5000
 _LEVELS_PATH = os.path.join(os.path.dirname(__file__), "levels.json")
 
 
+def _read_levels_json():
+    """Load levels.json in every context it might run in:
+      * as a folder under worlds/ (filesystem open),
+      * as a zipimported .apworld (open() can't read inside the zip -> pkgutil),
+      * imported standalone by tools/export_ids.py (filesystem open).
+    Try the filesystem first (covers folder + standalone), fall back to pkgutil
+    (covers the zipimported apworld)."""
+    if os.path.exists(_LEVELS_PATH):
+        with open(_LEVELS_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    import pkgutil
+    raw = pkgutil.get_data(__name__, "levels.json")
+    if raw is None:
+        raise FileNotFoundError("levels.json not found (folder or apworld)")
+    return json.loads(raw.decode("utf-8"))
+
+
 @dataclass(frozen=True)
 class Level:
     id: str          # opaque LevelData.ID (e.g. "DI3JRA")
@@ -68,8 +85,7 @@ class Chest:
 
 
 def _load():
-    with open(_LEVELS_PATH, encoding="utf-8") as f:
-        w = json.load(f)
+    w = _read_levels_json()
     areas = tuple(
         Area(a["name"],
              tuple(Level(l["id"], l["scene"], bool(l["boss"]),
