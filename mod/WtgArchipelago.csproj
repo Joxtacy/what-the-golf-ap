@@ -52,6 +52,7 @@
     <Reference Include="$(MLDir)\Il2CppAssemblies\Il2Cppmscorlib.dll" Private="false" />
     <Reference Include="$(MLDir)\Il2CppAssemblies\Il2CppSystem.dll" Private="false" />
     <Reference Include="$(MLDir)\Il2CppAssemblies\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="$(MLDir)\Il2CppAssemblies\UnityEngine.IMGUIModule.dll" Private="false" />   <!-- in-game connection UI (GUI/Event) -->
     <Reference Include="$(MLDir)\Il2CppAssemblies\Assembly-CSharp.dll" Private="false" />
   </ItemGroup>
 
@@ -65,6 +66,7 @@
     <Reference Include="$(RefDir)/Il2Cppmscorlib.dll" Private="false" />
     <Reference Include="$(RefDir)/Il2CppSystem.dll" Private="false" />
     <Reference Include="$(RefDir)/UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="$(RefDir)/UnityEngine.IMGUIModule.dll" Private="false" />
     <Reference Include="$(RefDir)/Assembly-CSharp.dll" Private="false" />
   </ItemGroup>
 

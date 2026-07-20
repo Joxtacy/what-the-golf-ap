@@ -19,10 +19,17 @@ namespace WtgArchipelago;
 /// </summary>
 public class ArchipelagoClient
 {
+    public enum ConnState { Disconnected, Connecting, Connected, Failed }
+
     public ArchipelagoData Data { get; } = new();
     public ArchipelagoSession Session { get; private set; }
     public DeathLinkHandler DeathLink { get; private set; }
-    public bool Connected { get; private set; }
+
+    /// <summary>Current connection state (drives the UI + the passive-until-connected gate).</summary>
+    public ConnState State { get; private set; } = ConnState.Disconnected;
+    /// <summary>Human-readable status for the connection UI.</summary>
+    public string StatusMessage { get; private set; } = "Not connected";
+    public bool Connected => State == ConnState.Connected;
 
     private readonly ConcurrentQueue<Action> _mainThread = new();
 
@@ -38,10 +45,35 @@ public class ArchipelagoClient
 
     public void Connect(string host, int port, string slot, string password = null)
     {
-        Data.Host = host; Data.Port = port; Data.SlotName = slot; Data.Password = password;
+        if (State == ConnState.Connecting || State == ConnState.Connected)
+        {
+            Plugin.Log.LogWarning("AP already connected/connecting — disconnect first.");
+            return;
+        }
+        Data.Host = host; Data.Port = port; Data.SlotName = slot;
+        Data.Password = string.IsNullOrEmpty(password) ? null : password;
+
+        State = ConnState.Connecting;
+        StatusMessage = $"Connecting to {host}:{port} as {slot}...";
 
         // Connect off-thread so we never block Unity's main loop.
         ThreadPool.QueueUserWorkItem(_ => ConnectImpl());
+    }
+
+    /// <summary>Drop the AP session and return the mod to passive/vanilla behaviour.</summary>
+    public void Disconnect()
+    {
+        try
+        {
+            if (Session != null)
+                try { Session.Socket.DisconnectAsync(); } catch { }
+        }
+        finally
+        {
+            State = ConnState.Disconnected;
+            StatusMessage = "Disconnected";
+            Plugin.Log.LogInfo("AP disconnected — mod is passive (vanilla) until you reconnect.");
+        }
     }
 
     private void ConnectImpl()
@@ -54,7 +86,12 @@ public class ArchipelagoClient
             Session.Items.ItemReceived += OnItemReceived;
             Session.MessageLog.OnMessageReceived += m => Plugin.Log.LogInfo(m.ToString());
             Session.Socket.ErrorReceived += (e, msg) => Plugin.Log.LogError($"AP socket: {msg}");
-            Session.Socket.SocketClosed += reason => { Connected = false; Plugin.Log.LogWarning($"AP closed: {reason}"); };
+            Session.Socket.SocketClosed += reason =>
+            {
+                State = ConnState.Disconnected;
+                StatusMessage = $"Disconnected: {reason}";
+                Plugin.Log.LogWarning($"AP closed: {reason}");
+            };
 
             LoginResult result = Session.TryConnectAndLogin(
                 Plugin.GameName,
@@ -66,7 +103,10 @@ public class ArchipelagoClient
 
             if (result is LoginFailure failure)
             {
-                Plugin.Log.LogError("AP login failed: " + string.Join("; ", failure.Errors));
+                string errs = string.Join("; ", failure.Errors);
+                State = ConnState.Failed;
+                StatusMessage = "Login failed: " + errs;
+                Plugin.Log.LogError("AP login failed: " + errs);
                 return;
             }
 
@@ -84,11 +124,14 @@ public class ArchipelagoClient
             });
 
             DeathLink = new DeathLinkHandler(this, Data.DeathLinkEnabled);
-            Connected = true;
+            State = ConnState.Connected;
+            StatusMessage = $"Connected as {Data.SlotName}";
             Plugin.Log.LogInfo($"AP connected as {Data.SlotName}.");
         }
         catch (Exception e)
         {
+            State = ConnState.Failed;
+            StatusMessage = "Connect error: " + e.Message;
             Plugin.Log.LogError($"AP connect error: {e}");
         }
     }

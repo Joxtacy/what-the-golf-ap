@@ -283,22 +283,42 @@ progression. Since the Final boss is included, `all_bosses` subsumes `campaign`.
   09). `data.all_boss_scenes()` now drops any boss sharing the Final boss's area →
   the finale is represented by the Final boss alone → 7 required bosses.
 
-## ROADMAP — mod UX / lifecycle (agreed 2026-07-19)
+## ROADMAP — mod UX / lifecycle — ✅ DONE (2026-07-20)
 
-Right now the mod hard-codes `Connect("localhost",38281,"Player1")` in
-`Mod.OnInitializeMelon` and starts pumping/dumping on load, so to play vanilla you
-must delete `<game>\Mods\WtgArchipelago.dll`. Should not require that:
+The mod no longer hard-codes `Connect(...)` or writes state on load. It is now
+**passive until connected** with an **in-game connection UI**:
 
-1. **Passive until connected.** With no active AP connection the mod must have ZERO
-   side effects — no auto-connect, no save writes (ChamberUnlock), no periodic
-   dumpers. Installed mod == vanilla play until you opt in. (Gate all gameplay
-   effects behind "connected".)
-2. **In-game connection UI.** Enter host / port / slot name / password and hit
-   Connect from within the game (e.g. a MelonLoader IMGUI panel on a hotkey, or a
-   main-menu button) instead of the hard-coded Connect. Persist last-used details
-   (MelonPreferences). A disconnect/toggle to drop back to vanilla mid-session.
-3. Optional: a MelonPreferences "enabled" flag / main-menu toggle so AP mode is
-   off by default.
+1. **Passive until connected.** With no live AP session the mod has ZERO side
+   effects — no auto-connect, no save writes, no gate ticks. Installed == vanilla
+   until you opt in. In `Mod.OnUpdate` the ChamberUnlock/BossGate/SectionGate ticks
+   are gated behind `Plugin.Client.Connected`; the Harmony postfixes already no-op
+   when `Session == null`. (`Client.Tick()` still drains its main-thread queue
+   unconditionally — harmless.)
+2. **In-game connection UI** — `mod/src/ConnectionUI.cs`, an IMGUI panel toggled
+   with **F8**: host / port / slot / password fields, an "Auto-connect on launch"
+   checkbox, a Connect/Disconnect button, and a live status line
+   (`ArchipelagoClient.State` / `StatusMessage`, a new `ConnState` enum +
+   `Disconnect()`). Uses the low-level `GUI.*` API (clean fixed-arg overloads — safer
+   than `GUILayout`'s `params` arrays under Il2CppInterop) and reads the F8 hotkey
+   from `Event.current` (works regardless of the game's input backend). Needs
+   `UnityEngine.IMGUIModule.dll` (added to both csproj ref groups + `refs/README.md`).
+3. **Persisted + off by default.** `mod/src/Preferences.cs` = a `MelonPreferences`
+   category (`<game>\UserData\MelonPreferences.cfg`): host/port/slot/password +
+   `autoConnect` (default **false**). Auto-connect only fires when the player has
+   ticked the box; otherwise the mod waits for a manual Connect.
+4. **Pause while open.** `ConnectionUI.UpdatePause()` (called each frame from
+   `Mod.OnUpdate`) sets `Time.timeScale = 0` while the panel is visible and restores
+   the prior scale on close, so the menu ball doesn't move behind the UI.
+   **Known minor residual:** the game still *polls* the mouse each frame (input
+   polling ignores timeScale), so a click made while the panel is open is buffered
+   and applied on close (the ball nudges once). Fully eliminating it needs disabling
+   the game's Rewired overworld input while open — deferred as low-value.
+
+**VALIDATED (2026-07-20):** builds + deploys clean; launched in-game — mod loads,
+all data + 3 patches bind, logs `Press F8 for the Archipelago panel`, and **makes
+no connection attempt** (passive). `OnGUI` runs per-frame with no errors.
+**Interactive F8 test (type fields, Connect/Disconnect) — pending a human at the
+keyboard.**
 
 ## How to resume
 
@@ -338,8 +358,9 @@ pip install websockets==13.1            # 0.6.7 REQUIRES this exact version
 python Generate.py --player_files_path Players_solo --outputpath output_solo
 python MultiServer.py output_solo/AP_*.archipelago     # hosts on :38281
 ```
-The mod currently hardcodes `Connect("localhost", 38281, "Player1")` in
-`mod/src/Mod.cs` (replace with a connection UI eventually).
+The mod no longer hardcodes a connect — press **F8** in-game and enter
+`localhost` / `38281` / `Player1`, then Connect (tick "Auto-connect on launch" to
+skip this next time). See the mod-UX section above.
 
 ## Key gotchas (hard-won)
 
@@ -355,9 +376,11 @@ The mod currently hardcodes `Connect("localhost", 38281, "Player1")` in
 
 ## Suggested next steps
 
-1. Solve the level-exit (try the untried candidates above) — or pivot to
-   fresh-save native-progression suppression.
-2. Test the whole loop on a **fresh save**.
-3. Optional: rebuild `data.py` from the **real hub sections** (`wtg_goals.json`)
-   instead of theme groups, for authentic, spatially-coherent areas.
-4. In-game connection UI; DeathLink; polish area names.
+1. **Content options** (all additive, apworld Options): chests as ~24 locations
+   (`OPEN_CHESTS`/`SetChestUnlocked`); crown-gating (Crown as a counted progression
+   item); DLC Sporty Sports; ball shapes / Transmogrif (stretch, needs RE).
+2. **DeathLink** — the `Level.Fail` hook was deferred (tricky signature); wire the
+   death semantics (kill/reset the ball on an incoming DeathLink).
+3. Polish: friendlier area/section display names.
+4. Optional: rebuild `data.py` from the **real hub sections** (`wtg_goals.json`)
+   for authentic, spatially-coherent areas.

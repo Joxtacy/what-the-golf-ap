@@ -48,12 +48,27 @@ public class Mod : MelonMod
         Mapping.BossGate.Load();
         Mapping.BossGoal.Load();
         GamePatches.Apply(HarmonyInstance);
-        Plugin.Log.LogInfo($"WtgArchipelago loaded (game: {Plugin.GameName}).");
 
-        // PROOF-OF-CONCEPT: connect to a local AP server hosting our solo seed.
-        // (Replace with an in-game connection UI later.)
-        Plugin.Client.Connect("localhost", 38281, "Player1");
+        // Passive until connected: load persisted connection settings + the in-game
+        // UI, but do NOT touch the game until the player opts in. An installed mod
+        // therefore plays exactly like vanilla unless AP mode is turned on.
+        Preferences.Load();
+        ConnectionUI.Init();
+
+        Plugin.Log.LogInfo($"WtgArchipelago loaded (game: {Plugin.GameName}). Press F8 for the Archipelago panel.");
+
+        // Only auto-connect if the player has explicitly opted in (persisted).
+        if (Preferences.AutoConnect.Value && !string.IsNullOrWhiteSpace(Preferences.Slot.Value))
+        {
+            Plugin.Log.LogInfo("Auto-connect enabled -> connecting.");
+            Plugin.Client.Connect(
+                Preferences.Host.Value, Preferences.Port.Value,
+                Preferences.Slot.Value, Preferences.Password.Value);
+        }
     }
+
+    // MelonLoader GUI callback -> draw the connection panel (and read its hotkey).
+    public override void OnGUI() => ConnectionUI.OnGUI();
 
     private int _dumpTimer;
     private int _gateTimer;
@@ -66,6 +81,10 @@ public class Mod : MelonMod
     {
         var client = Plugin.Client;
         client?.Tick();
+
+        // Freeze the game while the connection panel is open (stops the menu ball
+        // reacting to clicks/mouse behind the UI). No-op when the panel is closed.
+        ConnectionUI.UpdatePause();
 
         // Spike diagnostic: periodic read-only overworld gating snapshot
         // (WalkGateProbe) for the within-chamber hard-lock investigation. ~every
@@ -83,21 +102,28 @@ public class Mod : MelonMod
 
         if (ProbeEnabled) Mapping.UnlockProbe.RunOnce();
 
+        // PASSIVE UNTIL CONNECTED: everything below writes game/save state, so it
+        // runs only while an AP session is live. With no connection the mod has no
+        // side effects (installed == vanilla). The dev ForceUnlockTrigger path is
+        // the one exception (bypasses AP for fresh-save reachability tests).
+        bool connected = client != null && client.Connected;
+
         // Apply any AP chamber unlocks that couldn't be applied yet (e.g. items
         // received before the overworld loaded). Cheap no-op when up to date.
-        if (++_unlockTimer >= 30)
+        if ((connected || !string.IsNullOrEmpty(ForceUnlockTrigger)) && ++_unlockTimer >= 30)
         {
             _unlockTimer = 0;
             // DEV/TEST: force a chosen section trigger open (teleporter thread).
             if (!string.IsNullOrEmpty(ForceUnlockTrigger))
                 Mapping.ChamberUnlock.ForceTrigger(ForceUnlockTrigger);
-            Mapping.ChamberUnlock.TryApply();
+            if (connected)
+                Mapping.ChamberUnlock.TryApply();
         }
 
         // Gate holding (~6x/sec; each self-no-ops when its option is off):
         //  - BossGate: hold still-locked computer doors shut (boss_keys).
         //  - SectionGate: hold locked within-chamber connectors shut (hard_sections).
-        if (++_bossTimer >= 10)
+        if (connected && ++_bossTimer >= 10)
         {
             _bossTimer = 0;
             Mapping.BossGate.Tick();
