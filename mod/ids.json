@@ -35,14 +35,13 @@
     "Computer 4 Key": 78579030,
     "Computer 7 Key": 78579031,
     "Computer 8 Key": 78579032,
-    "Computer 9 Key": 78579033,
-    "Flag": 78579034,
-    "Silly Hat": 78579035,
-    "Golf Ball Skin": 78579036,
-    "Confetti Burst": 78579037,
-    "Trophy": 78579038,
-    "Extra Putt": 78579039,
-    "Rubber Duck": 78579040
+    "Flag": 78579033,
+    "Silly Hat": 78579034,
+    "Golf Ball Skin": 78579035,
+    "Confetti Burst": 78579036,
+    "Trophy": 78579037,
+    "Extra Putt": 78579038,
+    "Rubber Duck": 78579039
   },
   "locations": {
     "ClubBallMany - Clear": 78584000,
@@ -527,8 +526,7 @@
     "Computer 3 Key": "C1C9DS",
     "Computer 4 Key": "3VGKO4",
     "Computer 7 Key": "DSCVS",
-    "Computer 8 Key": "AXCX7",
-    "Computer 9 Key": "IKCV7"
+    "Computer 8 Key": "AXCX7"
   },
   "boss_scenes": [
     "2D HoleInOne 01 basic",

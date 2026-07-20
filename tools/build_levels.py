@@ -26,6 +26,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECTIONS = os.path.join(ROOT, "mod", "wtg_sections.json")
 LEVELS = os.path.join(ROOT, "mod", "wtg_levels.json")
+DOORS = os.path.join(ROOT, "mod", "wtg_doors.json")
 OUT = os.path.join(ROOT, "what_the_golf", "levels.json")
 
 FINAL_BOSS_SCENE = "Final boss"
@@ -50,6 +51,40 @@ SECTION_THEME = {
 def chamber_num(section_name):
     m = re.match(r"(\d+)", section_name.strip())
     return int(m.group(1)) if m else None
+
+
+def keyable_boss_doors(campaign_scenes):
+    """The computer doors that can serve as an AP boss key.
+
+    Sourced from the authoritative door topology (mod/wtg_doors.json). A door is
+    keyable only if it BOTH:
+      * has plate areas -- so the mod's OverworldMainDoorPlate.SetState lever can
+        actually hold it shut until the key arrives (excludes the plateless
+        finale computer 9, chamber -1, a scripted encounter); AND
+      * corresponds to a real campaign hole -- so there is a "<scene> - Clear"
+        location to gate (excludes computer 5, whose boss "2D HoleInOne 05 basic"
+        is not listed in any OverworldLevelData section).
+    Result today: computers 1,2,3,4,7,8. Returns [{computer, boss_level_id,
+    scene}], sorted by computer number.
+    """
+    doors = json.load(open(DOORS, encoding="utf-8"))["doors"]
+    all_levels = json.load(open(LEVELS, encoding="utf-8"))
+    id_to_scene = {x["id"]: x["scene"] for x in all_levels}
+    out = []
+    for door_name, d in doors.items():
+        if not d.get("plate_areas"):
+            continue
+        m = re.search(r"HOLEINONE_(\d+)", door_name)
+        if not m:
+            continue
+        blid = d.get("boss_level_id")
+        scene = id_to_scene.get(blid)
+        if scene is None or scene not in campaign_scenes:
+            continue
+        out.append({"computer": int(m.group(1)),
+                    "boss_level_id": blid, "scene": scene})
+    out.sort(key=lambda x: x["computer"])
+    return out
 
 
 def build():
@@ -128,11 +163,15 @@ def build():
             "scenes": g["scenes"],
         })
 
+    campaign_scenes = {l["scene"] for a in areas for l in a["levels"]}
+    boss_doors = keyable_boss_doors(campaign_scenes)
+
     return {
         "final_boss_scene": FINAL_BOSS_SCENE,
         "start_area": start_area,
         "areas": areas,
         "gate_units": units,
+        "boss_doors": boss_doors,
     }
 
 
@@ -172,6 +211,12 @@ def main():
     for g in world["gate_units"]:
         print(f"  {g['name']:24} ({len(g['scenes']):2d} holes)  "
               f"ch{g['chamber']:02d} {g['trigger']}  <- {'/'.join(g['sections'])}")
+
+    bd = world["boss_doors"]
+    print(f"\nkeyable boss computers (boss_keys option): {len(bd)}  "
+          f"-> {[d['computer'] for d in bd]}")
+    for d in bd:
+        print(f"  Computer {d['computer']}  {d['boss_level_id']:8} {d['scene']}")
 
     if "--write" in sys.argv:
         with open(OUT, "w", encoding="utf-8") as f:

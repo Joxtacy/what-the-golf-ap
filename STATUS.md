@@ -194,18 +194,31 @@ Planned, several as **apworld Options**:
    items (progression) + Clear/Crown rules in `Rules.py`; `export_ids.py` emits
    `boss_by_item` (key → boss LevelData.ID). Generates solvable on 0.6.7.
 
-   **⚠️ KNOWN BUG — keyable set is wrong (FOLLOW-UP, 2026-07-20).** The real
-   chamber-gating computers (doors with plate-areas in `wtg_doors.json`) are
-   **1,2,3,4,5,7,8**. But `BOSS_HOLES` keys **1,2,3,4,7,8,9**: it wrongly INCLUDES
-   Computer 9 (the plateless finale-special `IKCV7`, chamber -1 — keying it is
-   meaningless) and OMITS Computer 5 (`0WUALV`, "HoleInOne 05 basic") — because
-   Computer 5's boss hole **isn't in `wtg_sections.json`**, so `build_levels.py`
-   never added it to the apworld (no Clear/Crown location for it either). Root
-   cause: the keyable set is derived from campaign holes, not the door data. Fix
-   = source the keyable set from `wtg_doors.json` (plate-area doors), decide how to
-   surface Computer 5's missing boss hole, regenerate the ID table (drop C9 key,
-   add C5 key), and re-verify solvability. Touches `build_levels.py`, `data.py`,
-   `Rules.py`. Not started.
+   **✅ KEYABLE-SET BUG FIXED (2026-07-20, later session).** The keyable set is
+   now sourced from the door topology (`mod/wtg_doors.json`) instead of parsing
+   campaign scene names. `build_levels.py:keyable_boss_doors()` keeps only doors
+   that BOTH (a) have plate areas — so the mod's `OverworldMainDoorPlate.SetState`
+   lever can actually hold them shut — AND (b) map to a real campaign hole — so a
+   `<scene> - Clear` location exists to gate. It emits `boss_doors` into
+   `levels.json`; `data.BOSS_HOLES` reads that (no more regex on scene names).
+   **Result: computers 1,2,3,4,7,8** (6 keys). This drops **Computer 9** (the
+   plateless finale-special `IKCV7`, chamber -1 — `SetState` has no plates to
+   toggle, so it could never be gated) and **does NOT add Computer 5**: its boss
+   `2D HoleInOne 05 basic` (`0WUALV`) is in no `wtg_sections.json` section, so it
+   has no campaign location — inventing one for a hole whose in-game reachability
+   is unverified would risk an unreachable location (softlock). This keeps
+   `all_boss_scenes` (the `all_bosses` goal, live-validated at 7) unchanged and
+   consistent — its non-final bosses are exactly these 6. Touched
+   `tools/build_levels.py`, `what_the_golf/data.py`; regenerated `levels.json` +
+   `mod/ids.json` (40 items / 251 locs / 6 boss keys). **VALIDATED:** 3-player
+   seed (all_bosses×section / campaign×chamber / door_100×section, all boss_keys
+   on) generates solvable on 0.6.7; spoiler shows exactly `Computer {1,2,3,4,7,8}
+   Key`. The mod needs no code change (`BossGate`/`BossGoal` read `boss_by_item` /
+   `boss_scenes` from `wtg_ids.json`, which a rebuild redeploys). **Open sub-item
+   (deferred, needs a live run):** if Computer 5's boss `0WUALV` turns out to be a
+   normally reachable boss in-game, adding it as a campaign location (a Clear check
+   + a 7th key + inclusion in `all_bosses`) would be the natural follow-up — but
+   only after confirming the scene actually loads/completes in a real session.
 3. **Chests as locations (~24 checks).** Save tracks 24 overworld chests
    (`CHEST_KITCHEN`…, key `OPEN_CHESTS` / `SetChestUnlocked`). More checks = better
    spread. (Option.)

@@ -23,7 +23,6 @@ Model (an "Area" is a real chamber; naming kept generic for the framework code):
 
 import json
 import os
-import re
 from dataclasses import dataclass
 
 # Base offsets for IDs (derived from Steam AppID 785790 to avoid collisions).
@@ -73,10 +72,15 @@ def _load():
                  tuple(by_scene[s] for s in g["scenes"]))
         for g in w["gate_units"]
     )
-    return areas, gate_units, w["start_area"], w["final_boss_scene"]
+    # Keyable computer boss doors (built from wtg_doors.json by build_levels.py):
+    # doors with plate areas AND a real campaign hole. See boss_holes() below.
+    boss_doors = tuple(dict(d) for d in w.get("boss_doors", ()))
+    return areas, gate_units, w["start_area"], w["final_boss_scene"], boss_doors
 
 
-AREAS, GATE_UNITS, START_AREA, FINAL_BOSS_SCENE = _load()
+AREAS, GATE_UNITS, START_AREA, FINAL_BOSS_SCENE, BOSS_DOORS = _load()
+
+_BY_SCENE = {lv.scene: lv for a in AREAS for lv in a.levels}
 
 FLAG_ITEM = "Flag"
 FILLER_ITEMS = (
@@ -124,19 +128,24 @@ def final_boss_area() -> str:
 
 
 # --- Boss holes / computer keys ----------------------------------------------
-# The campaign's "computer" boss holes, each fought behind a real computer door
-# (OverworldMainDoorRobot). The door's bossLevelID equals the boss hole's
-# LevelData.ID, and the scene's "HoleInOne N" number equals the door's
-# ID_2D_HOLEINONE_N (verified via mod/wtg_doors.json). We exclude the Final boss
-# (no door; it's gated by the campaign goal). Result: computers 1,2,3,4,7,8,9.
+# The campaign's KEYABLE "computer" boss holes, each fought behind a real computer
+# door (OverworldMainDoorRobot). The keyable set is sourced from the door topology
+# (mod/wtg_doors.json, baked into levels.json's "boss_doors" by build_levels.py):
+# a door is keyable only if it BOTH has plate areas (so the mod's
+# OverworldMainDoorPlate.SetState lever can hold it shut until the key arrives)
+# AND maps to a real campaign hole (so a "<scene> - Clear" location exists to gate).
+# The door's bossLevelID equals the boss hole's LevelData.ID (Level.id), and its
+# ID_2D_HOLEINONE_N gives the computer number. This EXCLUDES the plateless finale
+# computer 9 (chamber -1, a scripted encounter -- can't be SetState-gated) and
+# computer 5 (its boss "2D HoleInOne 05 basic" is in no section, so has no
+# location). Result today: computers 1,2,3,4,7,8. The Final boss is never keyed
+# (no door; gated by the campaign goal).
 def boss_holes():
     """Yield (level, computer_number) for each keyable campaign boss hole."""
-    for _area, level in iter_holes():
-        if not level.boss or level.scene == FINAL_BOSS_SCENE:
-            continue
-        m = re.search(r"HoleInOne\s+(\d+)", level.scene)
-        if m:
-            yield level, int(m.group(1))
+    for bd in BOSS_DOORS:
+        level = _BY_SCENE.get(bd["scene"])
+        if level is not None:
+            yield level, int(bd["computer"])
 
 
 BOSS_HOLES = tuple(boss_holes())

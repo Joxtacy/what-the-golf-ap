@@ -1603,5 +1603,37 @@
     "2D HoleInOne 09 3d"
    ]
   }
+ ],
+ "boss_doors": [
+  {
+   "computer": 1,
+   "boss_level_id": "349CM9",
+   "scene": "2D HoleInOne 01 basic"
+  },
+  {
+   "computer": 2,
+   "boss_level_id": "9ZBIZC",
+   "scene": "2D HoleInOne 2 basic"
+  },
+  {
+   "computer": 3,
+   "boss_level_id": "C1C9DS",
+   "scene": "2D HoleInOne 03 frogger"
+  },
+  {
+   "computer": 4,
+   "boss_level_id": "3VGKO4",
+   "scene": "2D HoleInOne 04 peggle"
+  },
+  {
+   "computer": 7,
+   "boss_level_id": "DSCVS",
+   "scene": "2D HoleInOne 07 basic"
+  },
+  {
+   "computer": 8,
+   "boss_level_id": "AXCX7",
+   "scene": "2D HoleInOne 08 flying ball"
+  }
  ]
 }
