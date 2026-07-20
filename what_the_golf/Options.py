@@ -54,9 +54,24 @@ class BossKeys(Toggle):
     display_name = "Boss Keys"
 
 
+class HardSections(Toggle):
+    """Physically hard-lock not-yet-unlocked sub-areas within a chamber.
+
+    Only matters with 'section' area access. Sub-areas inside one chamber share an
+    open overworld room, so by default you *can* walk into a locked sibling sub-area
+    once any sibling is reachable (out of logic, never a softlock — see Area Access).
+    Turn this on and the mod holds the connecting door shut until that sub-area's
+    key arrives, so section access is a real physical gate too. No effect on the
+    item pool or logic; keyed sub-areas stay directly teleport-reachable regardless.
+    Under 'chamber' access this does nothing (a chamber's sub-areas unlock together).
+    """
+    display_name = "Hard Sub-area Locks"
+
+
 @dataclass
 class WTGOptions(PerGameCommonOptions):
     goal: Goal
     area_access: AreaAccess
     boss_keys: BossKeys
+    hard_sections: HardSections
     death_link: DeathLink

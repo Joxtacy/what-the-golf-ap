@@ -91,5 +91,6 @@ class WTGWorld(World):
             "goal": self.options.goal.value,
             "area_access": self.area_access_mode(),
             "boss_keys": bool(self.options.boss_keys.value),
+            "hard_sections": bool(self.options.hard_sections.value),
             "death_link": bool(self.options.death_link.value),
         }

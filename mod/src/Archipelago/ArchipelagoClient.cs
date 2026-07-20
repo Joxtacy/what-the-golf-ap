@@ -91,6 +91,8 @@ public class ArchipelagoClient
         if (slotData.TryGetValue("area_access", out var aa)) Data.AreaAccess = Convert.ToString(aa);
         if (slotData.TryGetValue("boss_keys", out var bk)) Data.BossKeysEnabled = Convert.ToBoolean(bk);
         BossGate.SetEnabled(Data.BossKeysEnabled);
+        if (slotData.TryGetValue("hard_sections", out var hs)) Data.HardSectionsEnabled = Convert.ToBoolean(hs);
+        SectionGate.SetEnabled(Data.HardSectionsEnabled);
     }
 
     // --- Location checks -----------------------------------------------------

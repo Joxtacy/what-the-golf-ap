@@ -28,4 +28,5 @@ public class ArchipelagoData
     public int Goal;
     public string AreaAccess = "section";
     public bool BossKeysEnabled;
+    public bool HardSectionsEnabled;
 }

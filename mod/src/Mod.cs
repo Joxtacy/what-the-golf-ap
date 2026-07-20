@@ -31,11 +31,10 @@ public class Mod : MelonMod
     // so keep OFF; flip to true + rebuild only when re-capturing game data.
     public const bool DumpersEnabled = false;
 
-    // Within-chamber hard-lock spike (VALIDATED, 2026-07-20): forcing a locked
-    // section connector's canOpen=false hard-gates the sub-area on a FRESH save.
-    // Kept OFF; productionize as a real SectionGate option. See ActiveGateTest.cs.
+    // Within-chamber hard-lock: productionized as SectionGate (the "hard_sections"
+    // apworld option; enabled from slot data). WalkGateProbe is the read-only gating
+    // diagnostic from the spike, kept OFF.
     public const bool WalkProbeEnabled = false;      // read-only gating probe
-    public const bool ActiveGateTestEnabled = false; // active force-lock experiment
 
     public override void OnInitializeMelon()
     {
@@ -73,9 +72,6 @@ public class Mod : MelonMod
             Mapping.WalkGateProbe.Snapshot();
         }
 
-        // Spike: actively force a chosen section locked, to test feasibility.
-        if (ActiveGateTestEnabled) Mapping.ActiveGateTest.Tick();
-
         if (client?.DeathLink != null && client.DeathLink.ConsumePending())
         {
             // TODO: reset/kill the ball on an incoming DeathLink.
@@ -94,12 +90,14 @@ public class Mod : MelonMod
             Mapping.ChamberUnlock.TryApply();
         }
 
-        // Boss gating: hold still-locked computer doors shut (~6x/sec; no-op when
-        // the seed didn't enable boss keys).
+        // Gate holding (~6x/sec; each self-no-ops when its option is off):
+        //  - BossGate: hold still-locked computer doors shut (boss_keys).
+        //  - SectionGate: hold locked within-chamber connectors shut (hard_sections).
         if (++_bossTimer >= 10)
         {
             _bossTimer = 0;
             Mapping.BossGate.Tick();
+            Mapping.SectionGate.Tick();
         }
 
         if (LegacyGatingEnabled)

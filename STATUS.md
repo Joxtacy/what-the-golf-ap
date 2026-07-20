@@ -83,21 +83,33 @@ looseness (computer doors are hard walls). `mod/src/Mapping/UnlockProbe.cs` = th
 read-only save-vocabulary probe (`Mod.ProbeEnabled`). ChamberGate/EntryGate/
 GoalGate are dead.
 
-### Within-chamber hard-lock — SPIKE DONE, FEASIBLE (2026-07-20)
+### Within-chamber hard-lock — DONE: `hard_sections` option (2026-07-20)
 
-The looseness above **can** be fixed. Validated in-game on a FRESH save: sub-areas
-connect via `OverworldButton2D` connectors that open on ball-touch while
-`canOpen==true`, and each connector's `OverworldID.ID` equals its section's
-`unlockTriggerId`. Forcing `canOpen=false` on a locked section's connector makes
-its door refuse to open (hard gate); restoring `canOpen=true` on unlock re-opens
-it. Proven: fresh save, only Easy 2D (09A) keyed → Living Room (09B/`Z4UZC`) door
-stayed shut while Easy 2D opened. **Only works on a FRESH save** — a progressed
-save re-derives door state from the persistent `OPEN_DOORS` flag each frame and
-overwrites the poke (this fooled earlier same-save tests into a premature
-"infeasible"). Experiment: `mod/src/Mapping/ActiveGateTest.cs` (+ read-only
-`WalkGateProbe.cs`; `ChamberUnlock.AllTriggers()`/`IsTriggerUnlocked()`), toggles
-`Mod.ActiveGateTestEnabled`/`WalkProbeEnabled` (both OFF). TODO: productionize as a
-`SectionGate` (sibling to `BossGate`) behind a `hard_sections` apworld option.
+The `area_access: section` walk-looseness is now closeable via the **`hard_sections`**
+apworld option (Toggle, default off). Sub-areas connect via `OverworldButton2D`
+connectors that open on ball-touch while `canOpen==true`, and each connector's
+`OverworldID.ID` equals its section's `unlockTriggerId`. When enabled the mod forces
+`canOpen=false` on every connector whose id is a not-yet-unlocked section trigger
+(hard gate) and restores `canOpen=true` on unlock. Proven in the spike: fresh save,
+only Easy 2D (09A) keyed → Living Room (09B/`Z4UZC`) door stayed shut.
+
+**Productionized as `mod/src/Mapping/SectionGate.cs`** (sibling to `BossGate`):
+`SetEnabled` from slot data (`hard_sections`), `Tick()` from `Mod.OnUpdate` (~6x/sec,
+alongside BossGate). Softlock-safe now that the teleporter lists every keyed section
+directly (a section is teleport-reachable iff its door is open — see the teleporter
+section), so a locked connector can never trap you; auto-no-op under `chamber`
+granularity (a chamber's sub-areas share triggers that unlock together). Apworld:
+`Options.HardSections` + `fill_slot_data` `hard_sections`; mod: `ArchipelagoData.
+HardSectionsEnabled`, `ReadSlotData` wires `SectionGate.SetEnabled`. The old spike
+file `ActiveGateTest.cs` was removed (superseded); read-only `WalkGateProbe.cs`
+(`Mod.WalkProbeEnabled`, OFF) kept. **VALIDATED:** mod builds + deploys; seed with
+`hard_sections: true` generates solvable on 0.6.7 (slot data + spoiler carry it).
+**Live in-game test of SectionGate itself still pending** (mechanism already proven
+by the spike). NOTE: like all door pokes, only reliable on a FRESH save.
+
+**Caveat — only reliable on a FRESH save:** on a progressed/contaminated save the
+game re-derives door state from persistent `OPEN_DOORS` each frame and can overwrite
+the poke.
 
 ### Teleporter / reachability — SOLVED (2026-07-20)
 
