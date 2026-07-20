@@ -38,6 +38,9 @@ def main():
     # boss-key item name -> boss hole LevelData.ID. The mod suppresses the
     # computer door whose bossLevelID matches, until this key arrives.
     boss_by_item = data.boss_key_to_level_id()
+    # Every boss scene (7 computers + final) + the final boss scene, so the mod's
+    # all_bosses goal knows which clears count and when all are down.
+    boss_scenes = list(data.all_boss_scenes())
     payload = {
         "game": "WHAT THE GOLF?",
         "start_area": data.START_AREA,
@@ -46,6 +49,8 @@ def main():
         "area_by_scene": area_by_scene,
         "unlocks_by_item": unlocks_by_item,
         "boss_by_item": boss_by_item,
+        "boss_scenes": boss_scenes,
+        "final_boss_scene": data.FINAL_BOSS_SCENE,
     }
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
@@ -53,7 +58,8 @@ def main():
     print(f"wrote {OUT}: {len(payload['items'])} items, "
           f"{len(payload['locations'])} locations, "
           f"{len(unlocks_by_item)} access->door maps, "
-          f"{len(boss_by_item)} boss keys")
+          f"{len(boss_by_item)} boss keys, "
+          f"{len(boss_scenes)} boss scenes")
 
 
 if __name__ == "__main__":

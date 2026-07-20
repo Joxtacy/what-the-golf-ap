@@ -184,8 +184,17 @@ Planned, several as **apworld Options**:
    (section/chamber × campaign/door) generates solvable on 0.6.7 — section = 17
    access keys, chamber = 10, both 132 flags. Mod builds + deploys. **Live in-game
    test of section unlocking still pending.**
-2. **Computer boss keys (9 items).** Gate each of the 9 boss doors behind a key,
-   using the VALIDATED `OverworldMainDoorPlate.SetState` lever. Bosses become gates.
+2. **Computer boss keys. ✅ DONE (apworld + mod; live test pending).** New
+   `boss_keys` toggle option. Gates the 7 keyable campaign computer bosses
+   (Computers 1,2,3,4,7,8,9 — the Final boss is gated by the goal, not a key)
+   behind a `Computer N Key` each, using the VALIDATED `OverworldMainDoorPlate.
+   SetState` lever run in reverse: `mod/src/Mapping/BossGate.cs` holds a locked
+   boss's door shut (forces its lit plates off every ~6th frame) until the key
+   arrives, then re-lights them. apworld: `data.BOSS_HOLES` /
+   `boss_key_to_level_id()`, `Options.BossKeys`, boss-key items (progression) +
+   Clear/Crown rules in `Rules.py`; `export_ids.py` emits `boss_by_item`
+   (key → boss LevelData.ID). Generates solvable on 0.6.7. **In-game live test of
+   the door-suppression still pending.**
 3. **Chests as locations (~24 checks).** Save tracks 24 overworld chests
    (`CHEST_KITCHEN`…, key `OPEN_CHESTS` / `SetChestUnlocked`). More checks = better
    spread. (Option.)
@@ -201,21 +210,33 @@ Planned, several as **apworld Options**:
 has everything unlocked. Use a dedicated fresh dev save slot to test; the 100%
 save is safe. ChamberUnlock WRITES save state (persists on that slot).
 
-## ROADMAP — goal options (idea, 2026-07-20)
+## ROADMAP — goal options — "all bosses" ✅ DONE (2026-07-20)
 
-Current goals: `campaign` (beat the final boss) and `door_50/75/100` (Flag count).
-Idea: add a **"beat all bosses"** goal — win requires **defeating all 9 Computer
-bosses**, not just the final one. Rationale: reaching only the final-area gate can
-be satisfied by one progression chain, leaving many chamber-access items unneeded;
-requiring every boss forces MORE progression items (every chamber's Access key) to
-actually be in logic → deeper, more spread-out progression, fewer hub shortcuts.
-Keep final-boss-only as an option too (new `Options` value, e.g.
-`goal: campaign / all_bosses / door_50/75/100`).
+Goals are now `campaign` (beat the final boss), `door_50/75/100` (Flag count), and
+the new **`all_bosses`** (`Goal.option_all_bosses = 4`): win requires **defeating
+every campaign boss** — the 7 computer HoleInOne bosses **and** the Final boss
+(8 total), not just the final one. Rationale (confirmed in the test spoiler):
+reaching only the final-area gate can be satisfied by one progression chain, but
+requiring every boss forces the chamber-access (and, with `boss_keys`, the boss)
+keys deep in chambers 08/07/06/05/03/01/00 into logic → deeper, more spread-out
+progression. Since the Final boss is included, `all_bosses` subsumes `campaign`.
 
-Implementation sketch: track per-boss Defeat events (mod already has
-`GameAnalytics.OnFinalBossCompleted` + boss detection via `GameState.isBossBattle`
-and boss level IDs `ID_2D_HOLEINONE_N`) and fire the Victory event once all 9 are
-registered. Pairs naturally with progression roadmap #2 (computer boss keys).
+- **apworld:** `Options.Goal.option_all_bosses`; `data.all_boss_scenes()`;
+  `Rules.py` completion = `all(state.can_reach_location("<scene> - Clear"))` over
+  every boss (reuses the existing Access/boss-key rules, so it folds both in).
+  `export_ids.py` now emits `boss_scenes` (all 8) + `final_boss_scene`.
+- **mod:** new `mod/src/Mapping/BossGoal.cs` — loads the boss scenes, enabled from
+  slot data (`goal == 4`), counts each boss clear (`GamePatches.LevelCompletePostfix
+  → RegisterDefeat`, and the Final boss via `OnFinalBossCompleted →
+  RegisterFinalBoss`), and reports Victory once all are down. `ArchipelagoData`
+  gained `GoalCampaign/Door50/75/100/AllBosses` constants.
+- **Latent bug fixed:** `FinalBossPostfix` previously always sent Victory, which
+  would wrongly complete a `door_%` seed on the final boss. It now branches on the
+  goal (campaign → Victory; all_bosses → count the boss; door → nothing).
+- **VALIDATED:** 3-player seed (all_bosses×section+boss_keys / all_bosses×chamber /
+  campaign) generates solvable on 0.6.7; spoiler shows `Goal: All Bosses` and
+  `Computer N Key` items placed as in-logic progression. Mod builds + deploys.
+  **In-game live test pending.**
 
 ## ROADMAP — mod UX / lifecycle (agreed 2026-07-19)
 

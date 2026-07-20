@@ -529,5 +529,16 @@
     "Computer 7 Key": "DSCVS",
     "Computer 8 Key": "AXCX7",
     "Computer 9 Key": "IKCV7"
-  }
+  },
+  "boss_scenes": [
+    "2D HoleInOne 01 basic",
+    "2D HoleInOne 2 basic",
+    "2D HoleInOne 03 frogger",
+    "2D HoleInOne 04 peggle",
+    "2D HoleInOne 07 basic",
+    "2D HoleInOne 08 flying ball",
+    "Final boss",
+    "2D HoleInOne 09 3d"
+  ],
+  "final_boss_scene": "Final boss"
 }

@@ -2,7 +2,9 @@ from math import ceil
 
 from worlds.generic.Rules import set_rule
 
-from .data import gates, BOSS_HOLES, boss_key_item, clear_loc, crown_loc
+from .data import (
+    gates, BOSS_HOLES, boss_key_item, clear_loc, crown_loc, all_boss_scenes,
+)
 from .Items import flag_pool
 
 
@@ -35,6 +37,16 @@ def set_rules(world) -> None:
     if goal == goal.option_campaign:
         multiworld.completion_condition[player] = \
             lambda state: state.has("Victory", player)
+    elif goal == goal.option_all_bosses:
+        # Win = able to defeat every boss hole. A boss Clear is reachable exactly
+        # when its region Access (and, if boss_keys is on, its Computer key) is
+        # held -- those rules are already set above, so can_reach_location folds
+        # both requirements in. Includes the Final boss, so all_bosses subsumes
+        # the campaign goal.
+        boss_clears = [clear_loc(s) for s in all_boss_scenes()]
+        multiworld.completion_condition[player] = \
+            lambda state, names=boss_clears: \
+            all(state.can_reach_location(n, player) for n in names)
     else:
         pct = {
             goal.option_door_50: 0.5,

@@ -71,6 +71,9 @@ public static class GamePatches
                 Plugin.Client?.SendClear(scene);
                 if (GameState.CurrentLevelCrowned())
                     Plugin.Client?.SendCrown(scene);
+
+                // all_bosses goal: count this clear if it's a boss (no-op otherwise).
+                Mapping.BossGoal.RegisterDefeat(scene);
             }
         }
         catch (Exception e) { Plugin.Log.LogError($"LevelCompletePostfix: {e}"); }
@@ -87,8 +90,23 @@ public static class GamePatches
     {
         try
         {
-            Plugin.Log.LogInfo("OnFinalBossCompleted -> campaign goal reached");
-            Plugin.Client?.SendVictory();
+            int goal = Plugin.Client?.Data?.Goal ?? WtgArchipelago.ArchipelagoData.GoalCampaign;
+            if (goal == WtgArchipelago.ArchipelagoData.GoalAllBosses)
+            {
+                // all_bosses: the final boss is just one of the required bosses.
+                Plugin.Log.LogInfo("OnFinalBossCompleted -> final boss down (all_bosses goal)");
+                Mapping.BossGoal.RegisterFinalBoss();
+            }
+            else if (goal == WtgArchipelago.ArchipelagoData.GoalCampaign)
+            {
+                Plugin.Log.LogInfo("OnFinalBossCompleted -> campaign goal reached");
+                Plugin.Client?.SendVictory();
+            }
+            else
+            {
+                // door_% goals complete via Flag count, not the final boss.
+                Plugin.Log.LogInfo("OnFinalBossCompleted (door goal -> no victory here)");
+            }
         }
         catch (Exception e) { Plugin.Log.LogError($"FinalBossPostfix: {e}"); }
     }

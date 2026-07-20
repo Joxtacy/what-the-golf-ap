@@ -88,6 +88,7 @@ public class ArchipelagoClient
         if (slotData == null) return;
         if (slotData.TryGetValue("death_link", out var dl)) Data.DeathLinkEnabled = Convert.ToBoolean(dl);
         if (slotData.TryGetValue("goal", out var g)) Data.Goal = Convert.ToInt32(g);
+        BossGoal.SetEnabled(Data.Goal == ArchipelagoData.GoalAllBosses);
         if (slotData.TryGetValue("area_access", out var aa)) Data.AreaAccess = Convert.ToString(aa);
         if (slotData.TryGetValue("boss_keys", out var bk)) Data.BossKeysEnabled = Convert.ToBoolean(bk);
         BossGate.SetEnabled(Data.BossKeysEnabled);

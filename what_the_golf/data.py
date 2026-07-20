@@ -142,6 +142,13 @@ def boss_holes():
 BOSS_HOLES = tuple(boss_holes())
 
 
+def all_boss_scenes():
+    """Scenes of EVERY campaign boss hole: the 7 keyable computer HoleInOne
+    bosses plus the Final boss. Used by the all_bosses goal (defeat them all)
+    and exported to the mod so it can track boss defeats."""
+    return tuple(lv.scene for _area, lv in iter_holes() if lv.boss)
+
+
 def boss_key_names():
     return [boss_key_item(n) for _lv, n in BOSS_HOLES]
 

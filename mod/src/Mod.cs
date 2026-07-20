@@ -42,6 +42,7 @@ public class Mod : MelonMod
         Mapping.AreaState.Load();
         Mapping.ChamberUnlock.Load();
         Mapping.BossGate.Load();
+        Mapping.BossGoal.Load();
         GamePatches.Apply(HarmonyInstance);
         Plugin.Log.LogInfo($"WtgArchipelago loaded (game: {Plugin.GameName}).");
 

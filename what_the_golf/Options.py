@@ -6,15 +6,21 @@ from Options import Choice, Toggle, DeathLink, PerGameCommonOptions
 class Goal(Choice):
     """How the multiworld is won.
 
-    campaign: reach the Final boss area (finish the campaign path).
+    campaign: reach and beat the Final boss (finish the campaign path).
+    all_bosses: defeat EVERY campaign boss -- the 7 computer HoleInOne bosses
+        AND the Final boss, not just the last one. Because the bosses sit deep
+        in chambers 08/07/06/05/03/01/00, this forces far more Access (and, with
+        the boss_keys option, boss) keys into logic -- deeper, more spread-out
+        progression than campaign, which one long chain can satisfy.
     door_50 / door_75 / door_100: collect that percentage of all Flags,
-    mirroring the game's 50% / 75% / 100% completion doors.
+        mirroring the game's 50% / 75% / 100% completion doors.
     """
     display_name = "Goal"
     option_campaign = 0
     option_door_50 = 1
     option_door_75 = 2
     option_door_100 = 3
+    option_all_bosses = 4
     default = 0
 
 

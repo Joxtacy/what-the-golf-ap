@@ -9,6 +9,13 @@ namespace WtgArchipelago;
 /// </summary>
 public class ArchipelagoData
 {
+    // Goal values must match Options.py's Goal choice (fill_slot_data sends the int).
+    public const int GoalCampaign = 0;
+    public const int GoalDoor50 = 1;
+    public const int GoalDoor75 = 2;
+    public const int GoalDoor100 = 3;
+    public const int GoalAllBosses = 4;
+
     public string Host = "localhost";
     public int Port = 38281;
     public string SlotName = "Player1";
