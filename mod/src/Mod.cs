@@ -54,10 +54,19 @@ public class Mod : MelonMod
     // MelonLoader GUI callback -> draw the connection panel (and read its hotkey).
     public override void OnGUI() => ConnectionUI.OnGUI();
 
-    // Wall-clock timestamps (unscaled seconds) for throttling the expensive
-    // FindObjectsOfTypeAll polling. TIME-based, not frame-based: a frame-count
-    // throttle fires ~2.4x more often at 144 Hz than at the 60 Hz it was tuned for,
-    // multiplying the scan cost exactly when the framerate is highest.
+    // Overworld polling is EVENT-DRIVEN to keep the idle hub cheap. The expensive
+    // FindObjectsOfTypeAll sweeps run at full rate only in a short "burst" after the
+    // overworld (re)loads -- returning from a hole, or just after connecting, when a
+    // node may have completed and doors/goals were rebuilt -- and otherwise only on a
+    // slow heartbeat (to cover teleport door reloads). Standing idle in the hub costs
+    // almost nothing, and all scanning is skipped entirely while in a hole.
+    // Timestamps are wall-clock (unscaled seconds), NOT frame counts: a frame-count
+    // throttle fires ~2.4x more often at 144 Hz than at 60 Hz -- inflating the cost
+    // exactly when the framerate is highest.
+    private bool _wasInLevel;
+    private bool _wasConnected;
+    private float _scanUntil;         // active-burst window end
+    private float _lastHeartbeat;
     private float _lastUnlock;
     private float _lastGate;
     private float _lastGoal;
@@ -111,39 +120,66 @@ public class Mod : MelonMod
         //       near vanilla, and
         //   (3) stagger the three gates so at most ONE scan runs per tick.
         bool connected = client != null && client.Connected;
-        if ((connected || !string.IsNullOrEmpty(ForceUnlockTrigger)) && !GameState.IsInLevel())
+        if (connected || !string.IsNullOrEmpty(ForceUnlockTrigger))
         {
             float now = UnityEngine.Time.unscaledTime;
+            bool inLevel = GameState.IsInLevel();
 
-            // Re-apply chamber unlocks (~2x/sec): self-heals after the save reload on
-            // overworld load, and covers items received before the overworld existed.
-            if (now - _lastUnlock >= 0.5f)
-            {
-                _lastUnlock = now;
-                if (!string.IsNullOrEmpty(ForceUnlockTrigger))   // DEV/TEST only
-                    Mapping.ChamberUnlock.ForceTrigger(ForceUnlockTrigger);
-                if (connected)
-                    Mapping.ChamberUnlock.TryApply();
-            }
+            // Open a 2s active-scan burst when the overworld (re)loads: returning from
+            // a hole (a node may have just completed; doors/goals were rebuilt) or the
+            // first frame after connecting (reconcile already-completed nodes).
+            if ((_wasInLevel && !inLevel) || (!_wasConnected && connected))
+                _scanUntil = now + 2f;
+            _wasInLevel = inLevel;
+            _wasConnected = connected;
 
-            if (connected)
+            // In a hole: nothing overworld to poll -> zero scanning (in-level = 144).
+            if (!inLevel)
             {
-                // One gate per slot (~3 slots/sec -> each gate ~1x/sec). Each no-ops
-                // (no scan) when its option is off. Boss gating correctness is the
-                // CanBeOpened override now, so this poll is only visual upkeep.
-                if (now - _lastGate >= 0.34f)
+                bool burst = now < _scanUntil;
+                // Idle in the hub: sweep only on a slow heartbeat (catches teleport
+                // door reloads + keyed-door opening). During a burst, sweep at rate.
+                if (burst || now - _lastHeartbeat >= 3f)
                 {
-                    _lastGate = now;
-                    switch (_gateSlot++ % 3)
+                    _lastHeartbeat = now;
+
+                    // Chamber unlocks: re-apply door-open flags (self-heal after a
+                    // save/overworld reload). Dev force path for fresh-save tests.
+                    if (now - _lastUnlock >= 0.5f)
                     {
-                        case 0: Mapping.BossGate.Tick(); break;
-                        case 1: Mapping.SectionGate.Tick(); break;
-                        case 2: Mapping.ChestGate.Tick(); break;
+                        _lastUnlock = now;
+                        if (!string.IsNullOrEmpty(ForceUnlockTrigger))   // DEV/TEST only
+                            Mapping.ChamberUnlock.ForceTrigger(ForceUnlockTrigger);
+                        if (connected)
+                            Mapping.ChamberUnlock.TryApply();
+                    }
+
+                    if (connected)
+                    {
+                        // One gate per tick (staggered). Each no-ops (no scan) when its
+                        // option is off. Boss correctness is the CanBeOpened override,
+                        // so this poll is only visual upkeep and can run slowly.
+                        if (now - _lastGate >= 0.34f)
+                        {
+                            _lastGate = now;
+                            switch (_gateSlot++ % 3)
+                            {
+                                case 0: Mapping.BossGate.Tick(); break;
+                                case 1: Mapping.SectionGate.Tick(); break;
+                                case 2: Mapping.ChestGate.Tick(); break;
+                            }
+                        }
+
+                        // Node Clear/Crown detection: only during a burst -- a node can
+                        // only newly-complete when you come back from a hole, so idle
+                        // never scans goals.
+                        if (burst && now - _lastGoal >= 0.5f)
+                        {
+                            _lastGoal = now;
+                            Mapping.GoalWatcher.Scan();
+                        }
                     }
                 }
-
-                // Node Clear/Crown detection (~2x/sec) from per-node OverworldGoal.state.
-                if (now - _lastGoal >= 0.5f) { _lastGoal = now; Mapping.GoalWatcher.Scan(); }
             }
         }
 
