@@ -11,8 +11,16 @@ namespace WtgArchipelago.Patches;
 /// </summary>
 public static class GameState
 {
+    // IMPORTANT: gate EVERY Level.Instance access behind Level.HasInstance.
+    // Level.get_Instance() does a FindObjectOfType<Level>() search whenever no level
+    // is active (the overworld) -- a full object-graph scan that, called per frame
+    // from OnUpdate, cost ~8 ms/frame and halved the overworld framerate. HasInstance
+    // just checks the cached reference (no search), and when an instance DOES exist
+    // Instance returns it cached (cheap). So this guard makes the overworld free while
+    // staying correct in a hole.
     private static Il2CppCore.LevelData CurrentLevel()
     {
+        if (!Il2CppCore.Level.HasInstance) return null;
         var level = Il2CppCore.Level.Instance;
         return level != null && level.levelManager != null
             ? level.levelManager.currentLevel
@@ -39,6 +47,7 @@ public static class GameState
     /// decide whether an incoming DeathLink has anything to kill.</summary>
     public static bool IsInLevel()
     {
+        if (!Il2CppCore.Level.HasInstance) return false;   // overworld: no search
         var level = Il2CppCore.Level.Instance;
         var lm = level != null ? level.levelManager : null;
         try { return lm != null && lm.IsInLevel(); }
@@ -51,6 +60,7 @@ public static class GameState
     /// apply an incoming DeathLink. Returns true if invoked.</summary>
     public static bool RestartLevel()
     {
+        if (!Il2CppCore.Level.HasInstance) return false;
         var level = Il2CppCore.Level.Instance;
         if (level == null) return false;
         level.Restart();
