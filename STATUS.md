@@ -423,16 +423,30 @@ skip this next time). See the mod-UX section above.
    held; TMP HUD renders in-game in the game font/palette. `send_deathlink.py` =
    reusable incoming-death test tool.
 
-   **PLANNED — HUD slide-in animation (agreed, not built yet).** Instead of always-on,
-   make the counter slide in from the left edge when you die, hold ~2–3s, then slide
-   back out (Celeste-ish; keeps it unobtrusive). Sketch: `DeathLinkHud` gets a small
-   state machine (Hidden → SlideIn → Hold → SlideOut) in `Tick()`; on a count change
-   reset a hold timer and trigger SlideIn; lerp `RectTransform.anchoredPosition.x`
-   between an off-screen x (e.g. `-width`) and the on-screen x, driven by
-   `Time.unscaledDeltaTime` so it animates even while paused. Keep a config toggle
-   (always-on vs. slide-in-on-death) — likely a `MelonPreferences` bool since it's
-   pure client cosmetics. Consider also sliding in briefly on connect so the player
-   sees the current tally once. Everything needed is already referenced (UIModule/TMP).
+   **HUD slide-in animation — DONE + LIVE-VALIDATED 2026-07-21.** `DeathLinkHud` now
+   has a `Hidden → SlideIn → Hold → SlideOut` state machine in `Tick()`: the counter
+   lives off-screen left (`OffScreenX = -700`) and slides in on each wipe (and once on
+   connect, to show the tally), holds `HoldSeconds` (2.5s), then slides out.
+   `Mathf.MoveTowards(x, …, SlideSpeed*dt)` at `SlideSpeed = 2600 px/s` (~0.28s/slide),
+   driven by `Time.unscaledDeltaTime` so it animates even while the F8 panel pauses the
+   game. Position (`ApplyPosition`) recomputed each frame so it tracks resolution; the
+   face + 8 outline copies move + scale together. Config toggle = `Preferences.HudAnimate`
+   (`hudAnimate`, default true = slide-in; false = always-on, parked on screen), exposed
+   as a checkbox in the F8 `ConnectionUI` panel ("Animate DeathLink HUD (slide-in)").
+   **Number tick-up:** on a wipe the counter slides in still showing the OLD number,
+   then after `BumpDelay` (0.35s) on screen ticks up to the new value with a scale pop
+   (`PopScale` 0.35, `PopDuration` 0.28s) — so the increment is SEEN, not pre-applied.
+   **Peak→reset "cash register":** on the wipe that hits the threshold and fires a
+   DeathLink, it peaks at `N/N` (`PeakHold` 1.1s) then flips to `0/N` (`ResetDwell` 1.2s)
+   instead of jumping `(N-1)/N → 0/N`. Implemented via a monotonic `DeathLinkHandler.
+   DeathsSent` counter (increments per broadcast) that the HUD watches (`_lastSent`) to
+   distinguish a broadcast wipe from a normal one — needed because the throttle counter
+   resets to 0 the instant it broadcasts, so `WipeCount` alone never shows the peak. The
+   sequencer (`AdvanceDisplay`) is shared by both display modes; `TickSlide` holds on
+   screen while a bump/reset is pending so the sequence is never cut off. All four tunables
+   (`BumpDelay`/`PeakHold`/`ResetDwell` + `SlideSpeed`/`HoldSeconds`) are consts at the top
+   of `DeathLinkHud`. Files: `DeathLinkHud.cs`, `DeathLinkHandler.cs` (DeathsSent),
+   `Preferences.cs` (HudAnimate), `ConnectionUI.cs` (F8 toggle).
 3. Polish: friendlier area/section display names.
 4. Optional: rebuild `data.py` from the **real hub sections** (`wtg_goals.json`)
    for authentic, spatially-coherent areas.

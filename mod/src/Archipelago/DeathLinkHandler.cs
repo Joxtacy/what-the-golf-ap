@@ -27,14 +27,16 @@ public class DeathLinkHandler
     private readonly int _threshold;
 
     private int _wipeCount;                 // local wipes since the last broadcast
+    private int _deathsSent;                // monotonic count of DeathLinks we've broadcast
     private int _suppressResetsUntilFrame;  // ignore OnLevelReset while <= this frame
 
     public bool Pending { get; private set; }   // set by a received death; consumed on main thread
 
-    // Read-only view for the on-screen HUD (see ConnectionUI.DrawHud).
+    // Read-only view for the on-screen HUD (see DeathLinkHud).
     public bool Enabled => _enabled;
     public int Threshold => _threshold;
     public int WipeCount => _wipeCount;   // local wipes since the last broadcast; loops 0..Threshold
+    public int DeathsSent => _deathsSent; // increments each broadcast -> HUD shows the peak+reset
 
     public DeathLinkHandler(ArchipelagoClient client, bool enabled)
     {
@@ -71,6 +73,7 @@ public class DeathLinkHandler
 
         int total = _wipeCount;
         _wipeCount = 0;
+        _deathsSent++;
         SendDeath($"{_client.Data.SlotName} wiped {total} times and dragged you down with them");
     }
 

@@ -84,7 +84,7 @@ public static class ConnectionUI
         try
         {
             const float x = 20f, y = 20f, w = 320f, rowH = 22f, gap = 6f;
-            float h = 356f;
+            float h = 384f;
             GUI.Box(new Rect(x, y, w, h), "WHAT THE GOLF?  —  Archipelago");
 
             float ix = x + 14f, iw = w - 28f, cy = y + 34f;
@@ -97,6 +97,13 @@ public static class ConnectionUI
             bool ac = Preferences.AutoConnect.Value;
             bool nac = GUI.Toggle(new Rect(ix, cy, iw, rowH), ac, " Auto-connect on launch");
             if (nac != ac) { Preferences.AutoConnect.Value = nac; Preferences.Save(); }
+            cy += rowH + gap;
+
+            // Client cosmetic: slide the DeathLink counter in on each wipe (on) vs.
+            // keep it always on screen (off). Takes effect immediately.
+            bool ha = Preferences.HudAnimate.Value;
+            bool nha = GUI.Toggle(new Rect(ix, cy, iw, rowH), ha, " Animate DeathLink HUD (slide-in)");
+            if (nha != ha) { Preferences.HudAnimate.Value = nha; Preferences.Save(); }
             cy += rowH + gap;
 
             var client = Plugin.Client;
