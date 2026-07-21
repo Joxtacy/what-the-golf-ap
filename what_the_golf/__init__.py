@@ -38,10 +38,25 @@ class WTGWorld(World):
 
     topology_present = True
 
+    # Universal Tracker: this world can be rebuilt from slot_data alone, so UT
+    # doesn't need the player's YAML in its Players folder -- it regenerates us
+    # and feeds slot_data back through multiworld.re_gen_passthrough (read in
+    # generate_early below) + interpret_slot_data.
+    ut_can_gen_without_yaml = True
+
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 
     # -- generation pipeline --------------------------------------------------
+
+    def generate_early(self) -> None:
+        # Universal Tracker re-runs generation to compute logic and passes the
+        # connected seed's slot_data via multiworld.re_gen_passthrough. Apply it
+        # HERE (before regions/items/rules) so the regenerated world matches the
+        # real seed. Absent during normal generation (attribute doesn't exist).
+        passthrough = getattr(self.multiworld, "re_gen_passthrough", None)
+        if passthrough and self.game in passthrough:
+            self._apply_slot_data(passthrough[self.game])
 
     def area_access_mode(self) -> str:
         """'section' or 'chamber' -- the granularity of the Access keys."""
@@ -102,3 +117,29 @@ class WTGWorld(World):
             "death_link": bool(self.options.death_link.value),
             "death_link_amnesty": int(self.options.death_link_amnesty.value),
         }
+
+    def _apply_slot_data(self, slot_data: dict) -> None:
+        """Restore the options that shape the item/location layout & logic (goal,
+        area_access, boss_keys, crowns) from slot_data. hard_sections/death_link
+        have no generation effect but are restored for completeness."""
+        o = self.options
+        o.goal.value = slot_data["goal"]
+        # area_access is serialized as the string "section"/"chamber" (not the
+        # Choice int), so map it back.
+        o.area_access.value = (
+            o.area_access.option_chamber
+            if slot_data["area_access"] == CHAMBER
+            else o.area_access.option_section
+        )
+        o.boss_keys.value = int(slot_data["boss_keys"])
+        o.crowns.value = int(slot_data["crowns"])
+        o.hard_sections.value = int(slot_data["hard_sections"])
+        o.death_link.value = int(slot_data["death_link"])
+
+    def interpret_slot_data(self, slot_data: dict) -> dict:
+        """Universal Tracker hook. UT re-runs generation locally (with no YAML,
+        only slot_data) to compute which locations are in logic. Returning truthy
+        tells UT to regenerate with slot_data threaded through re_gen_passthrough,
+        which generate_early applies -- that regen is the authoritative one."""
+        self._apply_slot_data(slot_data)
+        return slot_data
