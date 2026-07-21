@@ -182,8 +182,8 @@ Planned, several as **apworld Options**:
    straight from that map (granularity-agnostic); `ItemApplier` routes any
    "* Access" → `ChamberUnlock.RequestItem(name)`. VALIDATED: 4-player matrix
    (section/chamber × campaign/door) generates solvable on 0.6.7 — section = 17
-   access keys, chamber = 10, both 132 flags. Mod builds + deploys. **Live in-game
-   test of section unlocking still pending.**
+   access keys, chamber = 10, both 132 flags. Mod builds + deploys. **✅ Section
+   unlocking LIVE-VALIDATED in-game (`12df9b1`).**
 2. **Computer boss keys. ✅ DONE (apworld + mod; live-tested via all_bosses run).**
    New `boss_keys` toggle option. Gates campaign computer bosses behind a
    `Computer N Key` each, using the VALIDATED `OverworldMainDoorPlate.SetState`
@@ -224,12 +224,17 @@ Planned, several as **apworld Options**:
    / door_100×section, all boss_keys on) generates solvable on 0.6.7; spoiler shows
    `Computer {1,2,3,4,5,7,8} Key` with the C5 key placed + used in the playthrough,
    and the `2D HoleInOne 05 basic - Clear` location present.
-3. **Chests as locations (~24 checks).** Save tracks 24 overworld chests
-   (`CHEST_KITCHEN`…, key `OPEN_CHESTS` / `SetChestUnlocked`). More checks = better
-   spread. (Option.)
-4. **Crown-gating.** Some sections unlock natively via crowns (`CROWN_MAIN1`→Lebowski
-   07B, `CROWN_MAIN2`→Cars 03B). Make Crown a counted progression item + gate some
-   sections behind N crowns. (Option.)
+3. **Chests as locations (~24 checks). ✅ DONE (`7aefeed`, `crowns` option).**
+   Every overworld chest becomes an AP location (24 checks); crown-LOCKED chests
+   open on a `<Area> Chest Key` from the multiworld (the mod holds the door shut).
+   apworld: `Options.Crowns`, `data.Chest` / `chest_key_names` / `chest_location_names`,
+   `Items.CHEST_KEY_ITEMS`, Rules crown-chest gating. Mod: `ChestGate` / `ChestDumper`
+   / `ChestProbe` / `ItemApplier`. This key-based approach SUPERSEDES the counted-crown
+   idea below.
+4. **Crown-gating (counted Crown item). SUPERSEDED — not built.** The original idea
+   (make Crown a counted progression item + gate sections behind N crowns) was
+   replaced by the key-based crown-door gating in the `crowns` option (item 3). Gating
+   *sections* behind crown counts remains unbuilt; likely YAGNI.
 5. **DLC (Sporty Sports).** Adds more sections → more of everything. (Option.)
 6. **Ball shapes / Transmogrif (stretch).** Section `ballShape` = `Transmogrif.
    BALLSHAPES`; gating ball abilities as items = most WTG-flavoured progression, but
@@ -382,9 +387,9 @@ skip this next time). See the mod-UX section above.
 
 ## Suggested next steps
 
-1. **Content options** (all additive, apworld Options): chests as ~24 locations
-   (`OPEN_CHESTS`/`SetChestUnlocked`); crown-gating (Crown as a counted progression
-   item); DLC Sporty Sports; ball shapes / Transmogrif (stretch, needs RE).
+1. **Content options** (all additive, apworld Options): DLC Sporty Sports; ball
+   shapes / Transmogrif (stretch, needs RE). (Chests + crown-door gating are DONE —
+   the `crowns` option; see the numbered list above.)
 2. **DeathLink — DONE + LIVE-VALIDATED (2026-07-20).** "Death" = a level
    FAILURE (ball OOB/water/lost), hooked via the safe static no-arg
    `GameAnalytics:OnLevelReset` (NOT `Level.Fail` — bad sig; and distinct from
