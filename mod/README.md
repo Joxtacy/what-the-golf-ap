@@ -52,18 +52,4 @@ The build **auto-deploys**:
 
 Launch via Steam; logs at `<game>\MelonLoader\Latest.log`.
 
-## Remaining TODOs (marked in code)
-
-1. Implement `GameState.CurrentLevelId()` / `CurrentLevelCrowned()` strongly-typed
-   now that interop is referenced: `LevelManager.Instance.currentLevel.ID`, and
-   crown = `CompletedChallenges.Count == levelChallenges.Count`.
-2. Populate `LocationMap.GameLevelToApName` from observed `LevelData.ID` values
-   (the `Level.Complete` postfix logs each) and load `ids.json` for name→id.
-3. Implement `ItemApplier.UnlockChamber` / `GrantFlag` (open hub doors via
-   `OverworldMainDoorRobot`/`Plate`; suppress native flag-gating).
-4. DeathLink "death" semantics + incoming-death reset.
-5. In-game connection UI (or hardcode `Plugin.Client.Connect(...)` in `Mod` for a
-   first real test against a running AP server).
-
 See `REVERSE_ENGINEERING.md` for the full type/method reference.
-```
