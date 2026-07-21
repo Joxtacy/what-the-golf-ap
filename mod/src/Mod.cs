@@ -54,11 +54,16 @@ public class Mod : MelonMod
     // MelonLoader GUI callback -> draw the connection panel (and read its hotkey).
     public override void OnGUI() => ConnectionUI.OnGUI();
 
-    private int _dumpTimer;
-    private int _unlockTimer;
-    private int _bossTimer;
+    // Wall-clock timestamps (unscaled seconds) for throttling the expensive
+    // FindObjectsOfTypeAll polling. TIME-based, not frame-based: a frame-count
+    // throttle fires ~2.4x more often at 144 Hz than at the 60 Hz it was tuned for,
+    // multiplying the scan cost exactly when the framerate is highest.
+    private float _lastUnlock;
+    private float _lastGate;
+    private float _lastGoal;
+    private int _gateSlot;            // rotates Boss/Section/Chest -> one scan per tick
+    private int _dumpTimer;           // dumpers are OFF by default; frame-based is fine
     private int _chestDumpTimer;
-    private int _goalTimer;
 
     // Runs every frame on Unity's main thread -> ideal main-thread pump.
     public override void OnUpdate()
@@ -92,44 +97,54 @@ public class Mod : MelonMod
             }
         }
 
-        // PASSIVE UNTIL CONNECTED: everything below writes game/save state, so it
-        // runs only while an AP session is live. With no connection the mod has no
-        // side effects (installed == vanilla). The dev ForceUnlockTrigger path is
-        // the one exception (bypasses AP for fresh-save reachability tests).
+        // PASSIVE UNTIL CONNECTED: everything below reads/writes game state, so it
+        // runs only while an AP session is live (installed == vanilla otherwise). The
+        // dev ForceUnlockTrigger path is the one exception.
+        //
+        // PERFORMANCE: every helper below calls Resources.FindObjectsOfTypeAll, which
+        // walks the ENTIRE loaded object graph and marshals it across the IL2CPP
+        // bridge -- by far the biggest cost the mod adds. So we
+        //   (1) throttle by WALL-CLOCK time, not frame count (144 Hz would otherwise
+        //       scan 2.4x more than 60 Hz),
+        //   (2) skip it all while playing a hole -- every target is an overworld
+        //       object, so there's nothing to do in-level -- keeping in-level FPS
+        //       near vanilla, and
+        //   (3) stagger the three gates so at most ONE scan runs per tick.
         bool connected = client != null && client.Connected;
-
-        // Apply any AP chamber unlocks that couldn't be applied yet (e.g. items
-        // received before the overworld loaded). Cheap no-op when up to date.
-        if ((connected || !string.IsNullOrEmpty(ForceUnlockTrigger)) && ++_unlockTimer >= 30)
+        if ((connected || !string.IsNullOrEmpty(ForceUnlockTrigger)) && !GameState.IsInLevel())
         {
-            _unlockTimer = 0;
-            // DEV/TEST: force a chosen section trigger open (teleporter thread).
-            if (!string.IsNullOrEmpty(ForceUnlockTrigger))
-                Mapping.ChamberUnlock.ForceTrigger(ForceUnlockTrigger);
+            float now = UnityEngine.Time.unscaledTime;
+
+            // Re-apply chamber unlocks (~2x/sec): self-heals after the save reload on
+            // overworld load, and covers items received before the overworld existed.
+            if (now - _lastUnlock >= 0.5f)
+            {
+                _lastUnlock = now;
+                if (!string.IsNullOrEmpty(ForceUnlockTrigger))   // DEV/TEST only
+                    Mapping.ChamberUnlock.ForceTrigger(ForceUnlockTrigger);
+                if (connected)
+                    Mapping.ChamberUnlock.TryApply();
+            }
+
             if (connected)
-                Mapping.ChamberUnlock.TryApply();
-        }
+            {
+                // One gate per slot (~3 slots/sec -> each gate ~1x/sec). Each no-ops
+                // (no scan) when its option is off. Boss gating correctness is the
+                // CanBeOpened override now, so this poll is only visual upkeep.
+                if (now - _lastGate >= 0.34f)
+                {
+                    _lastGate = now;
+                    switch (_gateSlot++ % 3)
+                    {
+                        case 0: Mapping.BossGate.Tick(); break;
+                        case 1: Mapping.SectionGate.Tick(); break;
+                        case 2: Mapping.ChestGate.Tick(); break;
+                    }
+                }
 
-        // Gate holding (~6x/sec; each self-no-ops when its option is off):
-        //  - BossGate: hold still-locked computer doors shut (boss_keys).
-        //  - SectionGate: hold locked within-chamber connectors shut (hard_sections).
-        //  - ChestGate: hold locked crown-chest doors shut (crowns).
-        if (connected && ++_bossTimer >= 10)
-        {
-            _bossTimer = 0;
-            Mapping.BossGate.Tick();
-            Mapping.SectionGate.Tick();
-            Mapping.ChestGate.Tick();
-        }
-
-        // Node Clear/Crown detection (~3x/sec, overworld only). Reads the per-node
-        // OverworldGoal.state so compound "several smaller levels" nodes send their
-        // check only when the WHOLE node is done -- not when the first sub-level
-        // finishes. Overworld goals only exist while in the hub, so skip in-level.
-        if (connected && !GameState.IsInLevel() && ++_goalTimer >= 20)
-        {
-            _goalTimer = 0;
-            Mapping.GoalWatcher.Scan();
+                // Node Clear/Crown detection (~2x/sec) from per-node OverworldGoal.state.
+                if (now - _lastGoal >= 0.5f) { _lastGoal = now; Mapping.GoalWatcher.Scan(); }
+            }
         }
 
         // Periodically harvest level/goal data (accumulates). ~every 5s. OFF by
