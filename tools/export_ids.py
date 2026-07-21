@@ -47,11 +47,15 @@ def main():
     # chest opens).
     chest_doors_by_item = data.chest_doors_by_item()
     chest_loc_by_oid = data.chest_loc_by_oid()
+    # scene -> display name. The mod detects a completed level by its raw scene,
+    # then uses this to build the (renamed) location name "<display> - Clear/Crown".
+    name_by_scene = data.name_by_scene()
     payload = {
         "game": "WHAT THE GOLF?",
         "start_area": data.START_AREA,
         "items": data.item_name_to_id,
         "locations": data.location_name_to_id,
+        "name_by_scene": name_by_scene,
         "area_by_scene": area_by_scene,
         "unlocks_by_item": unlocks_by_item,
         "boss_by_item": boss_by_item,

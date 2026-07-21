@@ -23,6 +23,7 @@ Model (an "Area" is a real chamber; naming kept generic for the framework code):
 
 import json
 import os
+import re
 from dataclasses import dataclass
 
 # Base offsets for IDs (derived from Steam AppID 785790 to avoid collisions).
@@ -49,13 +50,61 @@ def _read_levels_json():
     return json.loads(raw.decode("utf-8"))
 
 
+# --- Display-name transform --------------------------------------------------
+# The game reports opaque, inconsistently-formatted SCENE strings (the internal
+# join key the mod matches on). pretty() derives the human display name used for
+# AP location names, per the agreed conventions:
+#   * keep the "2D"/"FPG" engine prefixes and the original (possibly gap-y) hole
+#     numbers; split camelCase into words; Title-case (also de-shouts ALL-CAPS
+#     tokens like SUPERGOLF -> Supergolf); keep small joining words lowercase;
+#     leave glued lowercase compounds (Livingroom, Manball) and do literal splits
+#     (no pun interpretation).
+#   * boss holes "2D HoleInOne <N> <desc>" -> "Computer <N> (<Desc>)" -- the
+#     canonical in-game Computer numbering, including the finale's Computer 9.
+# The raw scene stays the mod's join key; export_ids ships scene->display so the
+# mod can resolve a completed scene to its (renamed) "<display> - Clear/Crown".
+_KEEP = {"2d": "2D", "3d": "3D", "fpg": "FPG", "tv": "TV", "ol": "OL"}
+_SMALL = {"and", "or", "of", "a", "an", "the", "but", "then", "on", "with",
+          "in", "is", "to"}
+_BOSS_RE = re.compile(r"2D HoleInOne\s+(\d+)\s*(.*)", re.I)
+
+
+def _split_camel(tok: str) -> str:
+    s = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", tok)
+    s = re.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", " ", s)
+    return re.sub(r"(?<=[A-Za-z])(?=[0-9])", " ", s)
+
+
+def _word(w: str, first: bool) -> str:
+    lw = w.lower()
+    if lw in _KEEP:
+        return _KEEP[lw]
+    if w.isdigit():
+        return w
+    if not first and lw in _SMALL:
+        return lw
+    return w[:1].upper() + w[1:].lower()
+
+
+def pretty(scene: str) -> str:
+    """Human display name for a scene (see the conventions above)."""
+    m = _BOSS_RE.match(scene)
+    if m:
+        n = int(m.group(1))
+        desc = " ".join(_word(x, i == 0)
+                        for i, x in enumerate(_split_camel(m.group(2).strip()).split()))
+        return f"Computer {n} ({desc})" if desc else f"Computer {n}"
+    return " ".join(_word(t, i == 0) for i, t in enumerate(_split_camel(scene).split()))
+
+
 @dataclass(frozen=True)
 class Level:
     id: str          # opaque LevelData.ID (e.g. "DI3JRA")
-    scene: str       # human-readable scene name (globally unique)
+    scene: str       # internal scene name (the mod's join key; globally unique)
     boss: bool
     challenges: int   # number of mini-challenges (0, 1 or 2) -> crown if > 0
     trigger: str      # section unlockTriggerId ("" for the free start chamber)
+    display: str      # human display name (pretty(scene)); used for location names
 
 
 @dataclass(frozen=True)
@@ -89,7 +138,8 @@ def _load():
     areas = tuple(
         Area(a["name"],
              tuple(Level(l["id"], l["scene"], bool(l["boss"]),
-                         int(l["challenges"]), l.get("trigger", ""))
+                         int(l["challenges"]), l.get("trigger", ""),
+                         pretty(l["scene"]))
                    for l in a["levels"]))
         for a in w["areas"]
     )
@@ -104,7 +154,7 @@ def _load():
     boss_doors = tuple(dict(d) for d in w.get("boss_doors", ()))
     # Overworld crown chests (the "crowns" option). See build_levels.py CHESTS.
     chests = tuple(
-        Chest(c["id"], c["display"], int(c["chamber"]), c.get("trigger", ""),
+        Chest(c["id"], pretty(c["display"]), int(c["chamber"]), c.get("trigger", ""),
               bool(c["gated"]), c.get("door") or "")
         for c in w.get("chests", ())
     )
@@ -115,6 +165,14 @@ def _load():
 AREAS, GATE_UNITS, START_AREA, FINAL_BOSS_SCENE, BOSS_DOORS, CHESTS = _load()
 
 _BY_SCENE = {lv.scene: lv for a in AREAS for lv in a.levels}
+
+# scene -> display name (the mod resolves a completed scene to its location name
+# via this, exported as name_by_scene).
+_DISPLAY_BY_SCENE = {lv.scene: lv.display for a in AREAS for lv in a.levels}
+# computer number -> the chamber its boss sits in (for the boss-key display name).
+_SCENE_CHAMBER = {lv.scene: g.chamber for g in GATE_UNITS for lv in g.levels}
+_BOSS_CHAMBER = {int(bd["computer"]): _SCENE_CHAMBER[bd["scene"]]
+                 for bd in BOSS_DOORS if bd["scene"] in _SCENE_CHAMBER}
 
 FLAG_ITEM = "Flag"
 FILLER_ITEMS = (
@@ -130,8 +188,13 @@ def access_item(gate_name: str) -> str:
 
 
 def boss_key_item(n: int) -> str:
-    """Boss-key item name for computer N (e.g. "Computer 3 Key")."""
-    return f"Computer {n} Key"
+    """Boss-key item name for computer N (e.g. "Computer 3 Key (Chamber 06)").
+
+    The chamber suffix disambiguates the two counting systems: computer numbers
+    climb as chamber codes count down, so "Computer 3" lives in chamber 06.
+    """
+    ch = _BOSS_CHAMBER.get(n)
+    return f"Computer {n} Key (Chamber {ch:02d})" if ch is not None else f"Computer {n} Key"
 
 
 def chest_loc(display: str) -> str:
@@ -145,11 +208,17 @@ def chest_key_item(display: str) -> str:
 
 
 def clear_loc(scene: str) -> str:
-    return f"{scene} - Clear"
+    return f"{_DISPLAY_BY_SCENE.get(scene, scene)} - Clear"
 
 
 def crown_loc(scene: str) -> str:
-    return f"{scene} - Crown"
+    return f"{_DISPLAY_BY_SCENE.get(scene, scene)} - Crown"
+
+
+def name_by_scene() -> dict:
+    """scene -> display name. Exported to the mod so it can turn a completed
+    scene into the (renamed) AP location name '<display> - Clear/Crown'."""
+    return dict(_DISPLAY_BY_SCENE)
 
 
 def iter_holes():
@@ -350,5 +419,15 @@ def all_location_names():
     return names
 
 
-item_name_to_id = {name: BASE_ID + i for i, name in enumerate(all_item_names())}
-location_name_to_id = {name: LOC_BASE + i for i, name in enumerate(all_location_names())}
+_all_items = all_item_names()
+_all_locs = all_location_names()
+# Names become the AP item/location keys, so a duplicate would silently collapse
+# two entries and shift every later ID. Fail loudly if the display transform (or
+# a data edit) ever produces a collision.
+assert len(_all_items) == len(set(_all_items)), \
+    f"duplicate item name(s): {[n for n in _all_items if _all_items.count(n) > 1]}"
+assert len(_all_locs) == len(set(_all_locs)), \
+    f"duplicate location name(s): {[n for n in _all_locs if _all_locs.count(n) > 1]}"
+
+item_name_to_id = {name: BASE_ID + i for i, name in enumerate(_all_items)}
+location_name_to_id = {name: LOC_BASE + i for i, name in enumerate(_all_locs)}
