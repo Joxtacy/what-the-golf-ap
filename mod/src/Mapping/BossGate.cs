@@ -58,36 +58,6 @@ public static class BossGate
 
     public static bool Handles(string itemName) => _bossByItem.ContainsKey(itemName);
 
-    // DEV/DIAGNOSTIC: one-shot dump of every computer door's world position +
-    // parent + active + plate state, to locate a hard-to-find boss (e.g. Computer
-    // 9 in the finale). Gated by Mod.BossLocateEnabled; keep OFF in normal builds.
-    private static bool _loggedDoors;
-    public static void LogDoors()
-    {
-        if (_loggedDoors) return;
-        try
-        {
-            var doors = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldMainDoorRobot>();
-            if (doors == null || doors.Length == 0) return;
-            _loggedDoors = true;
-            Plugin.Log.LogInfo($"[BOSSLOC] {doors.Length} computer door(s) found:");
-            for (int i = 0; i < doors.Length; i++)
-            {
-                var d = doors[i];
-                if (d == null) continue;
-                string bid; try { bid = d.bossLevelID; } catch { bid = "?"; }
-                var t = d.transform;
-                var pos = t != null ? t.position : new UnityEngine.Vector3();
-                string parent = (t != null && t.parent != null) ? t.parent.name : "?";
-                bool active = false; try { active = d.gameObject.activeInHierarchy; } catch { }
-                int on = 0, tot = 0; var pl = d.plates;
-                if (pl != null) { tot = pl.Count; for (int j = 0; j < tot; j++) { var p = pl[j]; if (p != null && p.isOn) on++; } }
-                Plugin.Log.LogInfo($"[BOSSLOC] {bid} pos=({pos.x:F1},{pos.y:F1},{pos.z:F1}) parent='{parent}' active={active} plates={on}/{tot}");
-            }
-        }
-        catch (Exception e) { Plugin.Log.LogError($"BossGate.LogDoors: {e}"); }
-    }
-
     /// <summary>Mark a boss unlocked from a received "Computer N Key" item.</summary>
     public static void Unlock(string itemName)
     {

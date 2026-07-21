@@ -5,7 +5,8 @@ namespace WtgArchipelago.Mapping;
 /// <summary>
 /// Applies a received Archipelago item. Runs on the main thread (queued from
 /// ArchipelagoClient). Access items open the matching in-game door(s) so their
-/// holes become teleport-reachable; Flags count toward the % goals; rest = filler.
+/// holes become teleport-reachable; boss/chest keys release their gates; Flags and
+/// the rest are filler (% goals are evaluated AP-server-side, not by the mod).
 /// </summary>
 public static class ItemApplier
 {
@@ -13,11 +14,7 @@ public static class ItemApplier
     {
         string name = item.ItemName;
 
-        if (name == "Flag")
-        {
-            AreaState.AddFlag();
-        }
-        else if (BossGate.Handles(name))
+        if (BossGate.Handles(name))
         {
             // Computer boss key: stop holding that computer's door shut.
             BossGate.Unlock(name);

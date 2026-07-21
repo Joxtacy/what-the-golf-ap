@@ -19,12 +19,6 @@ public static class GameState
             : null;
     }
 
-    public static string CurrentLevelId()
-    {
-        var ld = CurrentLevel();
-        return ld != null ? ld.ID : null;
-    }
-
     /// <summary>The current level's scene name -- the key AP locations use.</summary>
     public static string CurrentLevelScene()
     {
@@ -51,19 +45,6 @@ public static class GameState
         var level = Il2CppCore.Level.Instance;
         if (level == null) return false;
         level.Restart();
-        return true;
-    }
-
-    /// <summary>Leave the current level and return to the overworld, via the
-    /// pause menu's Abandon action. Returns true if it was invoked.</summary>
-    public static bool AbortLevel()
-    {
-        var level = Il2CppCore.Level.Instance;
-        if (level == null) return false;
-        var lm = level.levelManager;
-        var menu = lm != null ? lm.InGameMenu : null;
-        if (menu == null) return false;
-        menu.AbandonLevel();
         return true;
     }
 

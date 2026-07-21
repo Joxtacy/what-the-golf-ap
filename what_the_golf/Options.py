@@ -50,8 +50,8 @@ class AreaAccess(Choice):
 class BossKeys(Toggle):
     """Gate the computer boss holes behind keys.
 
-    When on, each of the 7 campaign computer bosses (Computers 1, 2, 3, 4, 7, 8,
-    9) needs its "Computer N Key" before you can fight/clear it — the mod holds
+    When on, each of the 7 campaign computer bosses (Computers 1, 2, 3, 4, 5, 7,
+    8) needs its "Computer N Key" before you can fight/clear it — the mod holds
     that computer's door shut until the key arrives (a hard gate: the computer
     doors are real walls). Adds 7 progression items and, since bosses sit deep in
     the chambers, pushes more keys into logic. The Final boss is not keyed (it's

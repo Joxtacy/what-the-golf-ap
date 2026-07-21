@@ -7,9 +7,8 @@ namespace WtgArchipelago.Patches;
 /// Harmony hooks into WHAT THE GOLF?. Method names are REAL, discovered from an
 /// Il2CppDumper dump (see mod/REVERSE_ENGINEERING.md). Patches are applied by
 /// string via AccessTools, so this compiles without the generated interop
-/// assemblies. Reading level ids/challenge lists inside the postfixes needs the
-/// interop assemblies (see GameState + the RE doc); until then the postfixes log
-/// and call GameState, which returns null with a clear TODO.
+/// assemblies. The postfixes read the current level via GameState (Il2CppCore
+/// types) and send the matching AP checks.
 /// </summary>
 public static class GamePatches
 {
@@ -25,9 +24,6 @@ public static class GamePatches
         // event, is static, and takes only a reference-type param (safe). We read
         // the level via GameState (reading fields OUT is the safe direction).
         TryPatch(harmony, "GameAnalytics:OnLevelComplete", nameof(LevelCompletePostfix));
-
-        // Level started -> if its area is locked, request a kick-back (EntryGate).
-        TryPatch(harmony, "GameAnalytics:OnLevelBegin", nameof(LevelBeginPostfix));
 
         // Campaign goal: final Computer defeated.
         TryPatch(harmony, "GameAnalytics:OnFinalBossCompleted", nameof(FinalBossPostfix));
@@ -88,13 +84,6 @@ public static class GamePatches
             }
         }
         catch (Exception e) { Plugin.Log.LogError($"LevelCompletePostfix: {e}"); }
-    }
-
-    private static void LevelBeginPostfix()
-    {
-        // Scene isn't known yet here; arm a deferred check (see EntryGate).
-        try { Mapping.EntryGate.Arm(); }
-        catch (Exception e) { Plugin.Log.LogError($"LevelBeginPostfix: {e}"); }
     }
 
     // Automatic level reset = a failure (out of bounds / water / lost ball). Feed

@@ -2,8 +2,8 @@
 
 Built from REAL game data: `levels.json` is generated from the in-game dump of
 the OverworldLevelData ScriptableObject (see tools/build_levels.py and
-mod/harvested-levels.md). It contains the 132 real campaign holes grouped into
-the 11 real chambers (10 -> 00). This module loads it and exposes the item/
+mod/harvested-levels.md). It contains the 133 real campaign holes (132 from the
+dump + 1 injected computer-5 boss) grouped into the 11 real chambers (10 -> 00). This module loads it and exposes the item/
 location/region primitives the rest of the world uses; everything downstream is
 data-driven from levels.json.
 

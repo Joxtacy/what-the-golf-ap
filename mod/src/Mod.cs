@@ -13,13 +13,6 @@ namespace WtgArchipelago;
 /// </summary>
 public class Mod : MelonMod
 {
-    // Legacy gating experiments (door-plate suppression / area goal-hiding). Kept
-    // off: non-linear teleport unlocking (ChamberUnlock) is the real mechanism.
-    public const bool LegacyGatingEnabled = false;
-
-    // Read-only save-vocabulary diagnostic (UnlockProbe). Off outside R&D.
-    public const bool ProbeEnabled = false;
-
     // DEV/TEST: force one raw section trigger open on load, bypassing AP, for
     // fresh-save reachability/gating tests. "" = off (normal). Keep "".
     public const string ForceUnlockTrigger = "";
@@ -30,27 +23,10 @@ public class Mod : MelonMod
     // so keep OFF; flip to true + rebuild only when re-capturing game data.
     public const bool DumpersEnabled = false;
 
-    // Within-chamber hard-lock: productionized as SectionGate (the "hard_sections"
-    // apworld option; enabled from slot data). WalkGateProbe is the read-only gating
-    // diagnostic from the spike, kept OFF.
-    public const bool WalkProbeEnabled = false;      // read-only gating probe
-
-    // DEV/DIAGNOSTIC: one-shot dump of computer-door world positions (BossGate.
-    // LogDoors) to locate a hard-to-find boss. Keep OFF in normal builds.
-    public const bool BossLocateEnabled = false;
-
-    // DEV SPIKE for the "crowns" option (roadmap #3/#4): ChestProbe logs the live
-    // chest/crown-door inventory + polls chest-open detection. ChestBlockTest also
-    // forces every crown door shut (canOpen=false) to prove the block lever on
-    // "Main Crown Door" variants. Keep both OFF in normal builds.
-    public const bool ChestProbeEnabled = false;   // DEV: crowns spike. Superseded by ChestGate.
-    public const bool ChestBlockTest = false;       // DEV pass 2 (done): force crown doors shut.
-
     public override void OnInitializeMelon()
     {
         Plugin.Client = new ArchipelagoClient();
         Mapping.LocationMap.Load();
-        Mapping.AreaState.Load();
         Mapping.ChamberUnlock.Load();
         Mapping.BossGate.Load();
         Mapping.BossGoal.Load();
@@ -79,11 +55,8 @@ public class Mod : MelonMod
     public override void OnGUI() => ConnectionUI.OnGUI();
 
     private int _dumpTimer;
-    private int _gateTimer;
     private int _unlockTimer;
     private int _bossTimer;
-    private int _walkTimer;
-    private int _chestTimer;
     private int _chestDumpTimer;
 
     // Runs every frame on Unity's main thread -> ideal main-thread pump.
@@ -99,15 +72,6 @@ public class Mod : MelonMod
         // In-scene TextMeshPro DeathLink counter (uses the game's font). Shows/hides
         // itself based on connection + DeathLink state; safe to call every frame.
         DeathLinkHud.Tick();
-
-        // Spike diagnostic: periodic read-only overworld gating snapshot
-        // (WalkGateProbe) for the within-chamber hard-lock investigation. ~every
-        // 12s when enabled; correlate before/after with when a section is unlocked.
-        if (WalkProbeEnabled && ++_walkTimer >= 720)
-        {
-            _walkTimer = 0;
-            Mapping.WalkGateProbe.Snapshot();
-        }
 
         if (client?.DeathLink != null && client.DeathLink.ConsumePending())
         {
@@ -125,16 +89,6 @@ public class Mod : MelonMod
             {
                 Plugin.Log.LogInfo("[DEATHLINK] received in overworld -> dropped (nothing to kill)");
             }
-        }
-
-        if (ProbeEnabled) Mapping.UnlockProbe.RunOnce();
-
-        // DEV SPIKE (crowns option): chest/crown-door probe. Read-mostly; runs
-        // regardless of connection like the other diagnostics. ~6x/sec.
-        if (ChestProbeEnabled && ++_chestTimer >= 10)
-        {
-            _chestTimer = 0;
-            Mapping.ChestProbe.Tick(ChestBlockTest);
         }
 
         // PASSIVE UNTIL CONNECTED: everything below writes game/save state, so it
@@ -165,20 +119,6 @@ public class Mod : MelonMod
             Mapping.BossGate.Tick();
             Mapping.SectionGate.Tick();
             Mapping.ChestGate.Tick();
-            if (BossLocateEnabled) Mapping.BossGate.LogDoors();
-        }
-
-        if (LegacyGatingEnabled)
-        {
-            // Hard gate: kick the player out of a locked level (every frame).
-            Mapping.EntryGate.Tick();
-
-            // Gating: hide overworld goals whose area isn't unlocked (~3x/sec).
-            if (++_gateTimer >= 20)
-            {
-                _gateTimer = 0;
-                Mapping.GoalGate.Apply();
-            }
         }
 
         // Periodically harvest level/goal data (accumulates). ~every 5s. OFF by
@@ -193,9 +133,8 @@ public class Mod : MelonMod
             Mapping.SectionDumper.Dump();
         }
 
-        // Chest capture can run alone (under the crowns spike) without paying the
-        // full dumper-suite lag; also runs as part of the suite when enabled.
-        if ((DumpersEnabled || ChestProbeEnabled) && ++_chestDumpTimer >= 300)
+        // Chest capture runs as part of the dumper suite when enabled.
+        if (DumpersEnabled && ++_chestDumpTimer >= 300)
         {
             _chestDumpTimer = 0;
             Mapping.ChestDumper.Dump();

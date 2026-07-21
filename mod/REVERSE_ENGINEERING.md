@@ -88,6 +88,24 @@ Related overworld types seen: `OverworldGoal`, `OverworldMainDoorRobot`,
 `OverworldMainDoorPlate` (the physical hub doors ItemApplier must open when an
 Access key arrives).
 
+## Save data & teleport reachability (probed 2026-07-20)
+
+There is **NO "reached save spots" save set**. `SaveGame.OverWorldData` has a
+FIXED, fully-known key vocabulary — `OPEN_DOORS`, `OPEN_MAIN_DOORS`,
+`CONSOLES_HIT`, `COMPLETED_LEVELS`, `ACCESSIBLE_LEVELS`, `LEVEL_NOTIFICATIONS`,
+`COMPLETED_CHALLENGES`, `UNLOCKED_CHESTS`, `CROWN_AWARENESS_MODE` + scalars. The
+only save-position state is a SINGLE `SavePosition` string (the current respawn
+spot). So teleport reachability is **RUNTIME-COMPUTED**
+(`OverworldLevelSection.GetIsAvailable` / the teleport menu's filter), not a save
+set the mod can write to.
+
+The pause-menu teleporter only offers sections whose `saveSpotId` is a
+`TELEPORT_*` id. `SAVE_*`/`save_*` sections (e.g. 08C Space = `SAVE_space_01`) are
+plain save points reached by WALKING within the chamber — never teleport
+destinations. That is why forcing Space's door flag never made it list. This is
+why unlocking is done via `ChamberUnlock` (runtime trigger open), not by writing a
+save set. (Confirmed by the now-removed `UnlockProbe` read-only diagnostic.)
+
 ## Recommended hooks (what the mod patches)
 
 | Purpose | Patch (postfix) | Notes |

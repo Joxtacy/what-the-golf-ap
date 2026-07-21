@@ -21,8 +21,6 @@ public class ArchipelagoData
     public string SlotName = "Player1";
     public string Password = null;
 
-    public string Seed;
-
     // Highest received-item index already applied. Items at or below this were
     // already granted; skip them when the server replays history on connect.
     public long ItemIndex = -1;
@@ -34,7 +32,6 @@ public class ArchipelagoData
     public bool DeathLinkEnabled;
     public int DeathLinkAmnesty = 10;   // local wipes per outgoing DeathLink (Options range 1..30); fallback only — real seeds always send it
     public int Goal;
-    public string AreaAccess = "section";
     public bool BossKeysEnabled;
     public bool HardSectionsEnabled;
     public bool CrownsEnabled;

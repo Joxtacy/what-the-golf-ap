@@ -21,7 +21,7 @@ class WTGWeb(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["YourName"],
+        ["Joxtacy"],
     )]
 
 

@@ -155,9 +155,10 @@ def keyable_boss_doors(campaign_scenes):
         actually hold it shut until the key arrives (excludes the plateless
         finale computer 9, chamber -1, a scripted encounter); AND
       * corresponds to a real campaign hole -- so there is a "<scene> - Clear"
-        location to gate (excludes computer 5, whose boss "2D HoleInOne 05 basic"
-        is not listed in any OverworldLevelData section).
-    Result today: computers 1,2,3,4,7,8. Returns [{computer, boss_level_id,
+        location to gate. Computer 5's boss "2D HoleInOne 05 basic" is in no
+        OverworldLevelData section, but INJECT_LEVELS folds it into campaign_scenes
+        before this runs (see build()), so it qualifies.
+    Result today: computers 1,2,3,4,5,7,8. Returns [{computer, boss_level_id,
     scene}], sorted by computer number.
     """
     doors = json.load(open(DOORS, encoding="utf-8"))["doors"]
