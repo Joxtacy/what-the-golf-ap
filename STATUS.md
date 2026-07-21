@@ -455,3 +455,15 @@ skip this next time). See the mod-UX section above.
 3. Polish: friendlier area/section display names.
 4. Optional: rebuild `data.py` from the **real hub sections** (`wtg_goals.json`)
    for authentic, spatially-coherent areas.
+5. **Event-driven crown/section door gating (deferred 2026-07-22).** Give the
+   crown-chest doors (`ChestGate`) and within-chamber section connectors
+   (`SectionGate`) the same treatment the boss doors got: a Harmony prefix on the
+   door's open-check (as with `OverworldMainDoorRobot.CanBeOpened`) that returns the
+   AP-key state directly, instead of holding the door shut by polling `canOpen=false`
+   each tick. Boss doors are already race-free this way; chest/section are still
+   poll-based, so after a *teleport* (which doesn't fire the overworld poll burst)
+   there's up to a ~3s window before a locked crown/section door is re-shut — a rare,
+   non-softlocking "open a check early" gap. Prefixing their open-check (candidates:
+   `OverworldButton2D.CanDoorBeOpened` / `CanBeOpened`, filtered to our door OIDs)
+   closes it and lets the polling stop mattering for correctness. Low priority
+   (cosmetic/rare), but the clean finish to the gating model.
