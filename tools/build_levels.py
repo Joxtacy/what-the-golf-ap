@@ -80,6 +80,20 @@ INJECT_LEVELS = [
 # CHEST_HOLOROOM's area is a best guess (a hidden island; enum-adjacent to the
 # chamber-5 chests) -- it's free, so a slightly-off gating key is harmless; confirm
 # + correct later.
+# Chests that additionally sit PHYSICALLY behind a chamber's computer boss, so
+# they're only truly reachable once that boss is beaten. Under section-granularity
+# the boss lives in a DIFFERENT sub-area (a separate key) than the chest, so the
+# chest's own region rule doesn't capture the boss requirement -- without this the
+# tracker shows the chest in logic with just the sub-area key. Maps chest id ->
+# computer number; Rules.py adds "can reach that boss's Clear" to the chest.
+#   * CHEST_LEBOWSKI_SECRET: the secret "Toilets" room (07B) is entered past the
+#     chamber-07 boss Computer 2 (which lives in 07A / "OL"). Live-confirmed
+#     2026-07-21: with 07B access but not the boss beaten, the chest is unreachable.
+CHEST_BEHIND_BOSS = {
+    "CHEST_LEBOWSKI_SECRET": 2,
+}
+
+
 CHESTS = [
     # id,                    sub-area, crown-door (None = free)
     ("CHEST_EASY2D",          "09A", "CROWN_EASY2D"),
@@ -137,6 +151,8 @@ def build_chests(sections, chambers_by_num):
             "trigger": sec_trigger[subarea],
             "gated": door is not None,
             "door": door,
+            # 0 = not boss-gated; else the computer number that must be beaten.
+            "boss": CHEST_BEHIND_BOSS.get(cid, 0),
         })
     return out
 
@@ -347,6 +363,8 @@ def main():
           f"{len(gated)} keyed / {len(ch) - len(gated)} free")
     for c in ch:
         tag = f"key -> {c['door']}" if c["gated"] else "free"
+        if c.get("boss"):
+            tag += f" +Computer {c['boss']}"
         print(f"  {c['display']:16} ch{c['chamber']:02d} {c['subarea']:4} {c['trigger']:6} {tag}")
 
     if "--write" in sys.argv:

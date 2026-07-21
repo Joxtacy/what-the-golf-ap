@@ -131,6 +131,7 @@ class Chest:
     trigger: str     # its sub-area's unlockTriggerId (places it in that region)
     gated: bool      # True = behind a crown door (needs a key); False = free
     door: str        # the crown-door OverworldID.ID to hold shut ("" if free)
+    boss: int        # 0 = normal; else the computer N whose defeat also gates it
 
 
 def _load():
@@ -155,7 +156,7 @@ def _load():
     # Overworld crown chests (the "crowns" option). See build_levels.py CHESTS.
     chests = tuple(
         Chest(c["id"], pretty(c["display"]), int(c["chamber"]), c.get("trigger", ""),
-              bool(c["gated"]), c.get("door") or "")
+              bool(c["gated"]), c.get("door") or "", int(c.get("boss", 0)))
         for c in w.get("chests", ())
     )
     return (areas, gate_units, w["start_area"], w["final_boss_scene"],
@@ -263,6 +264,15 @@ def boss_holes():
 
 
 BOSS_HOLES = tuple(boss_holes())
+
+
+def boss_scene_for_computer(n: int):
+    """Scene of the keyable computer-N boss hole, or None. Used to gate a chest
+    that physically sits behind that boss (Chest.boss)."""
+    for level, num in BOSS_HOLES:
+        if num == n:
+            return level.scene
+    return None
 
 
 def all_boss_scenes():

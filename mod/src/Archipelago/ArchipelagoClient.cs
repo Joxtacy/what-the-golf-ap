@@ -72,6 +72,8 @@ public class ArchipelagoClient
         {
             State = ConnState.Disconnected;
             StatusMessage = "Disconnected";
+            // Forget what GoalWatcher has sent so a reconnect re-reconciles node state.
+            Mapping.GoalWatcher.Reset();
             Plugin.Log.LogInfo("AP disconnected — mod is passive (vanilla) until you reconnect.");
         }
     }

@@ -58,6 +58,7 @@ public class Mod : MelonMod
     private int _unlockTimer;
     private int _bossTimer;
     private int _chestDumpTimer;
+    private int _goalTimer;
 
     // Runs every frame on Unity's main thread -> ideal main-thread pump.
     public override void OnUpdate()
@@ -119,6 +120,16 @@ public class Mod : MelonMod
             Mapping.BossGate.Tick();
             Mapping.SectionGate.Tick();
             Mapping.ChestGate.Tick();
+        }
+
+        // Node Clear/Crown detection (~3x/sec, overworld only). Reads the per-node
+        // OverworldGoal.state so compound "several smaller levels" nodes send their
+        // check only when the WHOLE node is done -- not when the first sub-level
+        // finishes. Overworld goals only exist while in the hub, so skip in-level.
+        if (connected && !GameState.IsInLevel() && ++_goalTimer >= 20)
+        {
+            _goalTimer = 0;
+            Mapping.GoalWatcher.Scan();
         }
 
         // Periodically harvest level/goal data (accumulates). ~every 5s. OFF by

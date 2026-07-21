@@ -26,6 +26,15 @@ public static class GameState
         return ld != null ? ld.SceneName : null;
     }
 
+    /// <summary>Is the current level a computer/final boss? Bosses are triggered by
+    /// the computer doors (not overworld flags), so GoalWatcher never sees them --
+    /// their Clear/Crown must be sent from the OnLevelComplete path instead.</summary>
+    public static bool CurrentLevelIsBoss()
+    {
+        var ld = CurrentLevel();
+        return ld != null && ld.isBossBattle;
+    }
+
     /// <summary>Are we currently playing a hole (vs. the overworld/menu)? Used to
     /// decide whether an incoming DeathLink has anything to kill.</summary>
     public static bool IsInLevel()

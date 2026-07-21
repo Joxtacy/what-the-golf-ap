@@ -1659,7 +1659,8 @@
    "subarea": "09A",
    "trigger": "DOOR_easy2d_00",
    "gated": true,
-   "door": "CROWN_EASY2D"
+   "door": "CROWN_EASY2D",
+   "boss": 0
   },
   {
    "id": "CHEST_LIVINGROOM",
@@ -1668,7 +1669,8 @@
    "subarea": "09B",
    "trigger": "Z4UZC",
    "gated": true,
-   "door": "CROWN_LIVINGROOM"
+   "door": "CROWN_LIVINGROOM",
+   "boss": 0
   },
   {
    "id": "CHEST_PLATFORMER",
@@ -1677,7 +1679,8 @@
    "subarea": "08A",
    "trigger": "door_platformer_00",
    "gated": true,
-   "door": "CROWN_PLATFORMERS"
+   "door": "CROWN_PLATFORMERS",
+   "boss": 0
   },
   {
    "id": "CHEST_SOCCER1",
@@ -1686,7 +1689,8 @@
    "subarea": "08B",
    "trigger": "NLABA",
    "gated": true,
-   "door": "CROWN_SOCCER"
+   "door": "CROWN_SOCCER",
+   "boss": 0
   },
   {
    "id": "CHEST_SPACE",
@@ -1695,7 +1699,8 @@
    "subarea": "08C",
    "trigger": "door_space_00",
    "gated": true,
-   "door": "CROWN_SPACE"
+   "door": "CROWN_SPACE",
+   "boss": 0
   },
   {
    "id": "CHEST_EXPLOSION",
@@ -1704,7 +1709,8 @@
    "subarea": "08D",
    "trigger": "VJ69W",
    "gated": true,
-   "door": "CROWN_EXPLOSIONS"
+   "door": "CROWN_EXPLOSIONS",
+   "boss": 0
   },
   {
    "id": "CHEST_OL",
@@ -1713,7 +1719,8 @@
    "subarea": "07A",
    "trigger": "door_ol_00",
    "gated": true,
-   "door": "CROWN_OL"
+   "door": "CROWN_OL",
+   "boss": 0
   },
   {
    "id": "CHEST_LEBOWSKI",
@@ -1722,7 +1729,8 @@
    "subarea": "07B",
    "trigger": "CROWN_MAIN1",
    "gated": true,
-   "door": "CROWN_LEBOWSKI"
+   "door": "CROWN_LEBOWSKI",
+   "boss": 0
   },
   {
    "id": "CHEST_PORTAL",
@@ -1731,7 +1739,8 @@
    "subarea": "06A",
    "trigger": "YX3NO",
    "gated": true,
-   "door": "CROWN_PORTALS"
+   "door": "CROWN_PORTALS",
+   "boss": 0
   },
   {
    "id": "CHEST_SUPERPUTT",
@@ -1740,7 +1749,8 @@
    "subarea": "06B",
    "trigger": "YX3NO",
    "gated": true,
-   "door": "CROWN_SUPERPUTT"
+   "door": "CROWN_SUPERPUTT",
+   "boss": 0
   },
   {
    "id": "CHEST_GRAVITY_MAIN",
@@ -1749,7 +1759,8 @@
    "subarea": "05B",
    "trigger": "9DSBG",
    "gated": true,
-   "door": "CROWN_GRAVITY"
+   "door": "CROWN_GRAVITY",
+   "boss": 0
   },
   {
    "id": "CHEST_FPG",
@@ -1758,7 +1769,8 @@
    "subarea": "05C",
    "trigger": "9DSBG",
    "gated": true,
-   "door": "CROWN_FPG"
+   "door": "CROWN_FPG",
+   "boss": 0
   },
   {
    "id": "CHEST_MUSIC",
@@ -1767,7 +1779,8 @@
    "subarea": "04A",
    "trigger": "door_music_00",
    "gated": true,
-   "door": "CROWN_MUSIC"
+   "door": "CROWN_MUSIC",
+   "boss": 0
   },
   {
    "id": "CHEST_STEALTH",
@@ -1776,7 +1789,8 @@
    "subarea": "04B",
    "trigger": "0PMM9",
    "gated": true,
-   "door": "CROWN_STEALTH"
+   "door": "CROWN_STEALTH",
+   "boss": 0
   },
   {
    "id": "CHEST_JUNGLE",
@@ -1785,7 +1799,8 @@
    "subarea": "03A",
    "trigger": "RVQTA",
    "gated": true,
-   "door": "CROWN_JUNGLE"
+   "door": "CROWN_JUNGLE",
+   "boss": 0
   },
   {
    "id": "CHEST_CARS",
@@ -1794,7 +1809,8 @@
    "subarea": "03B",
    "trigger": "CROWN_MAIN2",
    "gated": true,
-   "door": "CROWN_CARS"
+   "door": "CROWN_CARS",
+   "boss": 0
   },
   {
    "id": "CHEST_DESERT1",
@@ -1803,7 +1819,8 @@
    "subarea": "01",
    "trigger": "8LARX",
    "gated": true,
-   "door": "CROWN_WESTERN1"
+   "door": "CROWN_WESTERN1",
+   "boss": 0
   },
   {
    "id": "CHEST_DESERT2",
@@ -1812,7 +1829,8 @@
    "subarea": "01",
    "trigger": "8LARX",
    "gated": true,
-   "door": "CROWN_WESTERN2"
+   "door": "CROWN_WESTERN2",
+   "boss": 0
   },
   {
    "id": "CHEST_KITCHEN",
@@ -1821,7 +1839,8 @@
    "subarea": "05A",
    "trigger": "9DSBG",
    "gated": false,
-   "door": null
+   "door": null,
+   "boss": 0
   },
   {
    "id": "CHEST_SAWABLE",
@@ -1830,7 +1849,8 @@
    "subarea": "03A",
    "trigger": "RVQTA",
    "gated": false,
-   "door": null
+   "door": null,
+   "boss": 0
   },
   {
    "id": "CHEST_SOCCER2",
@@ -1839,7 +1859,8 @@
    "subarea": "08B",
    "trigger": "NLABA",
    "gated": false,
-   "door": null
+   "door": null,
+   "boss": 0
   },
   {
    "id": "CHEST_GRAVITY_SIDE",
@@ -1848,7 +1869,8 @@
    "subarea": "05B",
    "trigger": "9DSBG",
    "gated": false,
-   "door": null
+   "door": null,
+   "boss": 0
   },
   {
    "id": "CHEST_LEBOWSKI_SECRET",
@@ -1857,7 +1879,8 @@
    "subarea": "07B",
    "trigger": "CROWN_MAIN1",
    "gated": false,
-   "door": null
+   "door": null,
+   "boss": 2
   },
   {
    "id": "CHEST_HOLOROOM",
@@ -1866,7 +1889,8 @@
    "subarea": "05C",
    "trigger": "9DSBG",
    "gated": false,
-   "door": null
+   "door": null,
+   "boss": 0
   }
  ]
 }

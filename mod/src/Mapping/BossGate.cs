@@ -58,6 +58,21 @@ public static class BossGate
 
     public static bool Handles(string itemName) => _bossByItem.ContainsKey(itemName);
 
+    /// <summary>Is this computer door one we gate at all (boss keys on + a known
+    /// keyable boss door)? If false, leave the door entirely to the game.</summary>
+    public static bool IsGatedBoss(string bossLevelId) =>
+        _enabled && !string.IsNullOrEmpty(bossLevelId) && Gated.Contains(bossLevelId);
+
+    /// <summary>Has this boss door's "Computer N Key" been received?</summary>
+    public static bool IsUnlocked(string bossLevelId) =>
+        !string.IsNullOrEmpty(bossLevelId) && Unlocked.Contains(bossLevelId);
+
+    /// <summary>Is this computer door currently locked (a gated boss whose key
+    /// hasn't arrived)? Used by the hard gate that blocks the door from opening.
+    /// False when boss keys are off (nothing is gated then).</summary>
+    public static bool IsLocked(string bossLevelId) =>
+        IsGatedBoss(bossLevelId) && !Unlocked.Contains(bossLevelId);
+
     /// <summary>Mark a boss unlocked from a received "Computer N Key" item.</summary>
     public static void Unlock(string itemName)
     {

@@ -1,10 +1,10 @@
 from math import ceil
 
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import set_rule, add_rule
 
 from .data import (
     gates, BOSS_HOLES, boss_key_item, clear_loc, crown_loc, all_boss_scenes,
-    CHESTS, chest_loc, chest_key_item,
+    CHESTS, chest_loc, chest_key_item, boss_scene_for_computer,
 )
 from .Items import flag_pool
 
@@ -33,16 +33,26 @@ def set_rules(world) -> None:
                 loc = multiworld.get_location(loc_name, player)
                 set_rule(loc, lambda state, k=key: state.has(k, player))
 
-    # Crown-chest gating: a crown-locked chest's location also needs its
-    # "<Area> Chest Key" (on top of its region's Access rule). Free chests have no
-    # key -- they're reachable as soon as their region is.
+    # Crown-chest gating. Two independent requirements can apply on top of the
+    # chest's region Access rule:
+    #   * gated  -> its "<Area> Chest Key" (behind a crown door). Free chests skip.
+    #   * boss   -> the chest physically sits past a chamber's computer boss, so it
+    #     also needs that boss beatable. can_reach_location on the boss's Clear
+    #     folds in the boss's own region access + its Computer key (if boss_keys),
+    #     regardless of granularity. Without this the chest reads as in-logic with
+    #     just its sub-area key (e.g. the Lebowski secret behind Computer 2).
     if world.options.crowns.value:
         for chest in CHESTS:
-            if not chest.gated:
-                continue
-            key = chest_key_item(chest.display)
             loc = multiworld.get_location(chest_loc(chest.display), player)
-            set_rule(loc, lambda state, k=key: state.has(k, player))
+            if chest.gated:
+                key = chest_key_item(chest.display)
+                set_rule(loc, lambda state, k=key: state.has(k, player))
+            if chest.boss:
+                boss_scene = boss_scene_for_computer(chest.boss)
+                if boss_scene is not None:
+                    bclear = clear_loc(boss_scene)
+                    add_rule(loc, lambda state, n=bclear:
+                             state.can_reach_location(n, player))
 
     # Completion condition depends on the chosen goal.
     goal = world.options.goal

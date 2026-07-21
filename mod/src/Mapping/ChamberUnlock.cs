@@ -18,11 +18,21 @@ namespace WtgArchipelago.Mapping;
 /// The save records opened doors in two sets:
 ///   OPEN_DOORS      -> regular section triggers (e.g. "door_platformer_00", "Z4UZC")
 ///   OPEN_MAIN_DOORS -> computer-door triggers   (e.g. "YX3NO", "9DSBG", "OS8GA")
-/// We don't know which set a given trigger belongs to, so we register it in both
-/// (harmless) via SaveGame.SetDoorOpen + SetMainDoorOpen, then
+/// We register access ONLY in OPEN_DOORS (SaveGame.SetDoorOpen), then
 /// OverworldManager2d.RefreshDoorsAndGoals() so the overworld/teleport updates.
-/// Validated in-game: opening a chamber's triggers made its sub-areas
-/// teleport-reachable on a fresh save.
+/// That is sufficient because a section's availability is
+///   isAvailable = IsNullOrWhiteSpace(trigger)
+///                 || GetIsDoorOpen(trigger) || GetIsMainDoorOpen(trigger)
+/// (an OR), so OPEN_DOORS membership alone makes the section teleport-reachable.
+///
+/// We deliberately do NOT call SetMainDoorOpen. A "main door open" is how the game
+/// records that a COMPUTER BOSS has been passed -- there is no separate "completed"
+/// flag, so setting it marks the boss beaten. Several section triggers ARE computer
+/// main-door ids (9DSBG = ch05, YX3NO = ch06, ...), so the old "register in both,
+/// it's harmless" approach silently marked those bosses opened: on the next save
+/// load the game removed the still-unbeaten computers and they became unfightable.
+/// Granting access via OPEN_DOORS only avoids that entirely (the boss's OWN
+/// main-door flag is set legitimately by the game when you actually beat it).
 ///
 /// AP items can arrive before the overworld scene is loaded (e.g. at connect, when
 /// all prior items are resent), so we remember requested triggers and (re)apply
@@ -128,11 +138,15 @@ public static class ChamberUnlock
             foreach (var trig in Requested)
             {
                 bool isOpen = false;
-                try { isOpen = Il2Cpp.SaveGame.GetIsDoorOpen(trig) || Il2Cpp.SaveGame.GetIsMainDoorOpen(trig); }
-                catch { }
+                // Check ONLY our own set (OPEN_DOORS): a boss's main-door flag may be
+                // legitimately set (beaten) without us having granted access, and we
+                // still want our OPEN_DOORS entry present so the section stays
+                // teleport-reachable independent of boss state.
+                try { isOpen = Il2Cpp.SaveGame.GetIsDoorOpen(trig); } catch { }
                 if (isOpen) continue;   // already registered (or persisted from a prior write)
+                // OPEN_DOORS only -- never SetMainDoorOpen (that marks a boss beaten;
+                // see the class summary).
                 try { Il2Cpp.SaveGame.SetDoorOpen(trig); } catch { }
-                try { Il2Cpp.SaveGame.SetMainDoorOpen(trig); } catch { }
                 opened++;
             }
 
