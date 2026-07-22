@@ -84,7 +84,7 @@ public static class ConnectionUI
         try
         {
             const float x = 20f, y = 20f, w = 320f, rowH = 22f, gap = 6f;
-            float h = 384f;
+            float h = 704f;
             GUI.Box(new Rect(x, y, w, h), "WHAT THE GOLF?  —  Archipelago");
 
             float ix = x + 14f, iw = w - 28f, cy = y + 34f;
@@ -139,8 +139,97 @@ public static class ConnectionUI
             }
             if (GUI.Button(new Rect(ix + bw + gap, cy, bw, rowH + 4f), "Close"))
                 Visible = false;
+            cy += rowH + 4f + gap + 6f;
+
+            DrawFeedSection(ix, cy, iw, rowH, gap);
         }
         catch (System.Exception e) { Plugin.Log.LogError($"ConnectionUI.Draw: {e}"); }
+    }
+
+    private static readonly string[] CornerNames = { "Top-Left", "Top-Right", "Bottom-Left", "Bottom-Right" };
+
+    /// <summary>The live-feed controls: master switch, per-category filter, and layout
+    /// knobs. Every change is persisted immediately and read live by MessageFeed.</summary>
+    private static void DrawFeedSection(float x, float y, float w, float rowH, float gap)
+    {
+        GUI.Label(new Rect(x, y, w, rowH), "— Live feed —");
+        y += rowH;
+
+        y = Toggle(x, y, w, rowH, gap, " Show live feed", Preferences.FeedEnabled);
+
+        y = Toggle2(x, y, w, rowH, gap,
+            " My items", Preferences.FeedShowMyItems,
+            " Sent by me", Preferences.FeedShowSentToOthers);
+        y = Toggle2(x, y, w, rowH, gap,
+            " Others' items", Preferences.FeedShowOthersItems,
+            " Hints", Preferences.FeedShowHints);
+        y = Toggle2(x, y, w, rowH, gap,
+            " Chat/joins", Preferences.FeedShowChat,
+            " DeathLink", Preferences.FeedShowLocal);
+
+        // Corner cycles through the four screen corners.
+        int corner = Mathf.Clamp(Preferences.FeedCorner.Value, 0, 3);
+        if (GUI.Button(new Rect(x, y, w, rowH), $"Corner: {CornerNames[corner]}"))
+        { Preferences.FeedCorner.Value = (corner + 1) % 4; Preferences.Save(); }
+        y += rowH + gap;
+
+        y = Toggle(x, y, w, rowH, gap, " Keep messages on screen (no fade)", Preferences.FeedPersist);
+
+        // Box width as a screen-width percentage (5% steps).
+        int wpct = Mathf.RoundToInt(Preferences.FeedWidthPct.Value * 100f);
+        GUI.Label(new Rect(x, y, w - 92f, rowH), $"Width: {wpct}% of screen");
+        if (GUI.Button(new Rect(x + w - 88f, y, 42f, rowH), "-"))
+        { Preferences.FeedWidthPct.Value = Mathf.Max(0.1f, Preferences.FeedWidthPct.Value - 0.05f); Preferences.Save(); }
+        if (GUI.Button(new Rect(x + w - 42f, y, 42f, rowH), "+"))
+        { Preferences.FeedWidthPct.Value = Mathf.Min(0.6f, Preferences.FeedWidthPct.Value + 0.05f); Preferences.Save(); }
+        y += rowH + gap;
+
+        y = StepInt(x, y, w, rowH, gap, "Lines", Preferences.FeedMaxLines, 1, 20, 1);
+        y = StepFloat(x, y, w, rowH, gap, "Size", Preferences.FeedFontSize, 10f, 60f, 2f, "0");
+        StepFloat(x, y, w, rowH, gap, "Seconds", Preferences.FeedSeconds, 1f, 60f, 1f, "0");
+    }
+
+    private static float Toggle(float x, float y, float w, float rowH, float gap,
+        string label, MelonLoader.MelonPreferences_Entry<bool> entry)
+    {
+        bool v = entry.Value;
+        bool nv = GUI.Toggle(new Rect(x, y, w, rowH), v, label);
+        if (nv != v) { entry.Value = nv; Preferences.Save(); }
+        return y + rowH + gap;
+    }
+
+    private static float Toggle2(float x, float y, float w, float rowH, float gap,
+        string la, MelonLoader.MelonPreferences_Entry<bool> a,
+        string lb, MelonLoader.MelonPreferences_Entry<bool> b)
+    {
+        float bw = (w - gap) / 2f;
+        bool av = a.Value, nav = GUI.Toggle(new Rect(x, y, bw, rowH), av, la);
+        if (nav != av) { a.Value = nav; Preferences.Save(); }
+        bool bv = b.Value, nbv = GUI.Toggle(new Rect(x + bw + gap, y, bw, rowH), bv, lb);
+        if (nbv != bv) { b.Value = nbv; Preferences.Save(); }
+        return y + rowH + gap;
+    }
+
+    private static float StepInt(float x, float y, float w, float rowH, float gap,
+        string label, MelonLoader.MelonPreferences_Entry<int> entry, int min, int max, int step)
+    {
+        GUI.Label(new Rect(x, y, w - 92f, rowH), $"{label}: {entry.Value}");
+        if (GUI.Button(new Rect(x + w - 88f, y, 42f, rowH), "-"))
+        { entry.Value = Mathf.Max(min, entry.Value - step); Preferences.Save(); }
+        if (GUI.Button(new Rect(x + w - 42f, y, 42f, rowH), "+"))
+        { entry.Value = Mathf.Min(max, entry.Value + step); Preferences.Save(); }
+        return y + rowH + gap;
+    }
+
+    private static float StepFloat(float x, float y, float w, float rowH, float gap,
+        string label, MelonLoader.MelonPreferences_Entry<float> entry, float min, float max, float step, string fmt)
+    {
+        GUI.Label(new Rect(x, y, w - 92f, rowH), $"{label}: {entry.Value.ToString(fmt)}");
+        if (GUI.Button(new Rect(x + w - 88f, y, 42f, rowH), "-"))
+        { entry.Value = Mathf.Max(min, entry.Value - step); Preferences.Save(); }
+        if (GUI.Button(new Rect(x + w - 42f, y, 42f, rowH), "+"))
+        { entry.Value = Mathf.Min(max, entry.Value + step); Preferences.Save(); }
+        return y + rowH + gap;
     }
 
     /// <summary>Draw a labelled text field; returns the next y offset.</summary>

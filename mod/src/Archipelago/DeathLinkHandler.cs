@@ -101,6 +101,7 @@ public class DeathLinkHandler
             {
                 service.SendDeathLink(new DeathLink(slot, cause));
                 Plugin.Log.LogInfo($"DeathLink sent: {cause}");
+                MessageFeed.PushLocal("DeathLink sent");
             }
             catch (Exception e) { Plugin.Log.LogError($"DeathLink not sent: {e.Message}"); }
         });

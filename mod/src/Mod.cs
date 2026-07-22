@@ -118,6 +118,10 @@ public class Mod : MelonMod
         // itself based on connection + DeathLink state; safe to call every frame.
         DeathLinkHud.Tick();
 
+        // Live on-screen feed of AP activity (items/hints/chat/DeathLink). Drains its
+        // queue + renders here on the main thread; no-op when disabled or empty.
+        MessageFeed.Tick();
+
         if (client?.DeathLink != null && client.DeathLink.ConsumePending())
         {
             // Incoming DeathLink. If we're in a hole, restart it (kills the ball,
@@ -129,6 +133,7 @@ public class Mod : MelonMod
                 client.DeathLink.BeginInducedDeath();
                 bool killed = GameState.RestartLevel();
                 Plugin.Log.LogInfo($"[DEATHLINK] received -> restart hole (killed={killed})");
+                MessageFeed.PushLocal("DeathLink received — hole restarted");
             }
             else
             {

@@ -86,7 +86,11 @@ public class ArchipelagoClient
 
             // Wire events BEFORE logging in.
             Session.Items.ItemReceived += OnItemReceived;
-            Session.MessageLog.OnMessageReceived += m => Plugin.Log.LogInfo(m.ToString());
+            Session.MessageLog.OnMessageReceived += m =>
+            {
+                Plugin.Log.LogInfo(m.ToString());
+                MessageFeed.Ingest(m);   // mirror the AP client's feed on-screen
+            };
             Session.Socket.ErrorReceived += (e, msg) => Plugin.Log.LogError($"AP socket: {msg}");
             Session.Socket.SocketClosed += reason =>
             {
