@@ -1,0 +1,1433 @@
+{
+  "boxes": {
+    "Shortcut portal winner area 02 in area@-42.2,304.1,0.0": {
+      "box": "Shortcut portal winner area 02 in area",
+      "pos": [
+        -42.2,
+        304.14,
+        0.0
+      ],
+      "parents": [
+        "Shortcuts",
+        "Container",
+        "Hub Section - Desert PC",
+        "SECTIONS"
+      ],
+      "computer": "Main door Robot dessert",
+      "computer_boss_id": "AXCX7",
+      "computer_boss_name": "ID_2D_HOLEINONE_8",
+      "computer_pos": [
+        -32.5,
+        307.0,
+        0.0
+      ],
+      "portal": "OverworldPortal winner shortcut area 02 in area",
+      "portal_id": "QV6EJ",
+      "portal_linked": "OverworldPortal winner shortcut 02",
+      "portal_pos": [
+        -41.64,
+        304.15,
+        0.0
+      ],
+      "portal_active": false,
+      "portal_enabled": false,
+      "portal_hide_until_used": true
+    },
+    "Shortcut portal winner area 09 in area@-36.1,0.7,0.0": {
+      "box": "Shortcut portal winner area 09 in area",
+      "pos": [
+        -36.127007,
+        0.6690006,
+        0.0
+      ],
+      "parents": [
+        "Shortcuts",
+        "Container",
+        "Hub Section - 08 area",
+        "SECTIONS"
+      ],
+      "computer": "Main door Robot 09",
+      "computer_boss_id": "349CM9",
+      "computer_boss_name": "ID_2D_HOLEINONE_1",
+      "computer_pos": [
+        -32.503006,
+        7.008,
+        0.0
+      ],
+      "portal": "OverworldPortal winner shortcut area 09 in area",
+      "portal_id": "2BUN8",
+      "portal_linked": "OverworldPortal winner shortcut 09",
+      "portal_pos": [
+        -35.56701,
+        0.67899895,
+        0.0
+      ],
+      "portal_active": false,
+      "portal_enabled": false,
+      "portal_hide_until_used": true
+    },
+    "Shortcut portal winner area 01 in area@-36.2,346.0,0.0": {
+      "box": "Shortcut portal winner area 01 in area",
+      "pos": [
+        -36.17,
+        346.02,
+        0.0
+      ],
+      "parents": [
+        "Container",
+        "Hub Section - CaddyLab",
+        "SECTIONS"
+      ],
+      "computer": "Main door Robot - boss 01",
+      "computer_boss_id": "IKCV7",
+      "computer_boss_name": "ID_2D_HOLEINONE_9",
+      "computer_pos": [
+        -32.48,
+        355.13,
+        3.45
+      ],
+      "portal": "OverworldPortal winner shortcut area 01 in area",
+      "portal_id": "61GA1",
+      "portal_linked": "OverworldPortal winner shortcut 01",
+      "portal_pos": [
+        -35.609997,
+        346.03,
+        0.0
+      ],
+      "portal_active": false,
+      "portal_enabled": false,
+      "portal_hide_until_used": true
+    },
+    "Shortcut portal winner area 06 in area@-36.2,90.5,0.0": {
+      "box": "Shortcut portal winner area 06 in area",
+      "pos": [
+        -36.18,
+        90.5,
+        0.0
+      ],
+      "parents": [
+        "Shortcuts",
+        "Container",
+        "Hub Section - 06 area",
+        "SECTIONS"
+      ],
+      "computer": "Main door Robot 05",
+      "computer_boss_id": "3VGKO4",
+      "computer_boss_name": "ID_2D_HOLEINONE_4",
+      "computer_pos": [
+        -32.5,
+        97.0,
+        0.0
+      ],
+      "portal": "OverworldPortal winner shortcut area 06 in area",
+      "portal_id": "Q7ICR",
+      "portal_linked": "OverworldPortal winner shortcut 06",
+      "portal_pos": [
+        -35.62,
+        90.51,
+        0.0
+      ],
+      "portal_active": false,
+      "portal_enabled": false,
+      "portal_hide_until_used": true
+    },
+    "Shortcut portal winner area 05 in area@-36.1,147.0,0.0": {
+      "box": "Shortcut portal winner area 05 in area",
+      "pos": [
+        -36.12,
+        147.0,
+        0.0
+      ],
+      "parents": [
+        "Shortcuts",
+        "Container",
+        "Hub Section - 05 area",
+        "SECTIONS"
+      ],
+      "computer": "Main door Robot 04",
+      "computer_boss_id": "0WUALV",
+      "computer_boss_name": "ID_2D_HOLEINONE_5",
+      "computer_pos": [
+        -32.5,
+        153.0,
+        0.0
+      ],
+      "portal": "OverworldPortal winner shortcut area 05 in area",
+      "portal_id": "Z8NIO",
+      "portal_linked": "OverworldPortal winner shortcut 05",
+      "portal_pos": [
+        -35.56,
+        147.01,
+        0.0
+      ],
+      "portal_active": false,
+      "portal_enabled": false,
+      "portal_hide_until_used": true
+    },
+    "Shortcut portal winner area 07 in area@-36.2,55.5,0.0": {
+      "box": "Shortcut portal winner area 07 in area",
+      "pos": [
+        -36.23,
+        55.5,
+        0.0
+      ],
+      "parents": [
+        "Shortcuts",
+        "Container",
+        "Hub Section - 07 area",
+        "SECTIONS"
+      ],
+      "computer": "Main door Robot 07",
+      "computer_boss_id": "C1C9DS",
+      "computer_boss_name": "ID_2D_HOLEINONE_3",
+      "computer_pos": [
+        -32.5,
+        62.0,
+        0.0
+      ],
+      "portal": "OverworldPortal winner shortcut area 07 in area",
+      "portal_id": "V79RE",
+      "portal_linked": "OverworldPortal winner shortcut 07",
+      "portal_pos": [
+        -35.67,
+        55.510002,
+        0.0
+      ],
+      "portal_active": false,
+      "portal_enabled": false,
+      "portal_hide_until_used": true
+    },
+    "Shortcut portal back to lab@-36.1,-43.2,-0.4": {
+      "box": "Shortcut portal back to lab",
+      "pos": [
+        -36.07,
+        -43.228996,
+        -0.44
+      ],
+      "parents": [
+        "Shortcuts",
+        "Container",
+        "Hub Section - archive intro",
+        "SECTIONS"
+      ],
+      "computer": null,
+      "computer_boss_id": null,
+      "computer_boss_name": null,
+      "computer_pos": null,
+      "portal": "OverworldPortal winner shortcut start archive in area",
+      "portal_id": "MYK31",
+      "portal_linked": "OverworldPortal winner shortcut start archive",
+      "portal_pos": [
+        -35.64,
+        -43.788998,
+        -0.44
+      ],
+      "portal_active": true,
+      "portal_enabled": false,
+      "portal_hide_until_used": false
+    },
+    "Shortcut portal winner area 03 in area@-36.2,211.5,0.0": {
+      "box": "Shortcut portal winner area 03 in area",
+      "pos": [
+        -36.17,
+        211.5,
+        0.0
+      ],
+      "parents": [
+        "Shortcuts",
+        "Container",
+        "Hub Section - 03 area",
+        "SECTIONS"
+      ],
+      "computer": "Main door Robot 02",
+      "computer_boss_id": "349CM9",
+      "computer_boss_name": "ID_2D_HOLEINONE_1",
+      "computer_pos": [
+        -32.5,
+        218.0,
+        0.0
+      ],
+      "portal": "OverworldPortal winner shortcut area 03 in area",
+      "portal_id": "O7GVL",
+      "portal_linked": "OverworldPortal winner shortcut 03",
+      "portal_pos": [
+        -35.61,
+        211.51,
+        0.0
+      ],
+      "portal_active": false,
+      "portal_enabled": false,
+      "portal_hide_until_used": true
+    },
+    "Shortcut portal winner area 04 in area@-36.2,181.5,0.0": {
+      "box": "Shortcut portal winner area 04 in area",
+      "pos": [
+        -36.17,
+        181.5,
+        0.0
+      ],
+      "parents": [
+        "Shortcuts",
+        "Container",
+        "Hub Section - 04 area",
+        "SECTIONS"
+      ],
+      "computer": "Main door Robot 03",
+      "computer_boss_id": "DSCVS",
+      "computer_boss_name": "ID_2D_HOLEINONE_7",
+      "computer_pos": [
+        -32.48,
+        188.13,
+        3.45
+      ],
+      "portal": "OverworldPortal winner shortcut area 04 in area",
+      "portal_id": "TFJW2",
+      "portal_linked": "OverworldPortal winner shortcut 04",
+      "portal_pos": [
+        -35.61,
+        181.51,
+        0.0
+      ],
+      "portal_active": false,
+      "portal_enabled": false,
+      "portal_hide_until_used": true
+    },
+    "Shortcut portal winner area 08 in area@-35.2,24.2,0.0": {
+      "box": "Shortcut portal winner area 08 in area",
+      "pos": [
+        -35.167,
+        24.169,
+        0.0
+      ],
+      "parents": [
+        "Shortcuts",
+        "Container",
+        "Hub Section - 08 area",
+        "SECTIONS"
+      ],
+      "computer": "Main door Robot 08 (5 Tiles Wide)",
+      "computer_boss_id": "9ZBIZC",
+      "computer_boss_name": "ID_2D_HOLEINONE_2",
+      "computer_pos": [
+        -32.5,
+        31.0,
+        0.0
+      ],
+      "portal": "OverworldPortal winner shortcut area 08 in area",
+      "portal_id": "ZYL31",
+      "portal_linked": "OverworldPortal winner shortcut 08",
+      "portal_pos": [
+        -34.607,
+        24.178999,
+        0.0
+      ],
+      "portal_active": false,
+      "portal_enabled": false,
+      "portal_hide_until_used": true
+    }
+  },
+  "portals": {
+    "OverworldPortal winner shortcut 04@38.0,593.5,0.0": {
+      "name": "OverworldPortal winner shortcut 04",
+      "id": "T29VM",
+      "linked": "OverworldPortal winner shortcut area 04 in area",
+      "pos": [
+        38.003006,
+        593.536,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal (4)@-65.5,112.8,0.0": {
+      "name": "OverworldPortal (4)",
+      "id": "XF0PP",
+      "linked": "OverworldPortal (8)",
+      "pos": [
+        -65.5,
+        112.845,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (27)@-52.8,93.0,-0.4": {
+      "name": "OverworldPortal (27)",
+      "id": "QUFEG",
+      "linked": "OverworldPortal (26)",
+      "pos": [
+        -52.85,
+        93.0,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (9)@-65.5,118.2,0.0": {
+      "name": "OverworldPortal (9)",
+      "id": "LBWZS",
+      "linked": "OverworldPortal (3)",
+      "pos": [
+        -65.491,
+        118.186,
+        0.03400001
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (32)@-85.2,82.0,-0.4": {
+      "name": "OverworldPortal (32)",
+      "id": "K38Y9",
+      "linked": "OverworldPortal (33)",
+      "pos": [
+        -85.18,
+        82.0,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (6)@-58.0,112.5,0.0": {
+      "name": "OverworldPortal (6)",
+      "id": "LBWZS",
+      "linked": "OverworldPortal (7)",
+      "pos": [
+        -58.0,
+        112.48,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (33)@-78.8,82.0,-0.4": {
+      "name": "OverworldPortal (33)",
+      "id": "4YU8F",
+      "linked": "OverworldPortal (32)",
+      "pos": [
+        -78.805,
+        82.0,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (23)@-40.2,104.5,-0.4": {
+      "name": "OverworldPortal (23)",
+      "id": "QE2IM",
+      "linked": "OverworldPortal (22)",
+      "pos": [
+        -40.191,
+        104.488,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut 02@38.0,598.5,0.0": {
+      "name": "OverworldPortal winner shortcut 02",
+      "id": "VJMQG",
+      "linked": "OverworldPortal winner shortcut area 02 in area",
+      "pos": [
+        38.003006,
+        598.536,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal (8)@-63.5,108.5,-0.4": {
+      "name": "OverworldPortal (8)",
+      "id": "LBWZS",
+      "linked": "OverworldPortal (4)",
+      "pos": [
+        -63.469,
+        108.50392,
+        -0.406
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (30)@-109.2,74.0,-0.4": {
+      "name": "OverworldPortal (30)",
+      "id": "IBSCE",
+      "linked": "OverworldPortal (31)",
+      "pos": [
+        -109.184,
+        74.0,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut 09@38.0,581.0,0.0": {
+      "name": "OverworldPortal winner shortcut 09",
+      "id": "95AZZ",
+      "linked": "OverworldPortal winner shortcut area 09 in area",
+      "pos": [
+        38.005,
+        581.036,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut 07@38.0,586.0,0.0": {
+      "name": "OverworldPortal winner shortcut 07",
+      "id": "W9LR9",
+      "linked": "OverworldPortal winner shortcut area 07 in area",
+      "pos": [
+        38.003006,
+        586.036,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal@-80.0,99.4,-0.4": {
+      "name": "OverworldPortal",
+      "id": "IOIIZ",
+      "linked": "OverworldPortal (1)",
+      "pos": [
+        -80.0,
+        99.449,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (26)@-55.1,88.0,-0.4": {
+      "name": "OverworldPortal (26)",
+      "id": "MVM0C",
+      "linked": "OverworldPortal (27)",
+      "pos": [
+        -55.146,
+        87.986,
+        -0.441
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut 03@38.0,596.0,0.0": {
+      "name": "OverworldPortal winner shortcut 03",
+      "id": "KL7EO",
+      "linked": "OverworldPortal winner shortcut area 03 in area",
+      "pos": [
+        38.003006,
+        596.036,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal (1)@-106.0,98.6,0.0": {
+      "name": "OverworldPortal (1)",
+      "id": "R1H5N",
+      "linked": "OverworldPortal",
+      "pos": [
+        -105.978,
+        98.567,
+        0.0
+      ],
+      "parents": [
+        "Decoration",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (5)@-82.0,76.9,-0.4": {
+      "name": "OverworldPortal (5)",
+      "id": "78GUQ",
+      "linked": "OverworldPortal (2)",
+      "pos": [
+        -82.0,
+        76.907,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal@-74.9,98.9,0.0": {
+      "name": "OverworldPortal",
+      "id": "LEUDM",
+      "linked": "OverworldPortal (1)",
+      "pos": [
+        -74.911,
+        98.908,
+        0.0
+      ],
+      "parents": [
+        "Decoration",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut 06@38.0,588.5,0.0": {
+      "name": "OverworldPortal winner shortcut 06",
+      "id": "HMR2H",
+      "linked": "OverworldPortal winner shortcut area 06 in area",
+      "pos": [
+        38.003006,
+        588.536,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal (29)@-92.8,88.5,0.0": {
+      "name": "OverworldPortal (29)",
+      "id": "TUCGL",
+      "linked": "OverworldPortal (28)",
+      "pos": [
+        -92.829,
+        88.451,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut 05@38.0,591.0,0.0": {
+      "name": "OverworldPortal winner shortcut 05",
+      "id": "QA2F4",
+      "linked": "OverworldPortal winner shortcut area 05 in area",
+      "pos": [
+        38.003006,
+        591.036,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal (31)@-78.8,87.0,-0.4": {
+      "name": "OverworldPortal (31)",
+      "id": "8435B",
+      "linked": "OverworldPortal (30)",
+      "pos": [
+        -78.849,
+        87.0,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut 01@38.0,601.0,0.0": {
+      "name": "OverworldPortal winner shortcut 01",
+      "id": "VUGV2",
+      "linked": "OverworldPortal winner shortcut area 01 in area",
+      "pos": [
+        38.003006,
+        601.036,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal (22)@-41.9,88.0,-0.4": {
+      "name": "OverworldPortal (22)",
+      "id": "NZXLD",
+      "linked": "OverworldPortal (23)",
+      "pos": [
+        -41.858,
+        87.952,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (7)@-48.0,91.9,-0.4": {
+      "name": "OverworldPortal (7)",
+      "id": "LQWS3",
+      "linked": "OverworldPortal (9)",
+      "pos": [
+        -48.0,
+        91.895,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (2)@-48.0,109.5,-0.4": {
+      "name": "OverworldPortal (2)",
+      "id": "1ER33",
+      "linked": "OverworldPortal (5)",
+      "pos": [
+        -47.997,
+        109.485,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (34)@-106.1,81.9,-0.4": {
+      "name": "OverworldPortal (34)",
+      "id": "0FEYY",
+      "linked": "OverworldPortal (34)",
+      "pos": [
+        -106.0869,
+        81.9276,
+        -0.43987498
+      ],
+      "parents": [
+        "moveable portal box",
+        "moveable portal box for final puzzle",
+        "Interactive objects",
+        "Container"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (3)@-63.5,98.9,-0.4": {
+      "name": "OverworldPortal (3)",
+      "id": "XF0PP",
+      "linked": "OverworldPortal (9)",
+      "pos": [
+        -63.516,
+        98.904,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut 08@38.0,583.5,0.0": {
+      "name": "OverworldPortal winner shortcut 08",
+      "id": "T02BZ",
+      "linked": "OverworldPortal winner shortcut area 08 in area",
+      "pos": [
+        38.003006,
+        583.536,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal (28)@-85.2,87.0,0.0": {
+      "name": "OverworldPortal (28)",
+      "id": "9CUWR",
+      "linked": "OverworldPortal (29)",
+      "pos": [
+        -85.185,
+        87.0,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (1)@-58.0,98.9,0.0": {
+      "name": "OverworldPortal (1)",
+      "id": "XF0PP",
+      "linked": "OverworldPortal",
+      "pos": [
+        -58.0,
+        98.918,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals PC",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (34)@-106.0,88.0,-0.4": {
+      "name": "OverworldPortal (34)",
+      "id": "2LLWP",
+      "linked": "OverworldPortal (34)",
+      "pos": [
+        -106.04311,
+        88.033295,
+        -0.43987498
+      ],
+      "parents": [
+        "moveable portal box for final puzzle",
+        "Interactive objects",
+        "Container",
+        "Hub Section - Portals Mobile"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut area 03 in area@-35.6,211.5,0.0": {
+      "name": "OverworldPortal winner shortcut area 03 in area",
+      "id": "O7GVL",
+      "linked": "OverworldPortal winner shortcut 03",
+      "pos": [
+        -35.61,
+        211.51,
+        0.0
+      ],
+      "parents": [
+        "Shortcut portal winner area 03 in area",
+        "Shortcuts",
+        "Container",
+        "Hub Section - 03 area"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": true
+    },
+    "OverworldPortal winner shortcut start archive@32.0,578.0,0.0": {
+      "name": "OverworldPortal winner shortcut start archive",
+      "id": null,
+      "linked": "OverworldPortal winner shortcut start archive in area",
+      "pos": [
+        32.0,
+        578.0,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Winner area",
+        "SECTIONS"
+      ],
+      "active": true,
+      "enabled": true,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut area 08 in area@-34.6,24.2,0.0": {
+      "name": "OverworldPortal winner shortcut area 08 in area",
+      "id": "ZYL31",
+      "linked": "OverworldPortal winner shortcut 08",
+      "pos": [
+        -34.607,
+        24.178999,
+        0.0
+      ],
+      "parents": [
+        "Shortcut portal winner area 08 in area",
+        "Shortcuts",
+        "Container",
+        "Hub Section - 08 area"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": true
+    },
+    "OverworldPortal winner shortcut area 04 in area@-35.6,181.5,0.0": {
+      "name": "OverworldPortal winner shortcut area 04 in area",
+      "id": "TFJW2",
+      "linked": "OverworldPortal winner shortcut 04",
+      "pos": [
+        -35.61,
+        181.51,
+        0.0
+      ],
+      "parents": [
+        "Shortcut portal winner area 04 in area",
+        "Shortcuts",
+        "Container",
+        "Hub Section - 04 area"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": true
+    },
+    "OverworldPortal winner shortcut start archive in area@-35.6,-43.8,-0.4": {
+      "name": "OverworldPortal winner shortcut start archive in area",
+      "id": "MYK31",
+      "linked": "OverworldPortal winner shortcut start archive",
+      "pos": [
+        -35.64,
+        -43.788998,
+        -0.44
+      ],
+      "parents": [
+        "Shortcut portal back to lab",
+        "Shortcuts",
+        "Container",
+        "Hub Section - archive intro"
+      ],
+      "active": true,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (29)@-92.8,88.4,0.0": {
+      "name": "OverworldPortal (29)",
+      "id": "TUCGL",
+      "linked": "OverworldPortal (28)",
+      "pos": [
+        -92.78,
+        88.379,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal@-71.7,99.0,-0.4": {
+      "name": "OverworldPortal",
+      "id": "LEUDM",
+      "linked": "OverworldPortal (1)",
+      "pos": [
+        -71.69512,
+        99.01256,
+        -0.44
+      ],
+      "parents": [
+        "Decoration",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (1)@-109.1,94.0,-0.4": {
+      "name": "OverworldPortal (1)",
+      "id": "R1H5N",
+      "linked": "OverworldPortal",
+      "pos": [
+        -109.09306,
+        94.02703,
+        -0.44
+      ],
+      "parents": [
+        "Decoration",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (28)@-85.1,87.0,0.0": {
+      "name": "OverworldPortal (28)",
+      "id": "9CUWR",
+      "linked": "OverworldPortal (29)",
+      "pos": [
+        -85.09,
+        86.995,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (2)@-48.0,109.2,-0.4": {
+      "name": "OverworldPortal (2)",
+      "id": "1ER33",
+      "linked": "OverworldPortal (5)",
+      "pos": [
+        -47.966,
+        109.191,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (22)@-63.0,73.9,-0.4": {
+      "name": "OverworldPortal (22)",
+      "id": "NZXLD",
+      "linked": "OverworldPortal (23)",
+      "pos": [
+        -63.029,
+        73.881,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (6)@-57.9,112.1,0.0": {
+      "name": "OverworldPortal (6)",
+      "id": "LBWZS",
+      "linked": "OverworldPortal (7)",
+      "pos": [
+        -57.932,
+        112.095,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (32)@-85.1,81.9,-0.4": {
+      "name": "OverworldPortal (32)",
+      "id": "K38Y9",
+      "linked": "OverworldPortal (33)",
+      "pos": [
+        -85.071,
+        81.95,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (27)@-55.0,69.9,0.0": {
+      "name": "OverworldPortal (27)",
+      "id": "QUFEG",
+      "linked": "OverworldPortal (26)",
+      "pos": [
+        -55.0,
+        69.87699,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal@-53.0,94.1,0.0": {
+      "name": "OverworldPortal",
+      "id": "IOIIZ",
+      "linked": "OverworldPortal (1)",
+      "pos": [
+        -53.0,
+        94.07,
+        0.0
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (26)@-63.0,87.2,-0.4": {
+      "name": "OverworldPortal (26)",
+      "id": "MVM0C",
+      "linked": "OverworldPortal (27)",
+      "pos": [
+        -62.98474,
+        87.15056,
+        -0.44099942
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (30)@-109.1,74.0,-0.4": {
+      "name": "OverworldPortal (30)",
+      "id": "IBSCE",
+      "linked": "OverworldPortal (31)",
+      "pos": [
+        -109.102,
+        74.0,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (8)@-63.5,108.2,-0.4": {
+      "name": "OverworldPortal (8)",
+      "id": "LBWZS",
+      "linked": "OverworldPortal (4)",
+      "pos": [
+        -63.461,
+        108.179,
+        -0.406
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal (23)@-39.5,105.2,-0.4": {
+      "name": "OverworldPortal (23)",
+      "id": "QE2IM",
+      "linked": "OverworldPortal (22)",
+      "pos": [
+        -39.452,
+        105.19,
+        -0.44
+      ],
+      "parents": [
+        "Portals",
+        "Container",
+        "Hub Section - Portals Mobile",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": false
+    },
+    "OverworldPortal winner shortcut area 02 in area@-41.6,304.1,0.0": {
+      "name": "OverworldPortal winner shortcut area 02 in area",
+      "id": "QV6EJ",
+      "linked": "OverworldPortal winner shortcut 02",
+      "pos": [
+        -41.64,
+        304.15,
+        0.0
+      ],
+      "parents": [
+        "Shortcut portal winner area 02 in area",
+        "Shortcuts",
+        "Container",
+        "Hub Section - Desert Mobile"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": true
+    },
+    "OverworldPortal winner shortcut area 06 in area@-35.6,90.5,0.0": {
+      "name": "OverworldPortal winner shortcut area 06 in area",
+      "id": "Q7ICR",
+      "linked": "OverworldPortal winner shortcut 06",
+      "pos": [
+        -35.62,
+        90.51,
+        0.0
+      ],
+      "parents": [
+        "Shortcut portal winner area 06 in area",
+        "Shortcuts",
+        "Container",
+        "Hub Section - 06 area"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": true
+    },
+    "OverworldPortal winner shortcut area 07 in area@-35.7,55.5,0.0": {
+      "name": "OverworldPortal winner shortcut area 07 in area",
+      "id": "V79RE",
+      "linked": "OverworldPortal winner shortcut 07",
+      "pos": [
+        -35.67,
+        55.510002,
+        0.0
+      ],
+      "parents": [
+        "Shortcut portal winner area 07 in area",
+        "Shortcuts",
+        "Container",
+        "Hub Section - 07 area"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": true
+    },
+    "OverworldPortal winner shortcut area 05 in area@-35.6,147.0,0.0": {
+      "name": "OverworldPortal winner shortcut area 05 in area",
+      "id": "Z8NIO",
+      "linked": "OverworldPortal winner shortcut 05",
+      "pos": [
+        -35.56,
+        147.01,
+        0.0
+      ],
+      "parents": [
+        "Shortcut portal winner area 05 in area",
+        "Shortcuts",
+        "Container",
+        "Hub Section - 05 area"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": true
+    },
+    "OverworldPortal winner shortcut area 01 in area@-35.6,346.0,0.0": {
+      "name": "OverworldPortal winner shortcut area 01 in area",
+      "id": "61GA1",
+      "linked": "OverworldPortal winner shortcut 01",
+      "pos": [
+        -35.609997,
+        346.03,
+        0.0
+      ],
+      "parents": [
+        "Shortcut portal winner area 01 in area",
+        "Container",
+        "Hub Section - middle after dessert",
+        "SECTIONS"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": true
+    },
+    "OverworldPortal winner shortcut area 09 in area@-35.6,0.7,0.0": {
+      "name": "OverworldPortal winner shortcut area 09 in area",
+      "id": "2BUN8",
+      "linked": "OverworldPortal winner shortcut 09",
+      "pos": [
+        -35.56701,
+        0.67899895,
+        0.0
+      ],
+      "parents": [
+        "Shortcut portal winner area 09 in area",
+        "Shortcuts",
+        "Container",
+        "Hub Section - 08 area"
+      ],
+      "active": false,
+      "enabled": false,
+      "hide_until_used": true
+    }
+  }
+}

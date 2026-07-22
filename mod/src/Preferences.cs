@@ -18,6 +18,7 @@ public static class Preferences
     public static MelonPreferences_Entry<bool> AutoConnect;
     public static MelonPreferences_Entry<bool> HudAnimate;
     public static MelonPreferences_Entry<bool> FlagHud;
+    public static MelonPreferences_Entry<bool> OpenHubPortal;
 
     // --- Live event feed (see MessageFeed) -----------------------------------
     // A scrolling on-screen log of Archipelago traffic (items found/sent, hints,
@@ -51,6 +52,10 @@ public static class Preferences
         // Flag progress HUD: show a "FLAGS x/N" counter while playing a door_50/75/100
         // goal (0 target = other goals -> hidden regardless). Cosmetic; on by default.
         FlagHud = Category.CreateEntry("flagHud", true, "Show Flag progress HUD (door goals)");
+        // QoL: keep the post-intro (chamber-10) hub portal open from the start, so you
+        // can warp back to the hub (e.g. to check the flag/% doors) before beating a
+        // chamber's computer boss. Client-side only; unlocks no gated content.
+        OpenHubPortal = Category.CreateEntry("openHubPortal", true, "Keep the hub portal open (chamber 10)");
         // NOTE: the DeathLink outgoing throttle (wipes per sent death) is NOT a client
         // preference -- it's the apworld's `death_link_amnesty` option, delivered via
         // slot data (see ArchipelagoData.DeathLinkAmnesty), so the seed owns it.

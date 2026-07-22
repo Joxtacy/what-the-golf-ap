@@ -23,6 +23,11 @@ public class Mod : MelonMod
     // so keep OFF; flip to true + rebuild only when re-capturing game data.
     public const bool DumpersEnabled = false;
 
+    // DEV/TEST: run ShortcutPortalDumper (captures the shortcut-portal topology to
+    // wtg_portals.json) to identify the chamber-10 hub portal for PortalGate.TargetKeys.
+    // Read-only scan; keep OFF except during a capture session.
+    public const bool PortalProbeEnabled = false;
+
     public override void OnInitializeMelon()
     {
         Plugin.Client = new ArchipelagoClient();
@@ -104,6 +109,7 @@ public class Mod : MelonMod
     private int _gateSlot;            // rotates Boss/Section/Chest -> one scan per tick
     private int _dumpTimer;           // dumpers are OFF by default; frame-based is fine
     private int _chestDumpTimer;
+    private int _portalProbeTimer;
 
     // Runs every frame on Unity's main thread -> ideal main-thread pump.
     public override void OnUpdate()
@@ -205,11 +211,12 @@ public class Mod : MelonMod
                         if (now - _lastGate >= 0.34f)
                         {
                             _lastGate = now;
-                            switch (_gateSlot++ % 3)
+                            switch (_gateSlot++ % 4)
                             {
                                 case 0: Mapping.BossGate.Tick(); break;
                                 case 1: Mapping.SectionGate.Tick(); break;
                                 case 2: Mapping.ChestGate.Tick(); break;
+                                case 3: Mapping.PortalGate.Tick(); break;
                             }
                         }
 
@@ -243,6 +250,14 @@ public class Mod : MelonMod
         {
             _chestDumpTimer = 0;
             Mapping.ChestDumper.Dump();
+        }
+
+        // Shortcut-portal capture: its own dev toggle so we can probe portals without
+        // the full (laggy) dumper suite. ~every 5s.
+        if (PortalProbeEnabled && ++_portalProbeTimer >= 300)
+        {
+            _portalProbeTimer = 0;
+            Mapping.ShortcutPortalDumper.Dump();
         }
     }
 }

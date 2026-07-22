@@ -87,7 +87,7 @@ public static class ConnectionUI
         try
         {
             const float x = 20f, y = 20f, w = 320f, rowH = 22f, gap = 6f;
-            float h = 732f;
+            float h = 760f;
             GUI.Box(new Rect(x, y, w, h), "WHAT THE GOLF?  —  Archipelago");
 
             float ix = x + 14f, iw = w - 28f, cy = y + 34f;
@@ -114,6 +114,13 @@ public static class ConnectionUI
             bool fh = Preferences.FlagHud.Value;
             bool nfh = GUI.Toggle(new Rect(ix, cy, iw, rowH), fh, " Show Flag progress HUD (door goals)");
             if (nfh != fh) { Preferences.FlagHud.Value = nfh; Preferences.Save(); }
+            cy += rowH + gap;
+
+            // QoL: keep the post-intro (chamber-10) hub portal open so you can warp back
+            // to the hub early. Client-side only; no effect on logic/generation.
+            bool hp = Preferences.OpenHubPortal.Value;
+            bool nhp = GUI.Toggle(new Rect(ix, cy, iw, rowH), hp, " Keep hub portal open (chamber 10)");
+            if (nhp != hp) { Preferences.OpenHubPortal.Value = nhp; Preferences.Save(); }
             cy += rowH + gap;
 
             var client = Plugin.Client;
