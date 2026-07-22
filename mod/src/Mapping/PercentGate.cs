@@ -107,6 +107,29 @@ public static class PercentGate
         return true;
     }
 
+    // --- Door label (called from the UpdateStatus postfix) -----------------------
+    // The % door's requirement label (missingFlagsText, aka the "RequirementText" TMP)
+    // natively shows "<nativePct>/<threshold>%" from the game's own completion calc --
+    // NOT the AP Flag count. For our goal-tier door we overwrite it with AP progress
+    // "<collected>/<needed>", right after the game's UpdateStatus sets it.
+
+    /// <summary>Retarget the goal-tier % door's requirement label to AP progress
+    /// (collected/needed) instead of the game's native completion %. No-op for off-tier
+    /// doors (they keep the native label) and when disarmed.</summary>
+    public static void ApplyDoorText(Il2Cpp.OverworldButton2DPercentage b)
+    {
+        if (!_enabled || b == null || !IsGoalTier(b)) return;
+        try
+        {
+            var mt = b.missingFlagsText;
+            if (mt == null) return;
+            var d = Plugin.Client?.Data;
+            string s = $"{d?.FlagsCollected ?? 0}/{d?.FlagGoal ?? 0}";
+            if (mt.text != s) mt.text = s;
+        }
+        catch { }
+    }
+
     // --- Victory (called from the inside button's collision postfix) -------------
 
     /// <summary>Is this main button the one INSIDE our goal-tier door (linked via

@@ -60,6 +60,12 @@ public static class GamePatches
         TryPatchPrefix(harmony, "OverworldButton2DPercentage:GetFlagsLeft",
                        nameof(PercentFlagsLeftPrefix));
 
+        // Door goal LABEL: the % door's requirement text natively shows the game's
+        // completion % ("4/50%"); retarget the goal-tier door's label to AP progress
+        // ("<collected>/<needed>") right after the game's UpdateStatus writes it.
+        TryPatch(harmony, "OverworldButton2DPercentage:UpdateStatus",
+                 nameof(PercentUpdateStatusPostfix));
+
         // Door goal VICTORY: pressing the OverworldMainButton INSIDE our % door (not
         // merely opening the door) reports the goal. Its collision handler fires
         // OnPressed when the ball hits it; we postfix it and, for the button linked to
@@ -235,6 +241,14 @@ public static class GamePatches
     // goal. IsInsideButton filters to exactly that button (via PreviousDoor identity +
     // isEnabled), so other main buttons (computer consoles, off-tier speedrun buttons)
     // are ignored.
+    // POSTFIX on OverworldButton2DPercentage.UpdateStatus: overwrite the goal-tier
+    // door's requirement label with AP progress (the game just set it to native %).
+    private static void PercentUpdateStatusPostfix(Il2Cpp.OverworldButton2DPercentage __instance)
+    {
+        try { Mapping.PercentGate.ApplyDoorText(__instance); }
+        catch (Exception e) { Plugin.Log.LogError($"PercentUpdateStatusPostfix: {e}"); }
+    }
+
     private static void PercentButtonPressedPostfix(Il2Cpp.OverworldMainButton __instance)
     {
         try
