@@ -90,6 +90,7 @@ public class ArchipelagoClient
             {
                 Plugin.Log.LogInfo(m.ToString());
                 MessageFeed.Ingest(m);   // mirror the AP client's feed on-screen
+                ConsoleUI.Ingest(m);     // full scrollback for the in-game console
             };
             Session.Socket.ErrorReceived += (e, msg) => Plugin.Log.LogError($"AP socket: {msg}");
             Session.Socket.SocketClosed += reason =>
@@ -188,6 +189,21 @@ public class ArchipelagoClient
 
     /// <summary>Send the Crown check for a scene (all challenges mastered).</summary>
     public void SendCrown(string scene) => SendCheck(LocationMap.CrownId(scene));
+
+    /// <summary>Send a chat line / server command (`!hint`, `!countdown`, `!admin ...`)
+    /// to the server -- the input side of the in-game console (see ConsoleUI). The
+    /// server interprets `!`-prefixed text; responses come back through MessageLog.
+    /// Sent off the main thread so a dead socket can't stall the game.</summary>
+    public void Say(string text)
+    {
+        if (Session == null || !Connected || string.IsNullOrWhiteSpace(text)) return;
+        var session = Session;
+        ThreadPool.QueueUserWorkItem(_ =>
+        {
+            try { session.Say(text); }
+            catch (Exception e) { Plugin.Log.LogError($"AP say failed: {e.Message}"); }
+        });
+    }
 
     /// <summary>Tell the server this slot reached its goal (campaign complete).</summary>
     public void SendVictory()

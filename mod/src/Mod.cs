@@ -60,6 +60,7 @@ public class Mod : MelonMod
     public override void OnGUI()
     {
         ConnectionUI.OnGUI();
+        ConsoleUI.OnGUI();
         if (DebugTrapHotkeys) HandleTrapHotkeys();
     }
 
@@ -121,6 +122,9 @@ public class Mod : MelonMod
         // Live on-screen feed of AP activity (items/hints/chat/DeathLink). Drains its
         // queue + renders here on the main thread; no-op when disabled or empty.
         MessageFeed.Tick();
+
+        // In-game command console scrollback: drain queued server messages (main thread).
+        ConsoleUI.Tick();
 
         if (client?.DeathLink != null && client.DeathLink.ConsumePending())
         {

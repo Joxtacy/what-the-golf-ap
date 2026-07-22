@@ -46,13 +46,16 @@ public static class ConnectionUI
     {
         try
         {
-            if (Visible && !_paused)
+            // Freeze while EITHER overlay is open (they share one timeScale owner so
+            // closing one while the other stays open doesn't unfreeze prematurely).
+            bool want = Visible || ConsoleUI.Visible;
+            if (want && !_paused)
             {
                 _prevTimeScale = UnityEngine.Time.timeScale;
                 UnityEngine.Time.timeScale = 0f;
                 _paused = true;
             }
-            else if (!Visible && _paused)
+            else if (!want && _paused)
             {
                 // Never restore a frozen scale: if the game happened to be at 0 when
                 // we opened (its own pause / a load), restoring 0 would leave the game

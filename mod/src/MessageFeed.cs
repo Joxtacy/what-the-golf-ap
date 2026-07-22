@@ -130,8 +130,8 @@ public static class MessageFeed
     };
 
     /// <summary>Turn a message's colored Parts into a TMP rich-text string, matching
-    /// the AP dark palette the real client uses.</summary>
-    private static string Render(LogMessage m)
+    /// the AP dark palette the real client uses. Shared with the console (ConsoleUI).</summary>
+    internal static string Render(LogMessage m)
     {
         var parts = m.Parts;
         if (parts == null) return Escape(m.ToString());
