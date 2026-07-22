@@ -88,6 +88,33 @@ class Crowns(Toggle):
     display_name = "Crown Chests"
 
 
+class Traps(Toggle):
+    """Add trap items to the pool.
+
+    When on, up to `trap_count` filler items are replaced by randomly-chosen
+    trap items. A received trap fires a short, disruptive/funny effect in the
+    game mod -- e.g. force-restarting your current hole, briefly slowing down or
+    speeding up game time, or randomizing your overworld ball's shape. Traps are
+    filler-class for logic (they never gate progression), so this only changes
+    the *flavour* of your filler, not what's required to beat the seed.
+    """
+    display_name = "Traps"
+
+
+class TrapPercentage(Range):
+    """What percentage of your filler items to replace with traps (when Traps is on).
+
+    Applied to however many filler slots the seed actually has, so it scales
+    automatically as the game gains more checks -- no fixed count to retune. 0
+    means no traps even if Traps is on; 100 turns every filler item into a trap.
+    Which trap types you get is random. No effect on generation logic.
+    """
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 20
+
+
 class DeathLinkAmnesty(Range):
     """How many of your own wipes it takes to send one DeathLink (Death Link Amnesty).
 
@@ -112,6 +139,8 @@ class WTGOptions(PerGameCommonOptions):
     boss_keys: BossKeys
     hard_sections: HardSections
     crowns: Crowns
+    traps: Traps
+    trap_percentage: TrapPercentage
     # Implemented in the game mod. "Death" = a level FAILURE (ball out of bounds /
     # in water / lost), reported via GameAnalytics.OnLevelReset -- manual restarts
     # and quits are excluded. The mod broadcasts one DeathLink per `death_link_amnesty`

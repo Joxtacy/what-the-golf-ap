@@ -33,6 +33,11 @@ public static class ItemApplier
             ChamberUnlock.RequestItem(name);
             MelonLoader.MelonLogger.Msg($"Access unlocked: {name}");
         }
+        else if (TrapManager.Handles(name))
+        {
+            // Trap item (the "traps" option): fire its disruptive/funny effect.
+            TrapManager.Apply(name);
+        }
         // else: filler / cosmetic -- nothing to apply.
 
         Plugin.Log.LogInfo($"AP item applied: {name}");

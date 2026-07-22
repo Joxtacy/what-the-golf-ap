@@ -51,8 +51,38 @@ public class Mod : MelonMod
         }
     }
 
+    // DEV/TEST: fire trap effects locally via F9-F12 (no server round-trip / no
+    // tabbing out to send). Set true only for local testing. Read from Event.current
+    // in OnGUI (works regardless of the game's input backend, same as the F8 toggle).
+    public const bool DebugTrapHotkeys = false;
+
     // MelonLoader GUI callback -> draw the connection panel (and read its hotkey).
-    public override void OnGUI() => ConnectionUI.OnGUI();
+    public override void OnGUI()
+    {
+        ConnectionUI.OnGUI();
+        if (DebugTrapHotkeys) HandleTrapHotkeys();
+    }
+
+    private static void HandleTrapHotkeys()
+    {
+        try
+        {
+            var e = UnityEngine.Event.current;
+            if (e == null || e.type != UnityEngine.EventType.KeyDown) return;
+            switch (e.keyCode)
+            {
+                case UnityEngine.KeyCode.F9: Mapping.TrapManager.Apply(Mapping.TrapManager.SlowMo); break;
+                case UnityEngine.KeyCode.F10: Mapping.TrapManager.Apply(Mapping.TrapManager.FastForward); break;
+                case UnityEngine.KeyCode.F11: Mapping.TrapManager.Apply(Mapping.TrapManager.Mulligan); break;
+                case UnityEngine.KeyCode.F12: Mapping.TrapManager.Apply(Mapping.TrapManager.Transmogrify); break;
+            }
+        }
+        catch { }
+    }
+
+    // Runs after every game Update -> re-assert the time-warp scale here so we win
+    // the race against the game's TimeControl (which rewrites the clock each Update).
+    public override void OnLateUpdate() => Mapping.TrapManager.Tick();
 
     // Overworld polling is EVENT-DRIVEN to keep the idle hub cheap. The expensive
     // FindObjectsOfTypeAll sweeps run at full rate only in a short "burst" after the

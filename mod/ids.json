@@ -60,7 +60,11 @@
     "Confetti Burst": 78579055,
     "Trophy": 78579056,
     "Extra Putt": 78579057,
-    "Rubber Duck": 78579058
+    "Rubber Duck": 78579058,
+    "Mulligan Trap": 78579059,
+    "Slow-Mo Trap": 78579060,
+    "Fast-Forward Trap": 78579061,
+    "Transmogrify Trap": 78579062
   },
   "locations": {
     "Club Ball Many - Clear": 78584000,

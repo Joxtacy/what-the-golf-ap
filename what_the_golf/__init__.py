@@ -4,8 +4,8 @@ from worlds.AutoWorld import World, WebWorld
 from .Options import WTGOptions
 from .Items import (
     WTGItem, item_name_to_id, item_classification,
-    access_items_for, BOSS_KEY_ITEMS, CHEST_KEY_ITEMS, FLAG_ITEM, FILLER_ITEMS,
-    flag_pool,
+    access_items_for, BOSS_KEY_ITEMS, CHEST_KEY_ITEMS, TRAP_ITEMS,
+    FLAG_ITEM, FILLER_ITEMS, flag_pool,
 )
 from .data import CHAMBER, SECTION
 from .Locations import location_name_to_id
@@ -94,7 +94,19 @@ class WTGWorld(World):
         total_locations = sum(
             1 for loc in self.multiworld.get_locations(self.player) if loc.address is not None
         )
-        for i in range(total_locations - len(pool)):
+        filler_needed = total_locations - len(pool)
+
+        # Traps replace a PERCENTAGE of the filler slots (self-scaling as the game
+        # gains checks). Pool size is unchanged and logic is unaffected. Which traps
+        # is random but deterministic (self.random is seeded per player) -- so
+        # Universal Tracker's regen reproduces the exact same pool.
+        n_traps = 0
+        if self.options.traps.value and filler_needed > 0:
+            n_traps = filler_needed * self.options.trap_percentage.value // 100
+        for _ in range(n_traps):
+            pool.append(self.create_item(self.random.choice(TRAP_ITEMS)))
+
+        for i in range(filler_needed - n_traps):
             pool.append(self.create_item(FILLER_ITEMS[i % len(FILLER_ITEMS)]))
 
         self.multiworld.itempool += pool
@@ -114,6 +126,8 @@ class WTGWorld(World):
             "boss_keys": bool(self.options.boss_keys.value),
             "hard_sections": bool(self.options.hard_sections.value),
             "crowns": bool(self.options.crowns.value),
+            "traps": bool(self.options.traps.value),
+            "trap_percentage": int(self.options.trap_percentage.value),
             "death_link": bool(self.options.death_link.value),
             "death_link_amnesty": int(self.options.death_link_amnesty.value),
         }
@@ -134,6 +148,10 @@ class WTGWorld(World):
         o.boss_keys.value = int(slot_data["boss_keys"])
         o.crowns.value = int(slot_data["crowns"])
         o.hard_sections.value = int(slot_data["hard_sections"])
+        # traps/trap_percentage change the pool composition, so UT's regen must
+        # apply them to reproduce the same item pool. .get() keeps older seeds valid.
+        o.traps.value = int(slot_data.get("traps", 0))
+        o.trap_percentage.value = int(slot_data.get("trap_percentage", 0))
         o.death_link.value = int(slot_data["death_link"])
 
     def interpret_slot_data(self, slot_data: dict) -> dict:

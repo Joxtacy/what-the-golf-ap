@@ -180,6 +180,18 @@ FILLER_ITEMS = (
     "Silly Hat", "Golf Ball Skin", "Confetti Burst",
     "Trophy", "Extra Putt", "Rubber Duck",
 )
+# Trap items (the "traps" option). A received trap triggers a disruptive/funny
+# effect in the game mod, routed purely by item NAME -- so these strings must
+# match the names in the mod's TrapManager EXACTLY. They replace filler slots
+# when the option is on and are classified ItemClassification.trap. Add more here
+# (and a matching effect in the mod) to grow the set; they append to the ID table
+# so existing IDs stay stable.
+TRAP_ITEMS = (
+    "Mulligan Trap",       # force-restart the current hole (Level.Restart)
+    "Slow-Mo Trap",        # briefly slow game time (Chronos clocks)
+    "Fast-Forward Trap",   # briefly speed up game time (Chronos clocks)
+    "Transmogrify Trap",   # randomize the overworld ball's shape (cosmetic)
+)
 
 
 # --- Naming helpers (names must stay unique & stable) ------------------------
@@ -412,9 +424,11 @@ def access_item_names():
 def all_item_names():
     # Universe of every item any option can produce (IDs must stay stable): all
     # access keys (both granularities) + all boss keys + crown-chest keys + Flag +
-    # filler. A seed only CREATES the subset its options need.
+    # filler + traps. A seed only CREATES the subset its options need. TRAP_ITEMS
+    # stay LAST so adding/removing traps never shifts the earlier IDs.
     return (list(access_item_names()) + list(boss_key_names())
-            + list(chest_key_names()) + [FLAG_ITEM] + list(FILLER_ITEMS))
+            + list(chest_key_names()) + [FLAG_ITEM] + list(FILLER_ITEMS)
+            + list(TRAP_ITEMS))
 
 
 def all_location_names():

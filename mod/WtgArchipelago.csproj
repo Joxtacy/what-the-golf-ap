@@ -58,6 +58,7 @@
     <Reference Include="$(MLDir)\Il2CppAssemblies\UnityEngine.UIModule.dll" Private="false" />   <!-- Canvas / CanvasRenderer for the HUD -->
     <Reference Include="$(MLDir)\Il2CppAssemblies\UnityEngine.UI.dll" Private="false" />   <!-- MaskableGraphic (TextMeshProUGUI base) -->
     <Reference Include="$(MLDir)\Il2CppAssemblies\Assembly-CSharp.dll" Private="false" />
+    <Reference Include="$(MLDir)\Il2CppAssemblies\Assembly-CSharp-firstpass.dll" Private="false" />   <!-- Chronos time system (Timekeeper/GlobalClock) for time-warp traps -->
   </ItemGroup>
 
   <!-- ==== Portable references (Mac/Linux): flat refs/ folder of copied DLLs ==== -->
@@ -76,6 +77,7 @@
     <Reference Include="$(RefDir)/UnityEngine.UIModule.dll" Private="false" />
     <Reference Include="$(RefDir)/UnityEngine.UI.dll" Private="false" />
     <Reference Include="$(RefDir)/Assembly-CSharp.dll" Private="false" />
+    <Reference Include="$(RefDir)/Assembly-CSharp-firstpass.dll" Private="false" />   <!-- Chronos time system (Timekeeper/GlobalClock) for time-warp traps -->
   </ItemGroup>
 
   <!-- Copy the built mod into <game>\Mods on build (Debug). MelonLoader loads
