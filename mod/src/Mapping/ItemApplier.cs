@@ -38,6 +38,13 @@ public static class ItemApplier
             // Trap item (the "traps" option): fire its disruptive/funny effect.
             TrapManager.Apply(name);
         }
+        else if (name == "Flag")
+        {
+            // Progress token for the door_50/75/100 goals. Nothing to apply in-game;
+            // just tally it for the on-screen Flag HUD (matches data.py's FLAG_ITEM).
+            var data = Plugin.Client?.Data;
+            if (data != null) data.FlagsCollected++;
+        }
         // else: filler / cosmetic -- nothing to apply.
 
         Plugin.Log.LogInfo($"AP item applied: {name}");

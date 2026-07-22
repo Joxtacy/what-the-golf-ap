@@ -9,6 +9,23 @@ from .data import (
 from .Items import flag_pool
 
 
+def flag_goal(goal) -> int:
+    """Flags required to win, given the `goal` option; 0 for non-door goals.
+
+    Shared by set_rules (the actual completion condition) and fill_slot_data (the
+    number the in-game Flag HUD counts toward) so the displayed target can never
+    drift from the real win condition.
+    """
+    pct = {
+        goal.option_door_50: 0.5,
+        goal.option_door_75: 0.75,
+        goal.option_door_100: 1.0,
+    }.get(goal.value)
+    if pct is None:
+        return 0
+    return max(1, ceil(flag_pool() * pct))
+
+
 def set_rules(world) -> None:
     player = world.player
     multiworld = world.multiworld
@@ -70,11 +87,6 @@ def set_rules(world) -> None:
             lambda state, names=boss_clears: \
             all(state.can_reach_location(n, player) for n in names)
     else:
-        pct = {
-            goal.option_door_50: 0.5,
-            goal.option_door_75: 0.75,
-            goal.option_door_100: 1.0,
-        }[goal.value]
-        need = max(1, ceil(flag_pool() * pct))
+        need = flag_goal(goal)
         multiworld.completion_condition[player] = \
             lambda state, n=need: state.has("Flag", player, n)

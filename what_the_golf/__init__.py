@@ -10,7 +10,7 @@ from .Items import (
 from .data import CHAMBER, SECTION
 from .Locations import location_name_to_id
 from .Regions import create_regions
-from .Rules import set_rules
+from .Rules import set_rules, flag_goal
 
 
 class WTGWeb(WebWorld):
@@ -130,6 +130,11 @@ class WTGWorld(World):
             "trap_percentage": int(self.options.trap_percentage.value),
             "death_link": bool(self.options.death_link.value),
             "death_link_amnesty": int(self.options.death_link_amnesty.value),
+            # Flags needed to win a door_50/75/100 goal (0 for campaign/all_bosses).
+            # Purely informational -- the mod's Flag HUD counts toward it; the real
+            # win condition is set_rules' completion_condition. Not applied in
+            # _apply_slot_data (no generation effect), so UT ignores it.
+            "flag_goal": flag_goal(self.options.goal),
         }
 
     def _apply_slot_data(self, slot_data: dict) -> None:

@@ -156,6 +156,8 @@ public class ArchipelagoClient
         SectionGate.SetEnabled(Data.HardSectionsEnabled);
         if (slotData.TryGetValue("crowns", out var cr)) Data.CrownsEnabled = Convert.ToBoolean(cr);
         ChestGate.SetEnabled(Data.CrownsEnabled);
+        // Flag target for the door_* goals (0 otherwise) -> drives the Flag HUD.
+        Data.FlagGoal = slotData.TryGetValue("flag_goal", out var fg) ? Convert.ToInt32(fg) : 0;
     }
 
     // --- Location checks -----------------------------------------------------

@@ -119,6 +119,10 @@ public class Mod : MelonMod
         // itself based on connection + DeathLink state; safe to call every frame.
         DeathLinkHud.Tick();
 
+        // In-scene "FLAGS x/N" progress counter (door_50/75/100 goals). Shows/hides
+        // itself based on connection + goal (FlagGoal > 0); safe to call every frame.
+        FlagHud.Tick();
+
         // Live on-screen feed of AP activity (items/hints/chat/DeathLink). Drains its
         // queue + renders here on the main thread; no-op when disabled or empty.
         MessageFeed.Tick();

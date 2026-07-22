@@ -87,7 +87,7 @@ public static class ConnectionUI
         try
         {
             const float x = 20f, y = 20f, w = 320f, rowH = 22f, gap = 6f;
-            float h = 704f;
+            float h = 732f;
             GUI.Box(new Rect(x, y, w, h), "WHAT THE GOLF?  —  Archipelago");
 
             float ix = x + 14f, iw = w - 28f, cy = y + 34f;
@@ -107,6 +107,13 @@ public static class ConnectionUI
             bool ha = Preferences.HudAnimate.Value;
             bool nha = GUI.Toggle(new Rect(ix, cy, iw, rowH), ha, " Animate DeathLink HUD (slide-in)");
             if (nha != ha) { Preferences.HudAnimate.Value = nha; Preferences.Save(); }
+            cy += rowH + gap;
+
+            // Flag progress HUD (door_50/75/100 goals). Only actually shows when the
+            // connected seed is a door goal; harmless to leave on for other goals.
+            bool fh = Preferences.FlagHud.Value;
+            bool nfh = GUI.Toggle(new Rect(ix, cy, iw, rowH), fh, " Show Flag progress HUD (door goals)");
+            if (nfh != fh) { Preferences.FlagHud.Value = nfh; Preferences.Save(); }
             cy += rowH + gap;
 
             var client = Plugin.Client;
