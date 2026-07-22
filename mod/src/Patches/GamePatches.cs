@@ -51,6 +51,22 @@ public static class GamePatches
         TryPatchPrefix(harmony, "OverworldMainDoorRobot:OnHitActiveButton",
                        nameof(MainDoorHitPrefix));
 
+        // Door goal (door_50/75/100) HARD-LOCK: the overworld % completion door opens
+        // through the game's own CheckOpen once GetFlagsLeft() <= 0. We override
+        // GetFlagsLeft for the seed's goal-tier door off the AP Flag count (0 when the
+        // target is reached -> opens; positive otherwise -> stays shut), so the door is
+        // decoupled from the game's native flag count. Off-tier % doors defer to the
+        // game. (CanDoorBeOpened turned out NOT to gate the open path.)
+        TryPatchPrefix(harmony, "OverworldButton2DPercentage:GetFlagsLeft",
+                       nameof(PercentFlagsLeftPrefix));
+
+        // Door goal VICTORY: pressing the OverworldMainButton INSIDE our % door (not
+        // merely opening the door) reports the goal. Its collision handler fires
+        // OnPressed when the ball hits it; we postfix it and, for the button linked to
+        // our tier's door, send Victory (once, Flag-count-guarded).
+        TryPatch(harmony, "OverworldMainButton:OnCollisionEnter2D",
+                 nameof(PercentButtonPressedPostfix));
+
         // DeathLink (outgoing): a level FAILURE -> maybe broadcast a death. We hook
         // the static, no-arg GameAnalytics.OnLevelReset (the AUTOMATIC reset the game
         // fires on out-of-bounds/water/lost-ball) -- safe like the other statics, and
@@ -197,6 +213,36 @@ public static class GamePatches
         }
         catch (Exception e) { Plugin.Log.LogError($"MainDoorHitPrefix: {e}"); }
         return true;            // not gated / already unlocked -> open as normal
+    }
+
+    // PREFIX on OverworldButton2D.CanDoorBeOpened(). For the seed's goal-tier %
+    // completion door we decide purely from the AP Flag count (PercentGate); every
+    // other door (section doors, off-tier % doors) defers to the game. Mirrors the
+    // boss-door CanBeOpened override.
+    private static bool PercentFlagsLeftPrefix(Il2Cpp.OverworldButton2DPercentage __instance, ref int __result)
+    {
+        try
+        {
+            if (!Mapping.PercentGate.TryFlagsLeft(__instance, out int left)) return true;  // not ours
+            __result = left;
+            return false;   // skip original -> our AP-based flags-left stands
+        }
+        catch (Exception e) { Plugin.Log.LogError($"PercentFlagsLeftPrefix: {e}"); return true; }
+    }
+
+    // POSTFIX on OverworldMainButton.OnCollisionEnter2D (the ball-hit that presses the
+    // button). For the enabled button sitting inside our goal-tier % door, report the
+    // goal. IsInsideButton filters to exactly that button (via PreviousDoor identity +
+    // isEnabled), so other main buttons (computer consoles, off-tier speedrun buttons)
+    // are ignored.
+    private static void PercentButtonPressedPostfix(Il2Cpp.OverworldMainButton __instance)
+    {
+        try
+        {
+            if (Mapping.PercentGate.IsInsideButton(__instance))
+                Mapping.PercentGate.OnInsideButtonPressed();
+        }
+        catch (Exception e) { Plugin.Log.LogError($"PercentButtonPressedPostfix: {e}"); }
     }
 
     private static void FinalBossPostfix()

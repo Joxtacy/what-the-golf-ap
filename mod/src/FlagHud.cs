@@ -66,7 +66,11 @@ public static class FlagHud
 
             if (!_root.activeSelf) _root.SetActive(true);
 
-            SetShown(data.FlagsCollected, data.FlagGoal);
+            // Clamp the shown count to the goal: once you've won, the server auto-
+            // collects your remaining locations, so FlagsCollected can exceed FlagGoal
+            // (e.g. 133/67). Never display more than the target.
+            int shown = data.FlagsCollected < data.FlagGoal ? data.FlagsCollected : data.FlagGoal;
+            SetShown(shown, data.FlagGoal);
             ApplyPosition();
         }
         catch (System.Exception e)

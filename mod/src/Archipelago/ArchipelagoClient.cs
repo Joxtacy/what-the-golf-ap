@@ -74,6 +74,7 @@ public class ArchipelagoClient
             StatusMessage = "Disconnected";
             // Forget what GoalWatcher has sent so a reconnect re-reconciles node state.
             Mapping.GoalWatcher.Reset();
+            Mapping.PercentGate.Reset();
             Plugin.Log.LogInfo("AP disconnected — mod is passive (vanilla) until you reconnect.");
         }
     }
@@ -150,6 +151,7 @@ public class ArchipelagoClient
         if (slotData.TryGetValue("death_link_amnesty", out var dla)) Data.DeathLinkAmnesty = Convert.ToInt32(dla);
         if (slotData.TryGetValue("goal", out var g)) Data.Goal = Convert.ToInt32(g);
         BossGoal.SetEnabled(Data.Goal == ArchipelagoData.GoalAllBosses);
+        PercentGate.SetGoal(Data.Goal);   // arm the % completion-door goal (door_50/75/100)
         if (slotData.TryGetValue("boss_keys", out var bk)) Data.BossKeysEnabled = Convert.ToBoolean(bk);
         BossGate.SetEnabled(Data.BossKeysEnabled);
         if (slotData.TryGetValue("hard_sections", out var hs)) Data.HardSectionsEnabled = Convert.ToBoolean(hs);
