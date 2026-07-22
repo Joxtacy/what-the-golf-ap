@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, Toggle, DeathLink, PerGameCommonOptions
+from Options import (
+    Choice, Range, Toggle, OptionSet, DeathLink, PerGameCommonOptions,
+)
 
 
 class Goal(Choice):
@@ -115,6 +117,25 @@ class TrapPercentage(Range):
     default = 20
 
 
+class Episodes(OptionSet):
+    """Which extra episodes (DLC) to include, on top of the base campaign.
+
+    Each listed episode adds its holes as checks (a Clear each, plus a Crown for
+    the rare hole that has one) and a single "<Episode> Episode Access" key that
+    gates them in logic. Episode hole-clears also grant Flags, so they count
+    toward the door_50/75/100 goals (bigger board = bigger % target).
+
+    Requires owning the corresponding DLC. Valid entries: "Sporty Sports", "Snow",
+    "Hotdog", "Alive", "Among Us". Default: none (base campaign only).
+
+    NOTE: in-game enforcement of episode access is not wired yet, so an episode
+    key is a LOGIC gate only for now -- like the sub-area "physical looseness" you
+    can already walk past; never a softlock.
+    """
+    display_name = "Episodes"
+    valid_keys = frozenset({"Sporty Sports", "Snow", "Hotdog", "Alive", "Among Us"})
+
+
 class DeathLinkAmnesty(Range):
     """How many of your own wipes it takes to send one DeathLink (Death Link Amnesty).
 
@@ -139,6 +160,7 @@ class WTGOptions(PerGameCommonOptions):
     boss_keys: BossKeys
     hard_sections: HardSections
     crowns: Crowns
+    episodes: Episodes
     traps: Traps
     trap_percentage: TrapPercentage
     # Implemented in the game mod. "Death" = a level FAILURE (ball out of bounds /

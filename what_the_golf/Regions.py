@@ -2,6 +2,7 @@ from BaseClasses import Region, ItemClassification
 
 from .data import (
     gates, final_boss_gate, clear_loc, crown_loc, CHESTS, chest_loc, chest_region,
+    episode_gates,
 )
 from .Items import WTGItem
 from .Locations import WTGLocation, location_name_to_id
@@ -36,6 +37,18 @@ def create_regions(world) -> None:
             if level.challenges > 0:
                 _add_location(region, crown_loc(level.scene))
 
+        menu.connect(region, f"To {name}")
+
+    # Episodes (DLC): each enabled episode is one region gated by its own
+    # "<Episode> Episode Access" key (Rules.py), connected freely from Menu (like
+    # the other gates -- non-linear). Holds that episode's Clear/Crown checks.
+    for name, _access, levels in episode_gates(world.enabled_episodes()):
+        region = Region(name, player, multiworld)
+        multiworld.regions.append(region)
+        for level in levels:
+            _add_location(region, clear_loc(level.scene))
+            if level.challenges > 0:
+                _add_location(region, crown_loc(level.scene))
         menu.connect(region, f"To {name}")
 
     # Crown chests (crowns option): each chest is a location in its sub-area's

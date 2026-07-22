@@ -134,6 +134,19 @@ class Chest:
     boss: int        # 0 = normal; else the computer N whose defeat also gates it
 
 
+@dataclass(frozen=True)
+class Episode:
+    """One extra episode / DLC (Sporty Sports, Snow, Hotdog, Alive, Among Us).
+
+    Episodes do NOT use the chamber/computer-door model -- their structure is the
+    OverworldGoal hub-section graph (built from wtg_goals.json). Each is a flat set
+    of holes gated by a single per-episode Access key.
+    """
+    name: str        # display / option key (e.g. "Snow", "Sporty Sports")
+    campaign: str    # ECampaignType tag (Olympics/Snow/Hotdog/Alive/Amongus)
+    levels: tuple    # tuple[Level, ...]
+
+
 def _load():
     w = _read_levels_json()
     areas = tuple(
@@ -159,17 +172,32 @@ def _load():
               bool(c["gated"]), c.get("door") or "", int(c.get("boss", 0)))
         for c in w.get("chests", ())
     )
+    # Extra episodes (DLC). Reuse Level (trigger="" -- episodes aren't door-gated
+    # by the Main section-trigger mechanism). Scenes are already de-duped vs Main
+    # and across episodes by build_levels.py.
+    episodes = tuple(
+        Episode(e["name"], e.get("campaign", ""),
+                tuple(Level(l.get("id", ""), l["scene"], bool(l.get("boss", False)),
+                            int(l.get("challenges", 0)), "", pretty(l["scene"]))
+                      for l in e["levels"]))
+        for e in w.get("episodes", ())
+    )
     return (areas, gate_units, w["start_area"], w["final_boss_scene"],
-            boss_doors, chests)
+            boss_doors, chests, episodes)
 
 
-AREAS, GATE_UNITS, START_AREA, FINAL_BOSS_SCENE, BOSS_DOORS, CHESTS = _load()
+AREAS, GATE_UNITS, START_AREA, FINAL_BOSS_SCENE, BOSS_DOORS, CHESTS, EPISODES = _load()
 
+# Scene lookups span Main holes AND every episode hole (episode scenes are disjoint
+# from Main and from each other by construction). The mod resolves a completed scene
+# to its display name via _DISPLAY_BY_SCENE (exported as name_by_scene), so episode
+# clears light up with no mod change.
 _BY_SCENE = {lv.scene: lv for a in AREAS for lv in a.levels}
-
-# scene -> display name (the mod resolves a completed scene to its location name
-# via this, exported as name_by_scene).
 _DISPLAY_BY_SCENE = {lv.scene: lv.display for a in AREAS for lv in a.levels}
+for _ep in EPISODES:
+    for _lv in _ep.levels:
+        _BY_SCENE.setdefault(_lv.scene, _lv)
+        _DISPLAY_BY_SCENE.setdefault(_lv.scene, _lv.display)
 # computer number -> the chamber its boss sits in (for the boss-key display name).
 _SCENE_CHAMBER = {lv.scene: g.chamber for g in GATE_UNITS for lv in g.levels}
 _BOSS_CHAMBER = {int(bd["computer"]): _SCENE_CHAMBER[bd["scene"]]
@@ -397,6 +425,56 @@ def unlocks_by_item():
     return m
 
 
+# --- Episodes (DLC) ----------------------------------------------------------
+# Episodes are a flat set of holes each gated by ONE per-episode Access key
+# (the `episodes` OptionSet chooses which are included). No bosses/chests; a few
+# crowns. Their holes DO contribute Flags to the door_% goals (per design), so
+# flag counting is episode-aware (see Items.flag_pool).
+def episode_access_item(name: str) -> str:
+    """Access-key item name for an episode (e.g. "Snow Episode Access")."""
+    return f"{name} Episode Access"
+
+
+def episode_names():
+    """Display names of every episode (the OptionSet valid keys), stable order."""
+    return [ep.name for ep in EPISODES]
+
+
+def iter_episode_holes(enabled=None):
+    """Yield (episode, level) for episode holes. enabled=None -> ALL episodes
+    (used for the stable ID table); a set of names -> only those episodes."""
+    for ep in EPISODES:
+        if enabled is not None and ep.name not in enabled:
+            continue
+        for lv in ep.levels:
+            yield ep, lv
+
+
+def episode_access_names():
+    """Access keys for every episode (full universe, for the ID table)."""
+    return [episode_access_item(ep.name) for ep in EPISODES]
+
+
+def episode_hole_count(enabled=None) -> int:
+    return sum(1 for _ in iter_episode_holes(enabled))
+
+
+def episode_location_names(enabled=None):
+    """AP location names (Clear + Crown) for episode holes."""
+    names = []
+    for _ep, lv in iter_episode_holes(enabled):
+        names.append(clear_loc(lv.scene))
+        if lv.challenges > 0:
+            names.append(crown_loc(lv.scene))
+    return names
+
+
+def episode_gates(enabled):
+    """(region_name, access_item, levels) for each ENABLED episode."""
+    return [(f"Episode: {ep.name}", episode_access_item(ep.name), ep.levels)
+            for ep in EPISODES if ep.name in enabled]
+
+
 # --- Name lists + ID maps (framework-free single source of truth) ------------
 def chamber_access_names():
     """Access keys for the chamber-granularity option (10 keys; 10 is free)."""
@@ -424,11 +502,12 @@ def access_item_names():
 def all_item_names():
     # Universe of every item any option can produce (IDs must stay stable): all
     # access keys (both granularities) + all boss keys + crown-chest keys + Flag +
-    # filler + traps. A seed only CREATES the subset its options need. TRAP_ITEMS
-    # stay LAST so adding/removing traps never shifts the earlier IDs.
+    # filler + traps + episode access keys. A seed only CREATES the subset its
+    # options need. Episode access keys are appended LAST (after traps) so this
+    # addition didn't shift any pre-episode ID.
     return (list(access_item_names()) + list(boss_key_names())
             + list(chest_key_names()) + [FLAG_ITEM] + list(FILLER_ITEMS)
-            + list(TRAP_ITEMS))
+            + list(TRAP_ITEMS) + list(episode_access_names()))
 
 
 def all_location_names():
@@ -440,6 +519,9 @@ def all_location_names():
     # Chest locations always in the ID table (stable IDs); Regions.py only CREATES
     # them when the crowns option is on.
     names += chest_location_names()
+    # Episode locations always in the ID table too (appended last); Regions.py
+    # CREATES only the enabled episodes' locations.
+    names += episode_location_names()
     return names
 
 

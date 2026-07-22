@@ -1892,5 +1892,737 @@
    "door": null,
    "boss": 0
   }
+ ],
+ "episodes": [
+  {
+   "name": "Sporty Sports",
+   "campaign": "Olympics",
+   "levels": [
+    {
+     "id": "EU2BYN",
+     "scene": "GiraffePainter 0",
+     "boss": false,
+     "challenges": 1,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "QTQ592",
+     "scene": "ElasticBed",
+     "boss": false,
+     "challenges": 1,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "949K4U",
+     "scene": "ManBall Olympic",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "Z2W6RB",
+     "scene": "Archery_1_Basic",
+     "boss": false,
+     "challenges": 2,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "9RKI27",
+     "scene": "PoleVaulting 0",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "EIGN3T",
+     "scene": "ManBall RunningTrack Long",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "RP4M5L",
+     "scene": "SoccerBall OL Enter The Arena",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "YIJ9FZ",
+     "scene": "Swimming 0 Tutorial",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "XF2BZZ",
+     "scene": "HammerThrowing 0 bowling",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "PBIH95",
+     "scene": "GolfIntoOlympics",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Olympics"
+    },
+    {
+     "id": "4VOU4I",
+     "scene": "Hurdles_GolfMan",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Olympics"
+    }
+   ]
+  },
+  {
+   "name": "Snow",
+   "campaign": "Snow",
+   "levels": [
+    {
+     "id": "F1QH79",
+     "scene": "W20_HouseOnIce",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Ice"
+    },
+    {
+     "id": "5U4VSX",
+     "scene": "W20_dec 25",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Presents Area"
+    },
+    {
+     "id": "UDTAR2",
+     "scene": "W20_Pizza_Time_5",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Ending"
+    },
+    {
+     "id": "5SOXDG",
+     "scene": "W20_xmas bowling",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Ice"
+    },
+    {
+     "id": "HHNG8C",
+     "scene": "W20_car sled",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Racing"
+    },
+    {
+     "id": "1VS0SD",
+     "scene": "W20_dec 8",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Presents Area"
+    },
+    {
+     "id": "HACMWG",
+     "scene": "W20_xmas tree 24_simple",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Snowman"
+    },
+    {
+     "id": "6UY1GS",
+     "scene": "W20_dec 23",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Ice"
+    },
+    {
+     "id": "7YRMD9",
+     "scene": "W20_puck_1",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Ice"
+    },
+    {
+     "id": "2MYYZX",
+     "scene": "W20_BowlingSnowTutorial",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Snowball"
+    },
+    {
+     "id": "Z6M0TF",
+     "scene": "W20_freezer_balls_1",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Freezer Area"
+    },
+    {
+     "id": "0G5P8O",
+     "scene": "W20_Pizza_Time_2",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Pizza Time_2"
+    },
+    {
+     "id": "K7J6ZC",
+     "scene": "W20_Pizza_Time_1",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Pizza Time_1"
+    },
+    {
+     "id": "E72INF",
+     "scene": "W20_ElfSoccerTutorial",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Snowball"
+    },
+    {
+     "id": "C3CEND",
+     "scene": "W20_Pizza_Time_4",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Pizza Time_4"
+    },
+    {
+     "id": "N3CCF7",
+     "scene": "W20_SnowballRoleAndGrow",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Snowball"
+    },
+    {
+     "id": "OB8P7Z",
+     "scene": "W20_SnowBoardBicycleTutorial",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Racing"
+    },
+    {
+     "id": "ACVU3Z",
+     "scene": "W20_rolling present tutorial",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Snowball"
+    },
+    {
+     "id": "1U7CCF",
+     "scene": "W20_dec 16",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Snowman"
+    },
+    {
+     "id": "R2TELX",
+     "scene": "W20_Pizza_Time_3",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Pizza Time_3"
+    },
+    {
+     "id": "CSPTLR",
+     "scene": "W20_SnowballMoon",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Snowball"
+    },
+    {
+     "id": "BTY671",
+     "scene": "W20_dec 24",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Freezer Area"
+    },
+    {
+     "id": "Q6X4ES",
+     "scene": "W20_snowman",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Snowman"
+    }
+   ]
+  },
+  {
+   "name": "Hotdog",
+   "campaign": "Hotdog",
+   "levels": [
+    {
+     "id": "S21BOSSENTRY",
+     "scene": "BossEntry",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Boss"
+    },
+    {
+     "id": "S21SIMPLYHOLES1",
+     "scene": "S21_SimplyHoles_1",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Start"
+    },
+    {
+     "id": "S21_HOLETELEPORT_TUTORIAL_5QJ37J",
+     "scene": "s21_holeTeleport_tutorial",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Start"
+    },
+    {
+     "id": "S21_SPRINGHOLE_0UM1WH",
+     "scene": "S21_SpringHole",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Start"
+    },
+    {
+     "id": "S21_BREAKABLEPICKLEJAR_FALJLY",
+     "scene": "s21_BreakablePickleJar",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Dogs"
+    },
+    {
+     "id": "S21_CARBICYCLE_WITHHOLES_4H6A1Z",
+     "scene": "S21_CarBicycle_WithHoles",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Holes"
+    },
+    {
+     "id": "S21SWAPCONTROLLER0",
+     "scene": "s21_SwapControllers_0",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Holes"
+    },
+    {
+     "id": "S21_EVILFLAGHIDING_BM3Y9C",
+     "scene": "S21_EvilFlag_Hiding",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Holes"
+    },
+    {
+     "id": "S21HOTDOGCANNON",
+     "scene": "s21_hotdogCannon",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Kethup"
+    },
+    {
+     "id": "S21FILLHOLEINTREE",
+     "scene": "s21_HoleInTree_fillHoles",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Holes"
+    },
+    {
+     "id": "S21_DONUTCOUNTY2",
+     "scene": "S21_DonutCounty2",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Start"
+    },
+    {
+     "id": "S21_HOLEFOODS_MTP1XR",
+     "scene": "s21_holeFood",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Start"
+    },
+    {
+     "id": "S21INDIANABONES",
+     "scene": "s21_IndianaBones",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Dogs"
+    },
+    {
+     "id": "S21REDFLAG",
+     "scene": "s21_RedFlag",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Kethup"
+    },
+    {
+     "id": "S21CATCHUP",
+     "scene": "s21_Catchup",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Kethup"
+    },
+    {
+     "id": "S21WALKINGTHEDOG",
+     "scene": "s21_walkingthedog",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Kethup"
+    },
+    {
+     "id": "S21_EXPLOSION2_19OJ23",
+     "scene": "S21_Explosion2",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Start"
+    },
+    {
+     "id": "S21_FILLHOLELAKE66OA33",
+     "scene": "S21_FillHoleLake",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Holes"
+    },
+    {
+     "id": "S21SPIDERDOG",
+     "scene": "S21_SpiderDog",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Dogs"
+    },
+    {
+     "id": "S21_HARMONIKADYR_HOLESGZE8QX",
+     "scene": "S21_HarmonikaDyr_Holes",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Dogs"
+    },
+    {
+     "id": "S21_CATBALL_2U1N1B",
+     "scene": "S21_CatBall",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Holes"
+    },
+    {
+     "id": "S21HOUNDOFMUSICHILLS",
+     "scene": "s21_HoundOfMusic_hills",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Dogs"
+    },
+    {
+     "id": "S21_LIVINGROOMTV_R9XQS4",
+     "scene": "S21_LivingroomTv",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Holes"
+    }
+   ]
+  },
+  {
+   "name": "Alive",
+   "campaign": "Alive",
+   "levels": [
+    {
+     "id": "LIVINGTHINGS_STONES&VASE_0I7CX7K",
+     "scene": "LivingThings_Stones&Vase_0",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Living"
+    },
+    {
+     "id": "LIVINGTHINGS_SNEAKCHAIREIZ420",
+     "scene": "LivingThings_SneakChair",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Sneak"
+    },
+    {
+     "id": "LIVINGTHINGS_TREESSPLITUPVLYWAM",
+     "scene": "LivingThings_TreesSplitUp",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Start"
+    },
+    {
+     "id": "LIVINGTHINGS_TABLECONTROLLER_1WK0EK0",
+     "scene": "LivingThings_tableController_1",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Living"
+    },
+    {
+     "id": "LIVINGTHINGS_TABLECONTROLLER_0AJ71NH",
+     "scene": "LivingThings_tableController_0",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Living"
+    },
+    {
+     "id": "LIVINGTHINGS_MUSEUMVASES2DCXDT",
+     "scene": "LivingThings_MuseumVases",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Living"
+    },
+    {
+     "id": "LIVINGTHINGS_SINGINGHOLEKS69G0",
+     "scene": "LivingThings_SingingHole",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Outside"
+    },
+    {
+     "id": "LIVINGTHINGS_MOUNTAINGOLFBALL_0SY9PVU",
+     "scene": "LivingThings_MountainGolfBall_0",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Outside"
+    },
+    {
+     "id": "LIVINGTHINGS_TENTZ2EE60",
+     "scene": "LivingThings_tent",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Outside"
+    },
+    {
+     "id": "LIVINGTHINGS_STATUETREE_01EDBNIS",
+     "scene": "LivingThings_StatueTree_01",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Sneak"
+    },
+    {
+     "id": "LIVINGTHINGS_CONTROLLASERHIG9DX",
+     "scene": "LivingThings_ControlLaser",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Sneak"
+    },
+    {
+     "id": "LIVINGTHINGS_GOLFFAMILYSNAKEPUOQFQ",
+     "scene": "LivingThings_GolfFamilySnake",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Hallway main"
+    },
+    {
+     "id": "LIVINGTHINGS_HOUSE_0FZIOMK",
+     "scene": "LivingThings_House_0",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Hallway main"
+    },
+    {
+     "id": "LIVINGTHINGS_FOOTBALL_0VDB0R2",
+     "scene": "LivingThings_football_0",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Soccer"
+    },
+    {
+     "id": "LIVINGTHINGS_BUSHESHTXRBE",
+     "scene": "LivingThings_bushes",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Outside"
+    },
+    {
+     "id": "LIVINGTHINGS_TREESOCCERPLAYERZQQ6E9",
+     "scene": "LivingThings_TreeSoccerPlayer",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Soccer"
+    },
+    {
+     "id": "LIVINGTHINGS_PRINTERCONTROLLERD1ANR3",
+     "scene": "LivingThings_PrinterController",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Hallway main"
+    },
+    {
+     "id": "LIVINGTHINGS_SNEAKGOLFBALLZFDKHX",
+     "scene": "LivingThings_SneakGolfball",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Sneak"
+    },
+    {
+     "id": "LIVINGTHINGS_BOSS_SLIME1Q0PGDP",
+     "scene": "LivingThings_Boss_slime1",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - End"
+    },
+    {
+     "id": "LIVINGTHINGS_TRAFFICCONESXMLKD7",
+     "scene": "LivingThings_trafficCones",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Soccer"
+    },
+    {
+     "id": "LIVINGTHINGS_FLAGWYHW79",
+     "scene": "LivingThings_Flag",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Start"
+    },
+    {
+     "id": "LIVINGTHINGS_CARPETJVIG6G",
+     "scene": "LivingThings_Carpet",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Living"
+    },
+    {
+     "id": "LIVINGTHINGS_GOLFERSNAKECLUBONQ03H",
+     "scene": "LivingThings_GolferSnakeClub",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Hallway main"
+    },
+    {
+     "id": "LIVINGTHINGS_FENCE_05SGV87",
+     "scene": "LivingThings_Fence_0",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - Soccer"
+    }
+   ]
+  },
+  {
+   "name": "Among Us",
+   "campaign": "Amongus",
+   "levels": [
+    {
+     "id": "AMONGUS_FINDIMPOSTER_INTROFVTNMV",
+     "scene": "AmongUs_FindImposter_Intro",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - LEFT SIDE SPACESHIP"
+    },
+    {
+     "id": "AMONGUS_FINALLEVELKO38R9",
+     "scene": "AmongUs_FinalLevel",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - BRIDGE FINAL"
+    },
+    {
+     "id": "AMONGUS_WIREBHIAQY",
+     "scene": "AmongUs_Wire",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - ELECTRICAL"
+    },
+    {
+     "id": "AMONGUS_VENTSEGGAJF73X",
+     "scene": "AmongUs_VentsEgg",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - OUTSIDE LEFT PART"
+    },
+    {
+     "id": "AMONGUS_EXPLOSION BARREL FLYING_EJECTEDU1Y7WR",
+     "scene": "AmongUs_Explosion barrel flying_Ejected",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - SPACE"
+    },
+    {
+     "id": "AMONGUS_VENTS81QJ58",
+     "scene": "AmongUs_Vents",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - START"
+    },
+    {
+     "id": "AMONGUS_BOWLINGBUTTONELRC20",
+     "scene": "AmongUs_BowlingButton",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - START"
+    },
+    {
+     "id": "AMONGUS_SHAPESHIFTER_INTROHXY7XC",
+     "scene": "AmongUs_ShapeShifter_Intro",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - LEFT SIDE SPACESHIP"
+    },
+    {
+     "id": "AMONGUS_VENDINGMACHINESP1GU1",
+     "scene": "AmongUs_VendingMachine",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - CAFETERIA"
+    },
+    {
+     "id": "AMONGUS_PAPERS2CLVC9",
+     "scene": "AmongUs_Papers",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - OUTSIDE LEFT PART"
+    },
+    {
+     "id": "AMONGUS_VENTSBUTTONCRATEUO153V",
+     "scene": "AmongUs_VentsButtonCrate",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - START"
+    },
+    {
+     "id": "AMONGUS_DOORTUTORIALRWMQVM",
+     "scene": "AmongUs_DoorTutorial",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - START"
+    },
+    {
+     "id": "AMONGUS_IMPOSTERFLAGS2AMIHN3",
+     "scene": "AmongUs_ImposterFlags2",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - LEFT SIDE SPACESHIP"
+    },
+    {
+     "id": "AMONGUS_SHOOTBEFOREBUTTONKYBW8V",
+     "scene": "AmongUs_ShootBeforeButton",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - CAFETERIA"
+    },
+    {
+     "id": "AMONGUS_PAPERS_MANBALLAD0XM3",
+     "scene": "AmongUs_Papers_ManBall",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - OUTSIDE LEFT PART"
+    },
+    {
+     "id": "AMONGUS_ROOMBACLEANSPACESHIPUBBTU6",
+     "scene": "AmongUs_RoombaCleanSpaceship",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - LEFT SIDE SPACESHIP"
+    },
+    {
+     "id": "AMONGUS_TRASHCHUTENLJP2K",
+     "scene": "AmongUs_TrashChute",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - LEFT SIDE SPACESHIP"
+    },
+    {
+     "id": "AMONGUS_VENTSWINDEPN77E",
+     "scene": "AmongUs_VentsWind",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section -VENT WITH FAN"
+    },
+    {
+     "id": "AMONGUS_VENTSSVP18L",
+     "scene": "AmongUs_Vents2",
+     "boss": false,
+     "challenges": 0,
+     "section": "Hub Section - CAFETERIA"
+    }
+   ]
+  }
  ]
 }

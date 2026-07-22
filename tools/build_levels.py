@@ -27,9 +27,27 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECTIONS = os.path.join(ROOT, "mod", "wtg_sections.json")
 LEVELS = os.path.join(ROOT, "mod", "wtg_levels.json")
 DOORS = os.path.join(ROOT, "mod", "wtg_doors.json")
+GOALS = os.path.join(ROOT, "mod", "wtg_goals.json")
 OUT = os.path.join(ROOT, "what_the_golf", "levels.json")
 
 FINAL_BOSS_SCENE = "Final boss"
+
+# The 5 extra episodes (DLC), in display order. Maps the AP/display name -> the
+# ECampaignType tag the dumpers stamp in wtg_goals.json (see CampaignInfo.cs).
+# Episodes do NOT use OverworldLevelData (Main-only); their structure is the
+# OverworldGoal hub-section graph, so they're built from the goal dump.
+EPISODE_DEFS = [
+    ("Sporty Sports", "Olympics"),
+    ("Snow",          "Snow"),
+    ("Hotdog",        "Hotdog"),
+    ("Alive",         "Alive"),
+    ("Among Us",      "Amongus"),
+]
+
+# A shared cross-episode "special day" crossover: the same Valentines_Balloon hole
+# is listed in every episode's hub. Excluded so it never yields a duplicate AP
+# location across episodes.
+EPISODE_EXCLUDE_SECTIONS = {"Hub Section - Special Day"}
 
 # Section code (name suffix) -> display theme, from PlateInfoManager.AreaIDEnum
 # (THEME_CHAMBER+SUBAREA). See tools/chamber_ids.py / mod/harvested-levels.md.
@@ -201,6 +219,50 @@ def keyable_boss_doors(campaign_scenes):
     return out
 
 
+def build_episodes(exclude_scenes, meta):
+    """Build the episode (DLC) structure from the goal-graph dump (wtg_goals.json).
+
+    Episodes do NOT use OverworldLevelData (that asset is Main-only) -- their
+    structure is the OverworldGoal hub-section graph. Each episode becomes a flat
+    set of holes (gated by one per-episode Access key downstream). Per-hole
+    metadata (id/boss/challenges) is joined from wtg_levels.json by scene.
+
+    Scenes are de-duplicated: against `exclude_scenes` (the Main campaign) and
+    across episodes (first episode in EPISODE_DEFS order wins), so no scene ever
+    yields two AP locations. Returns [{name, campaign, levels:[{id,scene,boss,
+    challenges,section}]}].
+    """
+    if not os.path.exists(GOALS):
+        return []
+    goals = json.load(open(GOALS, encoding="utf-8"))
+    by_campaign = {}
+    for g in goals:
+        by_campaign.setdefault(g.get("campaign"), []).append(g)
+
+    seen = set(exclude_scenes)
+    out = []
+    for display, tag in EPISODE_DEFS:
+        levels = []
+        for g in by_campaign.get(tag, []):
+            if g.get("section") in EPISODE_EXCLUDE_SECTIONS:
+                continue
+            scene = g.get("scene")
+            if not scene or scene in seen:
+                continue
+            seen.add(scene)
+            m = meta.get(scene, {})
+            levels.append({
+                "id": m.get("id", ""),
+                "scene": scene,
+                "boss": bool(m.get("boss", False)),
+                "challenges": int(m.get("challenges", 0)),
+                "section": g.get("section"),
+            })
+        if levels:
+            out.append({"name": display, "campaign": tag, "levels": levels})
+    return out
+
+
 def build():
     sections = json.load(open(SECTIONS, encoding="utf-8"))
     # The dumps are now episode-tagged (Main + Olympics/Snow/Hotdog/Alive/Amongus).
@@ -311,6 +373,7 @@ def build():
     campaign_scenes = {l["scene"] for a in areas for l in a["levels"]}
     boss_doors = keyable_boss_doors(campaign_scenes)
     chests = build_chests(sections, chambers)
+    episodes = build_episodes(campaign_scenes, meta)
 
     return {
         "final_boss_scene": FINAL_BOSS_SCENE,
@@ -319,6 +382,7 @@ def build():
         "gate_units": units,
         "boss_doors": boss_doors,
         "chests": chests,
+        "episodes": episodes,
     }
 
 
@@ -374,6 +438,15 @@ def main():
         if c.get("boss"):
             tag += f" +Computer {c['boss']}"
         print(f"  {c['display']:16} ch{c['chamber']:02d} {c['subarea']:4} {c['trigger']:6} {tag}")
+
+    eps = world.get("episodes", [])
+    ep_holes = sum(len(e["levels"]) for e in eps)
+    ep_crowns = sum(1 for e in eps for l in e["levels"] if l["challenges"] > 0)
+    print(f"\nepisodes (DLC, episodes option): {len(eps)}, {ep_holes} holes, {ep_crowns} crowns")
+    for e in eps:
+        c = sum(1 for l in e["levels"] if l["challenges"] > 0)
+        print(f"  {e['name']:14} ({e['campaign']:8}) {len(e['levels']):3d} holes"
+              + (f"  [{c} crown]" if c else ""))
 
     if "--write" in sys.argv:
         with open(OUT, "w", encoding="utf-8") as f:

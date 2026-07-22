@@ -285,16 +285,34 @@ Planned, several as **apworld Options**:
    the `SetState` plate lever** (episode `requires` chains read empty only because
    it's a 100% save — capturing them needs a fresh-save RE pass, later).
 
-   **NEXT — integration (scope agreed, not yet built):** a per-episode toggle
-   option in `Options.py` adding ~101 Clear locations + hub-section access keys
-   (areas = `ParentHubSection`, holes joined to `wtg_levels.json`), feeding the
-   `door_%` flag goals; new IDs append. Needs a **goal-graph path in
-   `build_levels.py`** for episodes (NOT the chamber/OLD path) and, eventually, the
-   fresh-save gating RE — the one real remaining unknown.
+   **APWORLD INTEGRATION DONE + VALIDATED (2026-07-22).** Episodes are a first-
+   class apworld feature now:
+   - `build_levels.py` gained a **goal-graph path** (`build_episodes`) emitting an
+     `episodes` block into `levels.json` (5 episodes, **100 holes**, 3 crowns —
+     the shared "Special Day" hole is dropped; scenes de-duped vs Main + across
+     episodes).
+   - `Options.py` **`episodes` OptionSet** (valid keys: Sporty Sports / Snow /
+     Hotdog / Alive / Among Us; default none). `data.py` loads an `Episode` model,
+     adds episode scenes to the display map + ID tables (appended last → existing
+     IDs unchanged). Each enabled episode = one region gated by a
+     `"<Episode> Episode Access"` key; episode hole-clears grant Flags (so the
+     `door_%` target scales — `flag_pool`/`flag_goal` are episode-aware).
+   - `Regions/Rules/Items/__init__` wired; `fill_slot_data` carries `episodes` and
+     UT restores it (`_apply_slot_data`). `WTGWorld.enabled_episodes()` reads the
+     option.
+   - **VALIDATED:** `ut_validate.py` 9/9 PASS incl. 3 episode cases (real gen ==
+     UT round-trip, identical locations/items/slot_data). Real `Generate.py`
+     2-player episode multiworld (all 5 / door_100 / crowns + Snow&AmongUs /
+     all_bosses / boss_keys) fills **solvable** on 0.6.7; Episode Access keys land
+     in the **playthrough** (required progression, cross-world). `mod/ids.json`
+     regen'd (68 items / 379 locations) + redeployed; episode clears will report
+     in-game via `name_by_scene` (no mod code change).
 
-   **NOTE — these changes are UNCOMMITTED on `main`:** `CampaignInfo.cs`, the
-   campaign-tagging in Section/Door/Chest/Goal dumpers, the `build_levels.py` Main
-   filter, and the merged `mod/wtg_goals.json`.
+   **STILL TODO for episodes:** (a) **mod-side access enforcement** — receiving an
+   Episode Access key is logic-only right now (the mod no-ops it; `ChamberUnlock`
+   has no trigger map for episodes). Real gating needs the fresh-save RE of the
+   episode goal-unlock graph. (b) display-name polish (e.g. `W 20_snowball...`).
+   (c) live in-game test of episode clears + flags.
 6. **Ball shapes / Transmogrif (stretch).** Section `ballShape` = `Transmogrif.
    BALLSHAPES`; gating ball abilities as items = most WTG-flavoured progression, but
    needs R&D on whether ball shape is force-settable.

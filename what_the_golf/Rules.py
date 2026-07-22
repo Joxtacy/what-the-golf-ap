@@ -4,18 +4,20 @@ from worlds.generic.Rules import set_rule, add_rule
 
 from .data import (
     gates, BOSS_HOLES, boss_key_item, clear_loc, crown_loc, all_boss_scenes,
-    CHESTS, chest_loc, chest_key_item, boss_scene_for_computer,
+    CHESTS, chest_loc, chest_key_item, boss_scene_for_computer, episode_gates,
 )
 from .Items import flag_pool
 
 
-def flag_goal(goal) -> int:
+def flag_goal(world) -> int:
     """Flags required to win, given the `goal` option; 0 for non-door goals.
 
     Shared by set_rules (the actual completion condition) and fill_slot_data (the
     number the in-game Flag HUD counts toward) so the displayed target can never
-    drift from the real win condition.
+    drift from the real win condition. The Flag pool -- and hence the target --
+    includes the enabled episodes' holes.
     """
+    goal = world.options.goal
     pct = {
         goal.option_door_50: 0.5,
         goal.option_door_75: 0.75,
@@ -23,7 +25,7 @@ def flag_goal(goal) -> int:
     }.get(goal.value)
     if pct is None:
         return 0
-    return max(1, ceil(flag_pool() * pct))
+    return max(1, ceil(flag_pool(world.enabled_episodes()) * pct))
 
 
 def set_rules(world) -> None:
@@ -35,6 +37,11 @@ def set_rules(world) -> None:
     for name, access, _levels in gates(mode):
         if access is None:
             continue
+        entrance = multiworld.get_entrance(f"To {name}", player)
+        set_rule(entrance, lambda state, k=access: state.has(k, player))
+
+    # Episode entrances: each enabled episode needs its own Episode Access key.
+    for name, access, _levels in episode_gates(world.enabled_episodes()):
         entrance = multiworld.get_entrance(f"To {name}", player)
         set_rule(entrance, lambda state, k=access: state.has(k, player))
 
@@ -87,6 +94,6 @@ def set_rules(world) -> None:
             lambda state, names=boss_clears: \
             all(state.can_reach_location(n, player) for n in names)
     else:
-        need = flag_goal(goal)
+        need = flag_goal(world)
         multiworld.completion_condition[player] = \
             lambda state, n=need: state.has("Flag", player, n)

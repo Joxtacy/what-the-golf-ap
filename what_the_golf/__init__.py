@@ -4,8 +4,8 @@ from worlds.AutoWorld import World, WebWorld
 from .Options import WTGOptions
 from .Items import (
     WTGItem, item_name_to_id, item_classification,
-    access_items_for, BOSS_KEY_ITEMS, CHEST_KEY_ITEMS, TRAP_ITEMS,
-    FLAG_ITEM, FILLER_ITEMS, flag_pool,
+    access_items_for, episode_access_items_for, BOSS_KEY_ITEMS, CHEST_KEY_ITEMS,
+    TRAP_ITEMS, FLAG_ITEM, FILLER_ITEMS, flag_pool,
 )
 from .data import CHAMBER, SECTION
 from .Locations import location_name_to_id
@@ -63,6 +63,12 @@ class WTGWorld(World):
         return CHAMBER if self.options.area_access.value == \
             self.options.area_access.option_chamber else SECTION
 
+    def enabled_episodes(self) -> set:
+        """The set of episode display names the player enabled (`episodes` option),
+        restricted to the valid keys."""
+        valid = set(self.options.episodes.valid_keys)
+        return {e for e in self.options.episodes.value if e in valid}
+
     def create_regions(self) -> None:
         create_regions(self)
 
@@ -86,8 +92,13 @@ class WTGWorld(World):
             for name in CHEST_KEY_ITEMS:
                 pool.append(self.create_item(name))
 
-        # Progression: one Flag per hole (counted for the % goals).
-        for _ in range(flag_pool()):
+        # Progression: one Access key per enabled episode (DLC).
+        for name in episode_access_items_for(self.enabled_episodes()):
+            pool.append(self.create_item(name))
+
+        # Progression: one Flag per hole (Main + enabled episodes), counted for
+        # the % goals.
+        for _ in range(flag_pool(self.enabled_episodes())):
             pool.append(self.create_item(FLAG_ITEM))
 
         # Fill the remainder so pool size == number of real (non-event) checks.
@@ -126,6 +137,9 @@ class WTGWorld(World):
             "boss_keys": bool(self.options.boss_keys.value),
             "hard_sections": bool(self.options.hard_sections.value),
             "crowns": bool(self.options.crowns.value),
+            # Enabled episodes (DLC). Restored in _apply_slot_data so UT's regen
+            # reproduces the same episode regions/items/flag count.
+            "episodes": sorted(self.enabled_episodes()),
             "traps": bool(self.options.traps.value),
             "trap_percentage": int(self.options.trap_percentage.value),
             "death_link": bool(self.options.death_link.value),
@@ -134,7 +148,7 @@ class WTGWorld(World):
             # Purely informational -- the mod's Flag HUD counts toward it; the real
             # win condition is set_rules' completion_condition. Not applied in
             # _apply_slot_data (no generation effect), so UT ignores it.
-            "flag_goal": flag_goal(self.options.goal),
+            "flag_goal": flag_goal(self),
         }
 
     def _apply_slot_data(self, slot_data: dict) -> None:
@@ -153,6 +167,9 @@ class WTGWorld(World):
         o.boss_keys.value = int(slot_data["boss_keys"])
         o.crowns.value = int(slot_data["crowns"])
         o.hard_sections.value = int(slot_data["hard_sections"])
+        # Episodes shape regions/items/flag count, so UT's regen must restore them.
+        # .get() keeps pre-episode seeds valid (they had no episodes).
+        o.episodes.value = set(slot_data.get("episodes", []))
         # traps/trap_percentage change the pool composition, so UT's regen must
         # apply them to reproduce the same item pool. .get() keeps older seeds valid.
         o.traps.value = int(slot_data.get("traps", 0))
