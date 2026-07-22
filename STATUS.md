@@ -235,7 +235,66 @@ Planned, several as **apworld Options**:
    (make Crown a counted progression item + gate sections behind N crowns) was
    replaced by the key-based crown-door gating in the `crowns` option (item 3). Gating
    *sections* behind crown counts remains unbuilt; likely YAGNI.
-5. **DLC (Sporty Sports).** Adds more sections → more of everything. (Option.)
+5. **DLC / episodes (Sporty Sports + 4 more).** Adds more sections → more of
+   everything. (Option, likely per-episode.) **IN PROGRESS — dumpers now
+   episode-aware (2026-07-22); a fresh multi-episode dump is the next action.**
+
+   The game has **7 playable campaigns** (`ECampaignType` in the il2cpp dump):
+   `Main=1` (base), `Olympics=2` (= Sporty Sports), `Snow=3`, `Hotdog=4`,
+   `Hub=5`, `Alive=6`, `Amongus=7` → **5 extra episodes** (Olympics/Snow/Hotdog/
+   Alive/Amongus; the user owns all 5). Each is a separate `ContentPack`/overworld
+   with its OWN `OverworldLevelData`, doors, chests **and its own section
+   numbering** — so episodes reuse section codes (`01`, `08A`) that would collide
+   in the shared dump files.
+
+   **Dumpers made episode-aware (built + `dotnet build` clean, 2026-07-22).** New
+   `mod/src/Mapping/CampaignInfo.cs` reads the active campaign via
+   `Il2Cpp.SaveGame.currentCampaignDef.type` (fallback `LastPlayedCampaignType`),
+   mapped by int → tag (`Main`/`Olympics`/…). `SectionDumper`, `DoorDumper`,
+   `ChestDumper`, `GoalDumper` now stamp every record with its `campaign` (Section
+   also `source` = the `OverworldLevelData` asset name) and **key records by
+   `campaign::<id>`** so accumulating several overworld walks never overwrites
+   across episodes. Section/Door/Chest dumpers gained/kept cross-session
+   `LoadOnce` that **migrates legacy un-tagged records to `Main`** (so re-dumping
+   base game is lossless). Only the active campaign's overworld data is loaded at a
+   time (confirmed: the base pass captured exactly Main's 21 sections), so the
+   active-campaign tag correctly labels each pass. `build_levels.py` now **filters
+   to `Main`** (sections + boss doors) so the base-game world stays byte-identical
+   (re-verified: 11 chambers, 133 holes, 7 boss keys) — episode integration is a
+   later, separate step.
+
+   **DUMP SESSION DONE + INSPECTED (2026-07-22).** All 5 episodes walked (100%
+   save). **Key discovery: episodes do NOT use `OverworldLevelData`** — that
+   ScriptableObject is Main-only, so `SectionDumper` just relabeled Main's 21
+   sections under each active-campaign tag (every episode "section" had
+   `source='Main overworld'`); its episode output is bogus and was discarded. **The
+   real episode structure is the goal graph** (`OverworldGoal.ParentHubSection`),
+   captured by `GoalDumper` (campaign-tagged) and merged into `mod/wtg_goals.json`
+   (243 goals: Main 139 + episodes 104; the `Hub` mis-tag artifact — a duplicate of
+   Amongus — dropped). `wtg_sections.json`/`wtg_levels.json`/doors/chests were
+   already correct and left untouched.
+
+   Per-episode structure (holes / hub-sections): **Olympics** (Sporty Sports) 11/1
+   (genuinely short); **Snow** 24/12; **Hotdog** 24/6; **Alive** 25/8; **Amongus**
+   20/9 — **~101 unique scenes, 100% joined to `wtg_levels.json`** for par/crown.
+
+   Findings that shape integration: only **3/101** episode holes are crownable (so
+   `crowns` barely applies); **zero** episode holes are `isBossBattle` (no
+   computer-doors — the DOORS dump got only Main's 8; so `campaign`/`all_bosses`/
+   `boss_keys` do NOT extend to episodes); **gating is the goal-unlock graph, not
+   the `SetState` plate lever** (episode `requires` chains read empty only because
+   it's a 100% save — capturing them needs a fresh-save RE pass, later).
+
+   **NEXT — integration (scope agreed, not yet built):** a per-episode toggle
+   option in `Options.py` adding ~101 Clear locations + hub-section access keys
+   (areas = `ParentHubSection`, holes joined to `wtg_levels.json`), feeding the
+   `door_%` flag goals; new IDs append. Needs a **goal-graph path in
+   `build_levels.py`** for episodes (NOT the chamber/OLD path) and, eventually, the
+   fresh-save gating RE — the one real remaining unknown.
+
+   **NOTE — these changes are UNCOMMITTED on `main`:** `CampaignInfo.cs`, the
+   campaign-tagging in Section/Door/Chest/Goal dumpers, the `build_levels.py` Main
+   filter, and the merged `mod/wtg_goals.json`.
 6. **Ball shapes / Transmogrif (stretch).** Section `ballShape` = `Transmogrif.
    BALLSHAPES`; gating ball abilities as items = most WTG-flavoured progression, but
    needs R&D on whether ball shape is force-settable.

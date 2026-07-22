@@ -182,9 +182,13 @@ def keyable_boss_doors(campaign_scenes):
     id_to_scene = {x["id"]: x["scene"] for x in all_levels}
     out = []
     for door_name, d in doors.items():
+        # Base-game world only (dumps are now episode-tagged; keys are campaign::name).
+        if (d.get("campaign") or "Main") != "Main":
+            continue
         if not d.get("plate_areas"):
             continue
-        m = re.search(r"HOLEINONE_(\d+)", door_name)
+        # Match on the bare boss level name (dict key may be campaign-prefixed).
+        m = re.search(r"HOLEINONE_(\d+)", d.get("boss_level_name") or door_name)
         if not m:
             continue
         blid = d.get("boss_level_id")
@@ -199,6 +203,10 @@ def keyable_boss_doors(campaign_scenes):
 
 def build():
     sections = json.load(open(SECTIONS, encoding="utf-8"))
+    # The dumps are now episode-tagged (Main + Olympics/Snow/Hotdog/Alive/Amongus).
+    # This builder produces the BASE-GAME world only; episode integration is a
+    # separate step. Keep just the Main campaign (legacy records have no tag).
+    sections = [s for s in sections if (s.get("campaign") or "Main") == "Main"]
     meta = {x["scene"]: x for x in json.load(open(LEVELS, encoding="utf-8"))}
 
     # Group sections into chambers, preserving progression order of first sight.

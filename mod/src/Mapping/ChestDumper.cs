@@ -35,6 +35,7 @@ public static class ChestDumper
 {
     private class ChestRec
     {
+        public string campaign;           // episode tag (Main/Olympics/Snow/...)
         public string id;                 // OverworldID.ID (AP location key)
         public string type;               // "Chest" | "OverworldIslandChest"
         public bool unlocked;             // IsUnlocked() at capture time
@@ -44,6 +45,7 @@ public static class ChestDumper
 
     private class DoorRec
     {
+        public string campaign;           // episode tag (Main/Olympics/Snow/...)
         public string id;                 // OverworldID.ID (the block/key trigger)
         public string name;               // GameObject name (which crown-door variant)
         public bool can_open;             // canOpen at capture time
@@ -52,6 +54,7 @@ public static class ChestDumper
 
     private class AreaRec
     {
+        public string campaign;           // episode tag (Main/Olympics/Snow/...)
         public string area;               // PlateInfoManager.Name (AreaIDEnum)
         public string chest;              // PlateInfoManager.chestID (ChestID)
     }
@@ -77,6 +80,7 @@ public static class ChestDumper
         try
         {
             LoadOnce();
+            string campaign = CampaignInfo.Current();
             bool changed = false;
 
             // --- Chests (Chest + island chests) -------------------------------
@@ -88,11 +92,12 @@ public static class ChestDumper
 
                 string id = ReadId(c.id);
                 if (string.IsNullOrEmpty(id)) id = SafeName(c) + "#noid";
+                string chestKey = campaign + "::" + id;
 
-                if (!Chests.TryGetValue(id, out var rec))
+                if (!Chests.TryGetValue(chestKey, out var rec))
                 {
-                    rec = new ChestRec { id = id, type = "Chest" };
-                    Chests[id] = rec;
+                    rec = new ChestRec { id = id, campaign = campaign, type = "Chest" };
+                    Chests[chestKey] = rec;
                     changed = true;
                 }
                 bool unlocked = false;
@@ -109,8 +114,9 @@ public static class ChestDumper
                 if (c == null) continue;
                 string id = ReadId(c.id);
                 if (string.IsNullOrEmpty(id)) continue;
-                if (Chests.TryGetValue(id, out var rec)) { if (rec.type != "OverworldIslandChest") { rec.type = "OverworldIslandChest"; changed = true; } }
-                else { Chests[id] = new ChestRec { id = id, type = "OverworldIslandChest", pos = Pos(c), parents = Parents(c) }; changed = true; }
+                string chestKey = campaign + "::" + id;
+                if (Chests.TryGetValue(chestKey, out var rec)) { if (rec.type != "OverworldIslandChest") { rec.type = "OverworldIslandChest"; changed = true; } }
+                else { Chests[chestKey] = new ChestRec { id = id, campaign = campaign, type = "OverworldIslandChest", pos = Pos(c), parents = Parents(c) }; changed = true; }
             }
 
             // --- Crown doors (OverworldButton2D named *Crown*) ----------------
@@ -125,11 +131,11 @@ public static class ChestDumper
                 string id = null;
                 try { var oid = b.gameObject.GetComponent<Il2Cpp.OverworldID>(); if (oid != null) id = oid.ID; }
                 catch { }
-                string key = !string.IsNullOrEmpty(id) ? id : name;
+                string key = campaign + "::" + (!string.IsNullOrEmpty(id) ? id : name);
 
                 if (!Doors.TryGetValue(key, out var dr))
                 {
-                    dr = new DoorRec { id = id, name = name, pos = Pos(b) };
+                    dr = new DoorRec { id = id, name = name, campaign = campaign, pos = Pos(b) };
                     Doors[key] = dr;
                     changed = true;
                 }
@@ -146,17 +152,18 @@ public static class ChestDumper
                 try { area = p.Name.ToString(); chest = p.chestID.ToString(); }
                 catch { continue; }
                 if (string.IsNullOrEmpty(area)) continue;
-                if (!Areas.ContainsKey(area)) { Areas[area] = new AreaRec { area = area, chest = chest }; changed = true; }
+                string areaKey = campaign + "::" + area;
+                if (!Areas.ContainsKey(areaKey)) { Areas[areaKey] = new AreaRec { area = area, chest = chest, campaign = campaign }; changed = true; }
             }
 
             if (changed)
             {
                 Write();
-                Plugin.Log.LogInfo($"[CHESTS] {Chests.Count} chests, {Doors.Count} crown doors, {Areas.Count} area->chest -> {OutPath}");
+                Plugin.Log.LogInfo($"[CHESTS] {Chests.Count} chests, {Doors.Count} crown doors, {Areas.Count} area->chest (active={campaign}) -> {OutPath}");
             }
             else if (++_runs % 4 == 0)
             {
-                Plugin.Log.LogInfo($"[CHESTS] heartbeat: {chests.Length} chests loaded, {Chests.Count} captured, {Doors.Count} crown doors");
+                Plugin.Log.LogInfo($"[CHESTS] heartbeat: {chests.Length} chests loaded, {Chests.Count} captured, {Doors.Count} crown doors (active campaign={campaign})");
             }
         }
         catch (Exception e) { Plugin.Log.LogError($"ChestDumper: {e}"); }
@@ -194,9 +201,32 @@ public static class ChestDumper
         {
             if (!File.Exists(OutPath)) return;
             var root = JsonConvert.DeserializeObject<ChestsFile>(File.ReadAllText(OutPath));
-            if (root?.chests != null) foreach (var kv in root.chests) Chests[kv.Key] = kv.Value;
-            if (root?.crown_doors != null) foreach (var kv in root.crown_doors) Doors[kv.Key] = kv.Value;
-            if (root?.areas != null) foreach (var kv in root.areas) Areas[kv.Key] = kv.Value;
+            // Migrate legacy (un-tagged) records to Main, re-keying to campaign::<id/area>.
+            if (root?.chests != null)
+                foreach (var kv in root.chests)
+                {
+                    var rec = kv.Value;
+                    if (string.IsNullOrEmpty(rec.campaign)) rec.campaign = "Main";
+                    string key = kv.Key.Contains("::") ? kv.Key : rec.campaign + "::" + (rec.id ?? kv.Key);
+                    Chests[key] = rec;
+                }
+            if (root?.crown_doors != null)
+                foreach (var kv in root.crown_doors)
+                {
+                    var rec = kv.Value;
+                    if (string.IsNullOrEmpty(rec.campaign)) rec.campaign = "Main";
+                    string bare = !string.IsNullOrEmpty(rec.id) ? rec.id : rec.name;
+                    string key = kv.Key.Contains("::") ? kv.Key : rec.campaign + "::" + (bare ?? kv.Key);
+                    Doors[key] = rec;
+                }
+            if (root?.areas != null)
+                foreach (var kv in root.areas)
+                {
+                    var rec = kv.Value;
+                    if (string.IsNullOrEmpty(rec.campaign)) rec.campaign = "Main";
+                    string key = kv.Key.Contains("::") ? kv.Key : rec.campaign + "::" + (rec.area ?? kv.Key);
+                    Areas[key] = rec;
+                }
             Plugin.Log.LogInfo($"[CHESTS] loaded {Chests.Count} chests, {Doors.Count} crown doors from existing {OutPath}");
         }
         catch (Exception e) { Plugin.Log.LogWarning($"ChestDumper.LoadOnce: {e}"); }

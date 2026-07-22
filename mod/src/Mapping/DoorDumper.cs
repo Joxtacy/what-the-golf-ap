@@ -28,6 +28,8 @@ public static class DoorDumper
 {
     private class AreaRec
     {
+        public string campaign;                   // episode tag (Main/Olympics/Snow/...)
+        public string area;                       // bare PlateInfoManager enum name (key is campaign-prefixed)
         public int area_id;
         public int chamber = -1;
         public string theme;
@@ -41,6 +43,7 @@ public static class DoorDumper
     // link between a computer door and the boss hole it actually gates.
     private class DoorRec
     {
+        public string campaign;           // episode tag (Main/Olympics/Snow/...)
         public string boss_level_id;      // OverworldMainDoorRobot.bossLevelID
         public string boss_level_name;    // OverworldMainDoorRobot.bossLevelName
         public int chamber = -1;          // from the door's plates' sub-areas
@@ -66,6 +69,7 @@ public static class DoorDumper
         try
         {
             LoadOnce();
+            string campaign = CampaignInfo.Current();
 
             var plates = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldMainDoorPlate>();
             bool changed = false;
@@ -84,11 +88,12 @@ public static class DoorDumper
                 catch { continue; }
                 if (string.IsNullOrEmpty(areaName)) continue;
 
-                if (!Areas.TryGetValue(areaName, out var rec))
+                string areaKey = campaign + "::" + areaName;
+                if (!Areas.TryGetValue(areaKey, out var rec))
                 {
-                    rec = new AreaRec { area_id = areaId };
+                    rec = new AreaRec { area_id = areaId, campaign = campaign, area = areaName };
                     ParseName(areaName, out rec.chamber, out rec.theme);
-                    Areas[areaName] = rec;
+                    Areas[areaKey] = rec;
                     changed = true;
                 }
 
@@ -125,13 +130,14 @@ public static class DoorDumper
                 string bid, bname;
                 try { bid = r.bossLevelID; bname = r.bossLevelName; }
                 catch { continue; }
-                string key = !string.IsNullOrEmpty(bname) ? bname
+                string bareKey = !string.IsNullOrEmpty(bname) ? bname
                            : (!string.IsNullOrEmpty(bid) ? bid : null);
-                if (key == null) continue;
+                if (bareKey == null) continue;
+                string key = campaign + "::" + bareKey;
 
                 if (!Doors.TryGetValue(key, out var dr))
                 {
-                    dr = new DoorRec { boss_level_id = bid, boss_level_name = bname };
+                    dr = new DoorRec { boss_level_id = bid, boss_level_name = bname, campaign = campaign };
                     Doors[key] = dr;
                     changed = true;
                 }
@@ -161,11 +167,11 @@ public static class DoorDumper
                 Write();
                 int totalLevels = Areas.Values.SelectMany(a => a.levels).Distinct().Count();
                 int withLevels = Areas.Values.Count(a => a.levels.Count > 0);
-                Plugin.Log.LogInfo($"[DOORS] {Areas.Count} sub-areas ({withLevels} w/levels), {totalLevels} holes, {Doors.Count} doors -> {OutPath}");
+                Plugin.Log.LogInfo($"[DOORS] {Areas.Count} sub-areas ({withLevels} w/levels), {totalLevels} holes, {Doors.Count} doors (active={campaign}) -> {OutPath}");
             }
             else if (++_runs % 4 == 0)
             {
-                Plugin.Log.LogInfo($"[DOORS] heartbeat: {plates.Length} plates loaded, {Areas.Count} sub-areas captured");
+                Plugin.Log.LogInfo($"[DOORS] heartbeat: {plates.Length} plates loaded, {Areas.Count} sub-areas captured (active campaign={campaign})");
             }
         }
         catch (Exception e) { Plugin.Log.LogError($"DoorDumper: {e}"); }
@@ -182,14 +188,23 @@ public static class DoorDumper
             if (root?.areas != null)
                 foreach (var kv in root.areas)
                 {
-                    kv.Value.levels ??= new SortedSet<string>();
-                    Areas[kv.Key] = kv.Value;
+                    var rec = kv.Value;
+                    rec.levels ??= new SortedSet<string>();
+                    // Migrate legacy (un-tagged) records to Main, re-keying to campaign::area.
+                    if (string.IsNullOrEmpty(rec.campaign)) rec.campaign = "Main";
+                    if (string.IsNullOrEmpty(rec.area)) rec.area = kv.Key;
+                    string key = kv.Key.Contains("::") ? kv.Key : rec.campaign + "::" + rec.area;
+                    Areas[key] = rec;
                 }
             if (root?.doors != null)
                 foreach (var kv in root.doors)
                 {
-                    kv.Value.plate_areas ??= new SortedSet<string>();
-                    Doors[kv.Key] = kv.Value;
+                    var rec = kv.Value;
+                    rec.plate_areas ??= new SortedSet<string>();
+                    if (string.IsNullOrEmpty(rec.campaign)) rec.campaign = "Main";
+                    string bare = !string.IsNullOrEmpty(rec.boss_level_name) ? rec.boss_level_name : rec.boss_level_id;
+                    string key = kv.Key.Contains("::") ? kv.Key : rec.campaign + "::" + (bare ?? kv.Key);
+                    Doors[key] = rec;
                 }
             Plugin.Log.LogInfo($"[DOORS] loaded {Areas.Count} sub-areas, {Doors.Count} doors from existing {OutPath}");
         }

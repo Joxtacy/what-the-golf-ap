@@ -27,6 +27,7 @@ public static class GoalDumper
     {
         try
         {
+            string campaign = CampaignInfo.Current();
             var all = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldGoal>();
             int added = 0;
             for (int i = 0; i < all.Length; i++)
@@ -36,7 +37,8 @@ public static class GoalDumper
 
                 var ld = g.levelData;
                 string scene = ld != null ? ld.SceneName : null;
-                string key = scene ?? ("goal#" + i);
+                // Key by campaign too, so episodes that reuse scene names don't drop goals.
+                string key = campaign + "::" + (scene ?? ("goal#" + i));
                 if (Seen.ContainsKey(key)) continue;
 
                 var section = g.ParentHubSection;
@@ -45,6 +47,7 @@ public static class GoalDumper
                 string requires = (req != null && req.levelData != null) ? req.levelData.SceneName : null;
 
                 Seen[key] = "{" +
+                    $"\"campaign\":{J(campaign)}," +
                     $"\"scene\":{J(scene)}," +
                     $"\"section\":{J(sectionName)}," +
                     $"\"state\":{(int)g.state}," +
