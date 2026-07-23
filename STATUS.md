@@ -571,15 +571,44 @@ skip this next time). See the mod-UX section above.
 3. Polish: friendlier area/section display names.
 4. Optional: rebuild `data.py` from the **real hub sections** (`wtg_goals.json`)
    for authentic, spatially-coherent areas.
-5. **Event-driven crown/section door gating (deferred 2026-07-22).** Give the
-   crown-chest doors (`ChestGate`) and within-chamber section connectors
-   (`SectionGate`) the same treatment the boss doors got: a Harmony prefix on the
-   door's open-check (as with `OverworldMainDoorRobot.CanBeOpened`) that returns the
-   AP-key state directly, instead of holding the door shut by polling `canOpen=false`
-   each tick. Boss doors are already race-free this way; chest/section are still
-   poll-based, so after a *teleport* (which doesn't fire the overworld poll burst)
-   there's up to a ~3s window before a locked crown/section door is re-shut — a rare,
-   non-softlocking "open a check early" gap. Prefixing their open-check (candidates:
-   `OverworldButton2D.CanDoorBeOpened` / `CanBeOpened`, filtered to our door OIDs)
-   closes it and lets the polling stop mattering for correctness. Low priority
-   (cosmetic/rare), but the clean finish to the gating model.
+5. **Event-driven crown/section door gating. ✅ DONE + LIVE-VALIDATED (2026-07-23).**
+   The crown-chest doors (`ChestGate`) and within-chamber section
+   connectors (`SectionGate`) now have the same race-free treatment the boss doors
+   got: a Harmony **prefix on `OverworldButton2D.CheckOpen`** (`GamePatches.
+   ButtonCheckOpenPrefix`) that returns false for a still-locked door OID, so the
+   natural ball-contact open can never fire — decoupled from the per-tick
+   `canOpen=false` poll (which could miss the door for up to ~3s after a *teleport*,
+   since teleporting skips the overworld poll burst → a rare, non-softlocking "open a
+   check early" gap). Closed now.
+
+   **RE (via `tools/disq_objdump.py`):** the ball-contact open path is
+   `OverworldButton2D.OnCollisionEnter2D` → checks `canOpen` (field 0x74) → calls
+   `CheckOpen()`, which is what actually opens (`SetDoorOpen`/`Hit`/`openOrOpening=1`).
+   Our own force-open uses `InstantOpenDoor()`, which **bypasses `CheckOpen`**, so
+   prefixing `CheckOpen` blocks only the natural open and never our keyed-door opens.
+   (`CanDoorBeOpened()` turned out to check save-state + the `previous`-door chain, NOT
+   `canOpen` — so it was the wrong lever, matching the earlier PercentGate finding.)
+   `CheckOpen` is parameterless (safe signature) and inherited unchanged by
+   `OverworldButton2DPercentage`, so one patch covers both; the % goal door defers
+   (its OID isn't in either locked set).
+
+   **Two-layer model now (mirrors BossGate):** HARD = the `CheckOpen` prefix
+   (correctness, race-free), driven by new `ChestGate.IsLocked(oid)` /
+   `SectionGate.IsLocked(oid)`. SOFT = the existing `Tick` polls kept for VISUALS
+   (hold a locked door's `canOpen=false` so it shows locked) + force-opening keyed
+   crown doors via `InstantOpenDoor` (needed because a crown door also gates on crown
+   count). Builds + deploys clean.
+
+   **LIVE-VALIDATED (2026-07-23, fresh save, crowns + hard_sections + section seed).**
+   The `CheckOpen` prefix bound (`patched (prefix): OverworldButton2D:CheckOpen`); both
+   gates held every locked section connector + crown door shut; `01: Western Access` →
+   opened connector `8LARX`; `Desert 2 Chest Key` → `CROWN_WESTERN2` unlocked +
+   InstantOpenDoor; chest open → `Desert 1 Chest` check sent; normal play (level clears,
+   checks, items) unaffected. Note: no `[GATE] blocked` log fires in steady state — the
+   soft poll's `canOpen=false` makes `OnCollisionEnter2D` short-circuit before it reaches
+   `CheckOpen`, so the prefix (and its block log) only fire in the post-teleport race
+   window it exists to cover. Aside (pre-existing, NOT this change): opening `CHEST_DESERT1`
+   became possible after unlocking only `CROWN_WESTERN2` — the two Western desert chests
+   appear to share a room (physical looseness, like sections) or the DESERT1/2 ↔ WESTERN1/2
+   pairing is labelled in a different order than the game's layout; a `crowns` data nuance
+   to look at separately (logic still requires both keys, so seeds stay completable).

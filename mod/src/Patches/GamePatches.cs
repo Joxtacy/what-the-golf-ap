@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using HarmonyLib;
 
 namespace WtgArchipelago.Patches;
@@ -12,6 +13,10 @@ namespace WtgArchipelago.Patches;
 /// </summary>
 public static class GamePatches
 {
+    // OIDs of locked crown/section doors we've already logged blocking (dedup so a
+    // player bumping a locked door repeatedly doesn't spam the log).
+    private static readonly HashSet<string> _loggedGateBlock = new();
+
     public static void Apply(HarmonyLib.Harmony harmony)
     {
         // Level cleared -> read the current level and send the AP Clear/Crown.
@@ -59,6 +64,20 @@ public static class GamePatches
         // game. (CanDoorBeOpened turned out NOT to gate the open path.)
         TryPatchPrefix(harmony, "OverworldButton2DPercentage:GetFlagsLeft",
                        nameof(PercentFlagsLeftPrefix));
+
+        // Crown-chest + section HARD gate (crowns / hard_sections options) -- the
+        // race-free lever. A door's natural ball-contact open (OverworldButton2D.
+        // OnCollisionEnter2D) routes through CheckOpen() to actually open; our own
+        // force-open (ChestGate/SectionGate) uses InstantOpenDoor(), which bypasses
+        // CheckOpen. So a prefix on CheckOpen that returns false for a still-locked
+        // door OID blocks the natural open regardless of the per-tick canOpen poll --
+        // closing the ~3s "open a check early" window that the poll leaves open right
+        // after a teleport (teleporting skips the overworld poll burst). Filtered to
+        // our locked OIDs; every other door (keyed, non-gated, the % goal door) defers
+        // to the game. CheckOpen is inherited unchanged by the percentage subclass, so
+        // one patch covers both.
+        TryPatchPrefix(harmony, "OverworldButton2D:CheckOpen",
+                       nameof(ButtonCheckOpenPrefix));
 
         // Door goal LABEL: the % door's requirement text natively shows the game's
         // completion % ("4/50%"); retarget the goal-tier door's label to AP progress
@@ -255,6 +274,39 @@ public static class GamePatches
         }
         catch (Exception e) { Plugin.Log.LogError($"MainDoorHitPrefix: {e}"); }
         return true;            // not gated / already unlocked -> open as normal
+    }
+
+    // PREFIX on OverworldButton2D.CheckOpen() -- the choke the natural ball-contact
+    // open routes through. For a LOCKED crown-chest door (crowns option) or a LOCKED
+    // within-chamber section connector (hard_sections option), skip the original so
+    // the door never opens on contact -- a race-free hard gate that doesn't depend on
+    // the per-tick canOpen=false poll winning the frame (which it can miss for ~3s
+    // after a teleport). Our own force-open uses InstantOpenDoor(), which bypasses
+    // CheckOpen, so keyed doors still open. Every other door defers to the game.
+    private static bool ButtonCheckOpenPrefix(Il2Cpp.OverworldButton2D __instance)
+    {
+        try
+        {
+            if (__instance == null) return true;
+            string oid = null;
+            try
+            {
+                var o = __instance.gameObject.GetComponent<Il2Cpp.OverworldID>();
+                if (o != null) oid = o.ID;
+            }
+            catch { }
+            if (string.IsNullOrEmpty(oid)) return true;
+
+            if (Mapping.ChestGate.IsLocked(oid) || Mapping.SectionGate.IsLocked(oid))
+            {
+                // Dedup: a player can bump a locked door repeatedly -> log once per OID.
+                if (_loggedGateBlock.Add(oid))
+                    Plugin.Log.LogInfo($"[GATE] blocked opening locked door '{oid}' (need its key)");
+                return false;   // skip original -> door stays shut
+            }
+        }
+        catch (Exception e) { Plugin.Log.LogError($"ButtonCheckOpenPrefix: {e}"); }
+        return true;   // not gated / unlocked -> open as normal
     }
 
     // PREFIX on OverworldButton2D.CanDoorBeOpened(). For the seed's goal-tier %

@@ -10,10 +10,19 @@ namespace WtgArchipelago.Mapping;
 ///
 /// Every overworld crown chest is an AP location. Most sit behind a crown door
 /// (an <c>OverworldButton2D</c> whose <c>OverworldID.ID</c> is a CROWN_* id); in
-/// vanilla that door opens once you own enough crowns. Here we OVERRIDE that: the
-/// door is held shut (<c>canOpen=false</c>, the validated lever -- same as
-/// SectionGate) until the matching "<Area> Chest Key" arrives from the multiworld,
-/// then released. Freely-reachable chests have no door/key -- just a check.
+/// vanilla that door opens once you own enough crowns. Here we OVERRIDE that until
+/// the matching "<Area> Chest Key" arrives from the multiworld, then release it.
+/// Freely-reachable chests have no door/key -- just a check.
+///
+/// Two-layer gate (mirrors BossGate):
+///  * HARD (correctness): a Harmony prefix on OverworldButton2D.CheckOpen (see
+///    GamePatches.ButtonCheckOpenPrefix) returns false for a still-locked door OID,
+///    so the natural ball-contact open can never fire -- race-free, and unaffected by
+///    a teleport (which skips the overworld poll burst). Driven by IsLocked().
+///  * SOFT (visual + force-open): Tick still polls -- it holds a locked door's
+///    canOpen=false so it SHOWS as locked, and force-opens a keyed door via
+///    InstantOpenDoor (a crown door also gates on crown count, so canOpen=true alone
+///    won't open it on a fresh save).
 ///
 /// Two maps come from the apworld (wtg_ids.json, via tools/export_ids.py):
 ///   chest_doors_by_item : "Cars Chest Key" -> "CROWN_CARS" (door to hold shut)
@@ -68,6 +77,13 @@ public static class ChestGate
     }
 
     public static bool Handles(string itemName) => _doorByItem.ContainsKey(itemName);
+
+    /// <summary>Is this door OID a crown-chest door we gate whose key hasn't arrived?
+    /// Used by the event-driven hard gate (the CheckOpen prefix in GamePatches) to
+    /// block the natural ball-contact open regardless of the per-tick canOpen poll.
+    /// False when crowns are off (nothing is gated then).</summary>
+    public static bool IsLocked(string oid) =>
+        _enabled && !string.IsNullOrEmpty(oid) && Gated.Contains(oid) && !Unlocked.Contains(oid);
 
     /// <summary>Mark a chest's door unlocked from a received "<Area> Chest Key".</summary>
     public static void Unlock(string itemName)

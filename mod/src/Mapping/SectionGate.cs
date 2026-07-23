@@ -11,10 +11,14 @@ namespace WtgArchipelago.Mapping;
 /// (door_space_00, VJ69W, ...). So with plain section access you can physically
 /// walk into a not-yet-keyed sibling once any sibling of the chamber is reachable.
 ///
-/// When enabled we close that leak: every tick, force <c>canOpen = false</c> on
-/// every connector whose id is a section trigger the AP seed has NOT unlocked, and
-/// restore <c>canOpen = true</c> once its key arrives. The locked connector then
-/// refuses to open on touch — a hard gate.
+/// When enabled we close that leak with a two-layer gate (mirrors BossGate/ChestGate):
+///  * HARD (correctness): a Harmony prefix on OverworldButton2D.CheckOpen (see
+///    GamePatches.ButtonCheckOpenPrefix) returns false for a still-locked connector
+///    OID, so it can never open on ball contact -- race-free, and unaffected by a
+///    teleport (which skips the overworld poll burst). Driven by IsLocked().
+///  * SOFT (visual): <see cref="Tick"/> still polls -- forcing <c>canOpen = false</c>
+///    on a locked connector so it SHOWS locked, and restoring <c>canOpen = true</c>
+///    once its key arrives.
 ///
 /// Notes:
 /// - VALIDATED in-game on a FRESH save (a progressed save re-derives door state
@@ -39,6 +43,17 @@ public static class SectionGate
     {
         _enabled = on;
         Plugin.Log.LogInfo($"SectionGate: {(on ? "ENABLED" : "disabled")}.");
+    }
+
+    /// <summary>Is this connector OID a section trigger the seed has NOT unlocked?
+    /// Used by the event-driven hard gate (the CheckOpen prefix in GamePatches) to
+    /// block the natural ball-contact open regardless of the per-tick canOpen poll.
+    /// False when hard_sections is off (nothing is gated then).</summary>
+    public static bool IsLocked(string oid)
+    {
+        if (!_enabled || string.IsNullOrEmpty(oid)) return false;
+        _triggers ??= ChamberUnlock.AllTriggers();
+        return _triggers.Contains(oid) && !ChamberUnlock.IsTriggerUnlocked(oid);
     }
 
     /// <summary>Hold every locked section's connector shut; reopen keyed ones.
