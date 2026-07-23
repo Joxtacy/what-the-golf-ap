@@ -68,6 +68,17 @@ _SMALL = {"and", "or", "of", "a", "an", "the", "but", "then", "on", "with",
           "in", "is", "to"}
 _BOSS_RE = re.compile(r"2D HoleInOne\s+(\d+)\s*(.*)", re.I)
 
+# Episode scene prefixes (internal campaign codes that leak into scene names). The
+# episode's region already says which episode a hole is in ("Episode: Snow"), so we
+# strip these from the display name. Olympics/Sporty Sports scenes carry no prefix.
+# Keyed by Episode.campaign (ECampaignType tag).
+_EPISODE_PREFIX = {
+    "Snow": "W20_",
+    "Hotdog": "S21_",
+    "Alive": "LivingThings_",
+    "Amongus": "AmongUs_",
+}
+
 
 def _split_camel(tok: str) -> str:
     s = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", tok)
@@ -95,6 +106,25 @@ def pretty(scene: str) -> str:
                         for i, x in enumerate(_split_camel(m.group(2).strip()).split()))
         return f"Computer {n} ({desc})" if desc else f"Computer {n}"
     return " ".join(_word(t, i == 0) for i, t in enumerate(_split_camel(scene).split()))
+
+
+def pretty_episode(scene: str, campaign: str, episode: str) -> str:
+    """Display name for an EPISODE hole: "<Episode>: <clean name>", e.g.
+    'W20_SnowballRoleAndGrow' -> 'Snow: Snowball Role and Grow',
+    'LivingThings_Stones&Vase_0' -> 'Alive: Stones & Vase 0'.
+
+    We strip the episode's internal campaign prefix (W20_/S21_/LivingThings_/AmongUs_)
+    and turn '_' and '&' into separators, then prepend the episode name. The prefix is
+    REQUIRED for global uniqueness: episodes reuse Main hole names (e.g. Hotdog's
+    'Cat Ball', 'Livingroom TV', 'Explosion 2' all exist in the base campaign), and AP
+    location names must be unique. Main/chest names use pretty() and are unaffected."""
+    s = scene
+    pre = _EPISODE_PREFIX.get(campaign)
+    if pre and s.lower().startswith(pre.lower()):
+        s = s[len(pre):]
+    s = s.replace("_", " ").replace("&", " & ")
+    bare = " ".join(_word(t, i == 0) for i, t in enumerate(_split_camel(s).split()))
+    return f"{episode}: {bare}"
 
 
 @dataclass(frozen=True)
@@ -178,7 +208,8 @@ def _load():
     episodes = tuple(
         Episode(e["name"], e.get("campaign", ""),
                 tuple(Level(l.get("id", ""), l["scene"], bool(l.get("boss", False)),
-                            int(l.get("challenges", 0)), "", pretty(l["scene"]))
+                            int(l.get("challenges", 0)), "",
+                            pretty_episode(l["scene"], e.get("campaign", ""), e["name"]))
                       for l in e["levels"]))
         for e in w.get("episodes", ())
     )
@@ -453,6 +484,32 @@ def iter_episode_holes(enabled=None):
 def episode_access_names():
     """Access keys for every episode (full universe, for the ID table)."""
     return [episode_access_item(ep.name) for ep in EPISODES]
+
+
+# ECampaignType tag (Episode.campaign) -> the game's in-engine ContentPack id.
+# Captured live from RuntimeStoreData.contentPacksDefs (see EpisodeProbe /
+# wtg_episodes.json). The mod gates episode entry by vetoing
+# OverworldSceneLoader.LoadOverworld for a locked pack, keyed on this id.
+_CAMPAIGN_TO_PACK = {
+    "Olympics": "CP_SPORTY_SPORTS",   # = "Sporty Sports"
+    "Snow": "CP_SNOWY_SNOW",
+    "Hotdog": "CP_HOTDOG",
+    "Alive": "CP_ALIVE",
+    "Amongus": "CP_AMONGUS",
+}
+
+
+def episode_pack_by_item():
+    """Episode Access item name -> in-game ContentPack id (full universe). The mod
+    marks a pack unlocked when this item arrives."""
+    return {episode_access_item(ep.name): _CAMPAIGN_TO_PACK[ep.campaign]
+            for ep in EPISODES}
+
+
+def episode_pack_by_name():
+    """Episode display name -> in-game ContentPack id (full universe). The mod maps
+    the seed's enabled-episode names (slot data) to the packs it must gate."""
+    return {ep.name: _CAMPAIGN_TO_PACK[ep.campaign] for ep in EPISODES}
 
 
 def episode_hole_count(enabled=None) -> int:

@@ -158,8 +158,32 @@ public class ArchipelagoClient
         SectionGate.SetEnabled(Data.HardSectionsEnabled);
         if (slotData.TryGetValue("crowns", out var cr)) Data.CrownsEnabled = Convert.ToBoolean(cr);
         ChestGate.SetEnabled(Data.CrownsEnabled);
+        // Enabled episodes (DLC): a list of display names. Gate entry to each until its
+        // "<name> Episode Access" arrives (EpisodeGate + the LoadOverworld veto).
+        if (slotData.TryGetValue("episodes", out var eps)) Data.Episodes = ToStringList(eps);
+        EpisodeGate.SetEnabled(Data.Episodes);
         // Flag target for the door_* goals (0 otherwise) -> drives the Flag HUD.
         Data.FlagGoal = slotData.TryGetValue("flag_goal", out var fg) ? Convert.ToInt32(fg) : 0;
+    }
+
+    // A slot-data list value may arrive as a Newtonsoft JArray or a plain
+    // IEnumerable depending on how MultiClient.Net deserialized it; handle both.
+    private static System.Collections.Generic.List<string> ToStringList(object v)
+    {
+        var list = new System.Collections.Generic.List<string>();
+        try
+        {
+            if (v is Newtonsoft.Json.Linq.JArray arr)
+            {
+                foreach (var t in arr) if (t != null) list.Add(t.ToString());
+            }
+            else if (v is System.Collections.IEnumerable en && !(v is string))
+            {
+                foreach (var o in en) if (o != null) list.Add(o.ToString());
+            }
+        }
+        catch (Exception e) { Plugin.Log.LogError($"ToStringList: {e}"); }
+        return list;
     }
 
     // --- Location checks -----------------------------------------------------

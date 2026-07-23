@@ -35,6 +35,9 @@ public class ArchipelagoData
     public bool BossKeysEnabled;
     public bool HardSectionsEnabled;
     public bool CrownsEnabled;
+    // Episode display names enabled by this seed ("episodes" option). Empty when no
+    // episodes are in the seed. Drives EpisodeGate (which packs to hard-gate).
+    public List<string> Episodes = new();
 
     // Flags needed to win a door_50/75/100 goal (0 for campaign/all_bosses); from
     // slot data. Drives the on-screen Flag HUD (see FlagHud); the actual win

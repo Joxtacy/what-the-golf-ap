@@ -39,6 +39,10 @@ public static class CampaignInfo
         _ => "None",
     };
 
+    /// <summary>Public map from an ECampaignType int to its short tag (e.g. 2 -> "Olympics").
+    /// Used by EpisodeProbe to label dumped content packs by campaign.</summary>
+    public static string NameOf(int campaignType) => Name(campaignType);
+
     /// <summary>Short tag for the active campaign, e.g. "Main" / "Olympics".
     /// "unknown" if no campaign is resolvable yet (nothing loaded).</summary>
     public static string Current()

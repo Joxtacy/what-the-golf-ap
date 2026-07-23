@@ -28,6 +28,13 @@ public class Mod : MelonMod
     // Read-only scan; keep OFF except during a capture session.
     public const bool PortalProbeEnabled = false;
 
+    // DEV/TEST: episode-enforcement research probe (read-only). Dumps the content-pack
+    // registry (RuntimeStoreData.contentPacksDefs) to wtg_episodes.json and logs every
+    // OverworldSceneLoader.LoadOverworld call, so we can see how an episode is entered
+    // and get the packId<->episode mapping before building the gate. Keep OFF; flip on
+    // for one capture run (enter each episode once), then off again.
+    public const bool EpisodeProbeEnabled = false;
+
     public override void OnInitializeMelon()
     {
         Plugin.Client = new ArchipelagoClient();
@@ -36,6 +43,7 @@ public class Mod : MelonMod
         Mapping.BossGate.Load();
         Mapping.BossGoal.Load();
         Mapping.ChestGate.Load();
+        Mapping.EpisodeGate.Load();
         GamePatches.Apply(HarmonyInstance);
 
         // Passive until connected: load persisted connection settings + the in-game
@@ -110,6 +118,7 @@ public class Mod : MelonMod
     private int _dumpTimer;           // dumpers are OFF by default; frame-based is fine
     private int _chestDumpTimer;
     private int _portalProbeTimer;
+    private int _episodeProbeTimer;
 
     // Runs every frame on Unity's main thread -> ideal main-thread pump.
     public override void OnUpdate()
@@ -258,6 +267,14 @@ public class Mod : MelonMod
         {
             _portalProbeTimer = 0;
             Mapping.ShortcutPortalDumper.Dump();
+        }
+
+        // Episode-enforcement probe: dump the content-pack registry once (self-guards
+        // after the first successful write). Read-only; own dev toggle. ~every 2s.
+        if (EpisodeProbeEnabled && ++_episodeProbeTimer >= 120)
+        {
+            _episodeProbeTimer = 0;
+            Mapping.EpisodeProbe.Dump();
         }
     }
 }

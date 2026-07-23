@@ -73,6 +73,18 @@ public static class GamePatches
         TryPatch(harmony, "OverworldMainButton:OnCollisionEnter2D",
                  nameof(PercentButtonPressedPostfix));
 
+        // Episode gate (the "episodes" option) -- the enforcement lever. Starting any
+        // campaign/episode goes through a BasePackStarter.StartPack(ContentPack, object[])
+        // override: a SYNCHRONOUS bool method that runs BEFORE any async scene load or
+        // "transition" tunnel. For a LOCKED episode (seed-enabled, its "<name> Episode
+        // Access" not yet received) we return false to skip it -- nothing starts, the
+        // player stays in the hub. Skipping this sync entry (vs the async loader) can't
+        // corrupt the loader state. Episodes use GeneralCampaignStarter; we also gate
+        // CampaignStarter for safety. The IsBlocked check only fires for locked episode
+        // packs, so gating both starters is harmless for every other pack.
+        TryPatchStartPack(harmony, "GeneralCampaignStarter", nameof(StartPackGatePrefix));
+        TryPatchStartPack(harmony, "CampaignStarter", nameof(StartPackGatePrefix));
+
         // DeathLink (outgoing): a level FAILURE -> maybe broadcast a death. We hook
         // the static, no-arg GameAnalytics.OnLevelReset (the AUTOMATIC reset the game
         // fires on out-of-bounds/water/lost-ball) -- safe like the other statics, and
@@ -122,6 +134,30 @@ public static class GamePatches
         {
             Plugin.Log.LogError($"failed to patch {target}: {e.Message}");
         }
+    }
+
+    // Patch a BasePackStarter subclass's StartPack(ContentPack, object[]) override.
+    // The class also has an unrelated private StartPack(ContentPack, string, BALLSHAPES)
+    // iterator, so a name-only AccessTools lookup is ambiguous -- resolve by reflection
+    // to the 2-parameter override whose first parameter is a ContentPack.
+    private static void TryPatchStartPack(HarmonyLib.Harmony harmony, string className, string prefix)
+    {
+        try
+        {
+            var t = AccessTools.TypeByName(className);
+            if (t == null) { Plugin.Log.LogWarning($"StartPack gate: type not found: {className}"); return; }
+            System.Reflection.MethodInfo target = null;
+            foreach (var m in AccessTools.GetDeclaredMethods(t))
+            {
+                if (m.Name != "StartPack") continue;
+                var ps = m.GetParameters();
+                if (ps.Length == 2 && ps[0].ParameterType.Name == "ContentPack") { target = m; break; }
+            }
+            if (target == null) { Plugin.Log.LogWarning($"StartPack gate: no StartPack(ContentPack, object[]) on {className}"); return; }
+            harmony.Patch(target, prefix: new HarmonyMethod(typeof(GamePatches), prefix));
+            Plugin.Log.LogInfo($"patched (prefix): {className}:StartPack");
+        }
+        catch (Exception e) { Plugin.Log.LogError($"failed to patch {className}:StartPack: {e.Message}"); }
     }
 
     // --- Postfixes -----------------------------------------------------------
@@ -257,6 +293,43 @@ public static class GamePatches
                 Mapping.PercentGate.OnInsideButtonPressed();
         }
         catch (Exception e) { Plugin.Log.LogError($"PercentButtonPressedPostfix: {e}"); }
+    }
+
+    // PREFIX on a BasePackStarter.StartPack(ContentPack, object[]) override. Episode
+    // gate: when the pack is a locked episode, set __result=false and skip the original
+    // so nothing starts (the player stays in the hub). Otherwise runs normally. __0 =
+    // the ContentPack param (by index; robust vs interop not preserving names).
+    private static bool StartPackGatePrefix(Il2Cpp.ContentPack __0, ref bool __result)
+    {
+        try
+        {
+            string id = null;
+            try { id = __0 != null ? __0.contentPackID : null; } catch { }
+
+            // DEV log of the entry path (only while probing).
+            if (Mod.EpisodeProbeEnabled)
+            {
+                int campaign = 0;
+                try { campaign = __0 != null ? (int)__0.campaignType : 0; } catch { }
+                Plugin.Log.LogInfo($"[EPISODES] StartPack pack='{id}' campaign={campaign} ({Mapping.CampaignInfo.NameOf(campaign)})");
+            }
+
+            // Passive until connected: never touch the game outside an AP session.
+            var client = Plugin.Client;
+            if (client == null || !client.Connected) return true;
+
+            if (Mapping.EpisodeGate.IsBlocked(id))
+            {
+                string name = Mapping.EpisodeGate.NameOf(id);
+                if (Mapping.EpisodeGate.ShouldLogBlock(id))
+                    Plugin.Log.LogInfo($"[EPISODE] blocked locked '{name}' ({id}) — need its Episode Access");
+                MessageFeed.PushLocal($"{name} is locked — need its Episode Access");
+                __result = false;   // report "didn't start"
+                return false;       // skip original -> no load, no transition, no corruption
+            }
+        }
+        catch (Exception e) { Plugin.Log.LogError($"StartPackGatePrefix: {e}"); }
+        return true;   // not gated / unlocked -> start as normal
     }
 
     private static void FinalBossPostfix()

@@ -26,6 +26,14 @@ public static class ItemApplier
             ChestGate.Unlock(name);
             MelonLoader.MelonLogger.Msg($"Chest unlocked: {name}");
         }
+        else if (EpisodeGate.Handles(name))
+        {
+            // "<Episode> Episode Access": stop vetoing entry to that episode's pack.
+            // Checked BEFORE the generic " Access" branch below, since "X Episode
+            // Access" also ends with " Access" (it must NOT route to ChamberUnlock).
+            EpisodeGate.Unlock(name);
+            MelonLoader.MelonLogger.Msg($"Episode unlocked: {name}");
+        }
         else if (name.EndsWith(" Access"))
         {
             // Open the exact in-game door(s) this Access item maps to. Works for

@@ -50,6 +50,12 @@ def main():
     # scene -> display name. The mod detects a completed level by its raw scene,
     # then uses this to build the (renamed) location name "<display> - Clear/Crown".
     name_by_scene = data.name_by_scene()
+    # episodes (DLC) enforcement. episode_pack_by_item: Access item -> in-game
+    # ContentPack id the mod unlocks when it arrives. episode_pack_by_name: episode
+    # display name -> pack id, so the mod maps the seed's enabled episodes (slot
+    # data) to the packs it hard-gates via the LoadOverworld veto.
+    episode_pack_by_item = data.episode_pack_by_item()
+    episode_pack_by_name = data.episode_pack_by_name()
     payload = {
         "game": "WHAT THE GOLF?",
         "start_area": data.START_AREA,
@@ -63,6 +69,8 @@ def main():
         "final_boss_scene": data.FINAL_BOSS_SCENE,
         "chest_doors_by_item": chest_doors_by_item,
         "chest_loc_by_oid": chest_loc_by_oid,
+        "episode_pack_by_item": episode_pack_by_item,
+        "episode_pack_by_name": episode_pack_by_name,
     }
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
@@ -72,7 +80,8 @@ def main():
           f"{len(unlocks_by_item)} access->door maps, "
           f"{len(boss_by_item)} boss keys, "
           f"{len(boss_scenes)} boss scenes, "
-          f"{len(chest_loc_by_oid)} chests ({len(chest_doors_by_item)} keyed)")
+          f"{len(chest_loc_by_oid)} chests ({len(chest_doors_by_item)} keyed), "
+          f"{len(episode_pack_by_name)} episode packs")
 
 
 if __name__ == "__main__":
