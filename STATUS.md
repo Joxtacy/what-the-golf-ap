@@ -319,9 +319,22 @@ Planned, several as **apworld Options**:
    **Display-name polish ✅ DONE (2026-07-23):** `pretty_episode()` →
    "Snow: Snowball Role and Grow" (episode-name prefix required for uniqueness).
 
-   **STILL TODO for episodes:** live in-game test of episode clears + flags reporting
-   (the entry gate is validated; clears/flags not yet). Optional: native grey-out of
-   locked episodes via `ContentPackDef.accessible`.
+   **Clears + flags ✅ DONE + live-validated (2026-07-23).** Solo door_100 seed
+   (all 5 episodes, keys via `start_inventory`) on 0.6.7: cleared Sporty Sports holes
+   in-game → server logged `Sporty Sports: Man Ball Olympic - Clear` and
+   `... Golf Into Olympics - Clear` (the latter yielding a `Flag`), confirming episode
+   clears report under polished names AND feed the Flag pool (door_100 N = 233 vs 133
+   base). **Episodes fully validated end-to-end.**
+
+   **Native portal grey-out — investigated + abandoned (2026-07-23; not possible).**
+   Forcing a locked pack's `ContentPackDef.accessible=false` sticks but greys nothing in
+   the hub: disassembly of `EpisodeEntranceManager` (the hub portal) shows its `Start()`
+   reads only play-count / `IsFresh` / `SavePosition` to drive its banners and never
+   checks `accessible`/ownership. The game has no native locked visual for owned-episode
+   portals (`accessible` only drives the main-menu mode-select carousel / "Coming Soon"
+   tile). Grey-out code was reverted; the lock stays communicated by the StartPack veto +
+   a MessageFeed line. A custom fabricated locked look (dim illustration / close
+   `_curtainsAnimator`) is the only remaining option — cosmetic, fragile, not worth it.
 6. **Ball shapes / Transmogrif (stretch).** Section `ballShape` = `Transmogrif.
    BALLSHAPES`; gating ball abilities as items = most WTG-flavoured progression, but
    needs R&D on whether ball shape is force-settable.

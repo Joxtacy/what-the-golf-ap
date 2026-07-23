@@ -10,18 +10,27 @@ namespace WtgArchipelago.Mapping;
 /// Snow / Hotdog / Alive / Among Us) is a separate in-engine <c>ContentPack</c>,
 /// entered from the episodes-hub side room. Episodes have NO computer doors, so the
 /// Main <c>SetState</c> plate lever does not apply. Instead we gate at the single
-/// entry choke point: <c>OverworldSceneLoader.LoadOverworld(ContentPack, bool)</c>.
+/// synchronous entry choke point: a prefix on <c>BasePackStarter.StartPack(ContentPack,
+/// object[])</c> (see <see cref="Patches.GamePatches"/>).
 ///
-/// The prefix in <see cref="Patches.GamePatches"/> vetoes that call (skips the
-/// original -> the overworld never loads, the player stays in the hub) whenever the
+/// The prefix vetoes that call (sets <c>__result=false</c> + skips the original -> nothing
+/// starts, the player stays in the hub) whenever the
 /// target pack is a LOCKED episode: one this seed enabled whose "&lt;name&gt; Episode
 /// Access" item hasn't arrived. The pack is identified by its stable
 /// <c>contentPackID</c> (e.g. CP_SNOWY_SNOW), captured live via EpisodeProbe and
 /// exported by the apworld (episode_pack_by_item / episode_pack_by_name in wtg_ids.json).
 ///
 /// Only episodes the seed enabled are gated (from slot data "episodes"); episodes not
-/// in the seed aren't randomized, so they stay freely playable. Enforcement is purely
-/// the load-time veto — no per-frame Tick / self-heal needed.
+/// in the seed aren't randomized, so they stay freely playable. The veto is the
+/// authoritative (and only) gate — no per-frame Tick / self-heal needed.
+///
+/// NOTE: there is no native "greyed/locked" visual for the in-world episode entrances to
+/// reuse. <c>EpisodeEntranceManager.Start()</c> (the hub portal) only reads play-count /
+/// IsFresh / SavePosition to drive its new/complete/progress banners — it never checks
+/// <c>ContentPackDef.accessible</c> or ownership. That <c>accessible</c> flag only drives
+/// the main-menu mode-select carousel (the game's own CP_SOON_FAKE "Coming Soon" tile);
+/// setting it on an episode pack greys nothing in the hub. So the lock is communicated
+/// functionally (the veto + a MessageFeed line), not by a portal grey-out.
 /// </summary>
 public static class EpisodeGate
 {
