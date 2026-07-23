@@ -607,8 +607,18 @@ skip this next time). See the mod-UX section above.
    checks, items) unaffected. Note: no `[GATE] blocked` log fires in steady state — the
    soft poll's `canOpen=false` makes `OnCollisionEnter2D` short-circuit before it reaches
    `CheckOpen`, so the prefix (and its block log) only fire in the post-teleport race
-   window it exists to cover. Aside (pre-existing, NOT this change): opening `CHEST_DESERT1`
-   became possible after unlocking only `CROWN_WESTERN2` — the two Western desert chests
-   appear to share a room (physical looseness, like sections) or the DESERT1/2 ↔ WESTERN1/2
-   pairing is labelled in a different order than the game's layout; a `crowns` data nuance
-   to look at separately (logic still requires both keys, so seeds stay completable).
+   window it exists to cover.
+
+   **Chest↔door pairing bug found + FIXED (2026-07-23, pre-existing in `crowns`, not this
+   change).** The test surfaced that opening `CHEST_DESERT1` needed only `Desert 2 Chest
+   Key` (`CROWN_WESTERN2`). Western (01) is the ONLY area with two gated chests + two crown
+   doors, and `build_levels.py`'s hand-authored `CHESTS` table had paired them by the
+   DESERT1/2 ↔ WESTERN1/2 numbers, which are CROSSED. Positions prove it: `CHEST_DESERT1`
+   (x=-10) sits at `CROWN_WESTERN2` (x=-10.5); `CHEST_DESERT2` (x=-40) at `CROWN_WESTERN1`
+   (x=-40.5). Swapped the door column (comment added: do not re-"fix" to matching numbers).
+   Was a real bug, not cosmetic: AP logic gated "Desert 1 Chest" on "Desert 1 Chest Key"
+   but the chest physically opened with the other key → the intended key couldn't reach it
+   (softlock risk if it held progression). Now `Desert 1 Chest Key`→`CROWN_WESTERN2`,
+   `Desert 2 Chest Key`→`CROWN_WESTERN1`. Regenerated `levels.json` + `mod/ids.json`
+   (counts unchanged: 68 items/379 locs/18 keyed → no ID shift, only door values), rebuilt
+   + reinstalled the apworld, redeployed `wtg_ids.json`.

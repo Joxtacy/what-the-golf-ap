@@ -130,8 +130,15 @@ CHESTS = [
     ("CHEST_STEALTH",         "04B", "CROWN_STEALTH"),
     ("CHEST_JUNGLE",          "03A", "CROWN_JUNGLE"),
     ("CHEST_CARS",            "03B", "CROWN_CARS"),
-    ("CHEST_DESERT1",         "01",  "CROWN_WESTERN1"),
-    ("CHEST_DESERT2",         "01",  "CROWN_WESTERN2"),
+    # Western (01) is the only area with TWO gated chests + TWO crown doors, so the
+    # chest<->door pairing must be by POSITION, not by the DESERT1/2<->WESTERN1/2
+    # numbers (which are crossed). From wtg_chests.json / wtg_doors.json positions:
+    # CHEST_DESERT1 (x=-10) sits at CROWN_WESTERN2 (x=-10.5); CHEST_DESERT2 (x=-40)
+    # sits at CROWN_WESTERN1 (x=-40.5). Live-confirmed 2026-07-23 (opening the door
+    # freed by "Desert 2 Chest Key" == CROWN_WESTERN2 revealed CHEST_DESERT1). Do NOT
+    # "fix" these back to matching numbers.
+    ("CHEST_DESERT1",         "01",  "CROWN_WESTERN2"),
+    ("CHEST_DESERT2",         "01",  "CROWN_WESTERN1"),
     # Free chests (no crown door):
     ("CHEST_KITCHEN",         "05A", None),
     ("CHEST_SAWABLE",         "03A", None),

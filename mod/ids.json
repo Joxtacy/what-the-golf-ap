@@ -949,8 +949,8 @@
     "Stealth Chest Key": "CROWN_STEALTH",
     "Jungle Chest Key": "CROWN_JUNGLE",
     "Cars Chest Key": "CROWN_CARS",
-    "Desert 1 Chest Key": "CROWN_WESTERN1",
-    "Desert 2 Chest Key": "CROWN_WESTERN2"
+    "Desert 1 Chest Key": "CROWN_WESTERN2",
+    "Desert 2 Chest Key": "CROWN_WESTERN1"
   },
   "chest_loc_by_oid": {
     "CHEST_EASY2D": "Easy 2D Chest",

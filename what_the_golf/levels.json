@@ -1819,7 +1819,7 @@
    "subarea": "01",
    "trigger": "8LARX",
    "gated": true,
-   "door": "CROWN_WESTERN1",
+   "door": "CROWN_WESTERN2",
    "boss": 0
   },
   {
@@ -1829,7 +1829,7 @@
    "subarea": "01",
    "trigger": "8LARX",
    "gated": true,
-   "door": "CROWN_WESTERN2",
+   "door": "CROWN_WESTERN1",
    "boss": 0
   },
   {
