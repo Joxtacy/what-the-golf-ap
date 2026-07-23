@@ -41,14 +41,20 @@ public static class TrapManager
     private const float WarpSeconds = 10f;    // how long a warp lasts (real seconds)
 
     // Overworld ball shapes that actually have an overworld prefab, so Load() shows
-    // a real ball. Only the shapes the hub uses in normal play work; others (goo,
-    // turkey, snowball, pizza, ...) have no overworld asset and show nothing. These
-    // three are live-confirmed working. (Add more here as we confirm them in-game.)
+    // a distinct, non-broken ball. FULL 15-shape sweep done in-game via BallShapeProbe
+    // (2026-07-23): only ball(0)/bread(2)/speedboat(4)/saw(5)/companioncube(6)/
+    // endball(7) render as a distinct skin. fish + islandBall/waterBall/puckBall/
+    // snowball/pizza/turkey/goo (8..14) show NOTHING (no overworld asset); boat(3)
+    // renders as the plain ball + a grey dot/wake (not visually distinct); speedboat
+    // reverts to the plain ball when "docked". For the Transmogrify TRAP we use the
+    // distinct, self-contained ones (skip the default ball, boat's non-distinctness,
+    // and speedboat's docking revert).
     private static readonly Il2Cpp.Transmogrif.BALLSHAPES[] SafeShapes =
     {
         Il2Cpp.Transmogrif.BALLSHAPES.bread,
         Il2Cpp.Transmogrif.BALLSHAPES.saw,
         Il2Cpp.Transmogrif.BALLSHAPES.companioncube,
+        Il2Cpp.Transmogrif.BALLSHAPES.endball,
     };
 
     private static readonly System.Random Rng = new();

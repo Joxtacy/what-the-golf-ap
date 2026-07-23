@@ -69,12 +69,30 @@ public class Mod : MelonMod
     // in OnGUI (works regardless of the game's input backend, same as the F8 toggle).
     public const bool DebugTrapHotkeys = false;
 
+    // DEV/TEST: ball-shape render probe. When true, F7 in the overworld steps
+    // OverworldBallManager.Load through all 15 BALLSHAPES (one per press) so we can
+    // SEE which shapes actually render -> decides whether a cosmetic ball-skin
+    // collectible is worth building. Read-only (only calls Load); keep OFF.
+    public const bool BallShapeProbeEnabled = false;
+
     // MelonLoader GUI callback -> draw the connection panel (and read its hotkey).
     public override void OnGUI()
     {
         ConnectionUI.OnGUI();
         ConsoleUI.OnGUI();
         if (DebugTrapHotkeys) HandleTrapHotkeys();
+        if (BallShapeProbeEnabled) HandleBallShapeProbeHotkey();
+    }
+
+    private static void HandleBallShapeProbeHotkey()
+    {
+        try
+        {
+            var e = UnityEngine.Event.current;
+            if (e == null || e.type != UnityEngine.EventType.KeyDown) return;
+            if (e.keyCode == UnityEngine.KeyCode.F7) Mapping.BallShapeProbe.CycleNext();
+        }
+        catch { }
     }
 
     private static void HandleTrapHotkeys()

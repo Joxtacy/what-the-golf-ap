@@ -335,9 +335,26 @@ Planned, several as **apworld Options**:
    tile). Grey-out code was reverted; the lock stays communicated by the StartPack veto +
    a MessageFeed line. A custom fabricated locked look (dim illustration / close
    `_curtainsAnimator`) is the only remaining option — cosmetic, fragile, not worth it.
-6. **Ball shapes / Transmogrif (stretch).** Section `ballShape` = `Transmogrif.
-   BALLSHAPES`; gating ball abilities as items = most WTG-flavoured progression, but
-   needs R&D on whether ball shape is force-settable.
+6. **Ball shapes / Transmogrif (stretch). ❌ INVESTIGATED + CLOSED (2026-07-23,
+   not worth building).** Two questions, both now answered:
+   - *As progression* — DEAD. The in-LEVEL ball shape is level-scripted
+     (`Transmogrif` trigger zones placed per hole), NOT a global setter, so it can't
+     be force-set without breaking levels (found during the traps work). So ball
+     shape can't gate anything → no "most WTG-flavoured progression".
+   - *As a cosmetic collectible* — possible but too thin. The OVERWORLD shape IS
+     globally settable via `OverworldBallManager.Load(BALLSHAPES)` (cosmetic only),
+     but a full 15-shape sweep (via `BallShapeProbe`, a read-only dev probe on F7,
+     `Mod.BallShapeProbeEnabled`, OFF) found only **6 render as a distinct skin**:
+     `ball`(default), `bread`, `speedboat`, `saw`, `companioncube`, `endball`.
+     `boat` renders as the plain ball + a grey dot/wake (not distinct); `fish` +
+     `islandBall`/`waterBall`/`puckBall`/`snowball`/`pizza`/`turkey`/`goo` render
+     nothing. So ~5 usable non-default skins (speedboat reverts to the plain ball
+     when "docked"). A collectible would also need re-assert-on-load (the game
+     overwrites the shape on transitions), a selection UI, and persistence — a lot
+     of plumbing for a cosmetic-only reward, and the **Transmogrify trap already
+     delivers the silly-ball-shape novelty**. Decision: close it.
+   Kept: `BallShapeProbe.cs` as a gated-off dev tool; `endball` added to the
+   Transmogrify trap's shape pool (it's a distinct, self-contained shape).
 
 **Note:** on a **fresh save** the game natively gates progression; the 100% save
 has everything unlocked. Use a dedicated fresh dev save slot to test; the 100%
