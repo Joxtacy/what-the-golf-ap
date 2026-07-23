@@ -308,11 +308,20 @@ Planned, several as **apworld Options**:
      regen'd (68 items / 379 locations) + redeployed; episode clears will report
      in-game via `name_by_scene` (no mod code change).
 
-   **STILL TODO for episodes:** (a) **mod-side access enforcement** — receiving an
-   Episode Access key is logic-only right now (the mod no-ops it; `ChamberUnlock`
-   has no trigger map for episodes). Real gating needs the fresh-save RE of the
-   episode goal-unlock graph. (b) display-name polish (e.g. `W 20_snowball...`).
-   (c) live in-game test of episode clears + flags.
+   **Access ENFORCEMENT ✅ DONE + live-validated (2026-07-23).** The Episode Access
+   key hard-locks entry: a Harmony prefix on `BasePackStarter.StartPack(ContentPack,
+   object[])` (GeneralCampaignStarter + CampaignStarter) returns false for a locked
+   episode, so nothing starts and the player is kept out at the episodes hub. Keyed
+   on the stable `contentPackID` (captured via the read-only `EpisodeProbe`);
+   `EpisodeGate` maps items/names from `wtg_ids.json` (`episode_pack_by_item` /
+   `episode_pack_by_name`) + the enabled set from slot data. NO goal-graph RE was
+   needed — it's one key per whole episode, gated at the episode boundary.
+   **Display-name polish ✅ DONE (2026-07-23):** `pretty_episode()` →
+   "Snow: Snowball Role and Grow" (episode-name prefix required for uniqueness).
+
+   **STILL TODO for episodes:** live in-game test of episode clears + flags reporting
+   (the entry gate is validated; clears/flags not yet). Optional: native grey-out of
+   locked episodes via `ContentPackDef.accessible`.
 6. **Ball shapes / Transmogrif (stretch).** Section `ballShape` = `Transmogrif.
    BALLSHAPES`; gating ball abilities as items = most WTG-flavoured progression, but
    needs R&D on whether ball shape is force-settable.

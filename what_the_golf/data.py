@@ -488,8 +488,8 @@ def episode_access_names():
 
 # ECampaignType tag (Episode.campaign) -> the game's in-engine ContentPack id.
 # Captured live from RuntimeStoreData.contentPacksDefs (see EpisodeProbe /
-# wtg_episodes.json). The mod gates episode entry by vetoing
-# OverworldSceneLoader.LoadOverworld for a locked pack, keyed on this id.
+# wtg_episodes.json). The mod hard-gates episode entry via a prefix on
+# BasePackStarter.StartPack that skips a locked pack, keyed on this id.
 _CAMPAIGN_TO_PACK = {
     "Olympics": "CP_SPORTY_SPORTS",   # = "Sporty Sports"
     "Snow": "CP_SNOWY_SNOW",

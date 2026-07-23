@@ -121,16 +121,14 @@ class Episodes(OptionSet):
     """Which extra episodes (DLC) to include, on top of the base campaign.
 
     Each listed episode adds its holes as checks (a Clear each, plus a Crown for
-    the rare hole that has one) and a single "<Episode> Episode Access" key that
-    gates them in logic. Episode hole-clears also grant Flags, so they count
-    toward the door_50/75/100 goals (bigger board = bigger % target).
+    the rare hole that has one) and a single "<Episode> Episode Access" key. That
+    key gates the episode both in logic AND in-game: the mod hard-locks entry to a
+    locked episode (you're kept out at the episodes hub until the key arrives).
+    Episode hole-clears also grant Flags, so they count toward the door_50/75/100
+    goals (bigger board = bigger % target).
 
     Requires owning the corresponding DLC. Valid entries: "Sporty Sports", "Snow",
     "Hotdog", "Alive", "Among Us". Default: none (base campaign only).
-
-    NOTE: in-game enforcement of episode access is not wired yet, so an episode
-    key is a LOGIC gate only for now -- like the sub-area "physical looseness" you
-    can already walk past; never a softlock.
     """
     display_name = "Episodes"
     valid_keys = frozenset({"Sporty Sports", "Snow", "Hotdog", "Alive", "Among Us"})
