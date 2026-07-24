@@ -107,8 +107,15 @@ INJECT_LEVELS = [
 #   * CHEST_LEBOWSKI_SECRET: the secret "Toilets" room (07B) is entered past the
 #     chamber-07 boss Computer 2 (which lives in 07A / "OL"). Live-confirmed
 #     2026-07-21: with 07B access but not the boss beaten, the chest is unreachable.
+#   * CHEST_SAWABLE: kept in its Jungle (03A) region for the saw requirement (the saw
+#     ball comes from entering Jungle), but the chest physically sits past the
+#     chamber-03 boss Computer 7 (which lives in 03B / "Cars"). Player-reported
+#     2026-07-24: reachable only after getting past that boss. So the chest needs the
+#     saw (Jungle access, its region) AND can-reach the Computer 7 Clear (Cars access
+#     + its key if boss_keys).
 CHEST_BEHIND_BOSS = {
     "CHEST_LEBOWSKI_SECRET": 2,
+    "CHEST_SAWABLE": 7,
 }
 
 
@@ -145,7 +152,11 @@ CHESTS = [
     ("CHEST_SOCCER2",         "08B", None),
     ("CHEST_GRAVITY_SIDE",    "05B", None),
     ("CHEST_LEBOWSKI_SECRET", "07B", None),
-    ("CHEST_HOLOROOM",        "05C", None),
+    # The hidden island is physically reached from chamber 02 (water/beach), NOT
+    # chamber 05 -- the earlier 05C was an unverified guess. Live-confirmed
+    # 2026-07-24: the chest opened with only chamber-02 (beach) access, while UT
+    # (data said 05) showed it out of logic. Reassigned to section 02.
+    ("CHEST_HOLOROOM",        "02",  None),
 ]
 
 

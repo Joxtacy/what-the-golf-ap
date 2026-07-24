@@ -1850,7 +1850,7 @@
    "trigger": "RVQTA",
    "gated": false,
    "door": null,
-   "boss": 0
+   "boss": 7
   },
   {
    "id": "CHEST_SOCCER2",
@@ -1885,9 +1885,9 @@
   {
    "id": "CHEST_HOLOROOM",
    "display": "Holoroom",
-   "chamber": 5,
-   "subarea": "05C",
-   "trigger": "9DSBG",
+   "chamber": 2,
+   "subarea": "02",
+   "trigger": "P3I4O",
    "gated": false,
    "door": null,
    "boss": 0
