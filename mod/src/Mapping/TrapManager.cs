@@ -171,6 +171,15 @@ public static class TrapManager
 
     private static void DoTransmogrify()
     {
+        // Only touch the ball in the overworld. OverworldBallManager is a persistent
+        // singleton, so HasInstance stays true DURING a level too -- calling Load() on
+        // the ball mid-hole corrupts level state and freezes the win-screen transition
+        // (live-observed 2026-07-24). Gate on IsInLevel() like DoMulligan does.
+        if (GameState.IsInLevel())
+        {
+            Plugin.Log.LogInfo("[TRAP] Transmogrify received in a level -> dropped (would freeze the win screen)");
+            return;
+        }
         if (!Il2Cpp.OverworldBallManager.HasInstance)
         {
             Plugin.Log.LogInfo("[TRAP] Transmogrify received but not in the overworld -> dropped");
