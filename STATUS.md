@@ -503,6 +503,22 @@ skip this next time). See the mod-UX section above.
 
 ## Suggested next steps
 
+0. **OPEN BUG — `hard_sections` leaks the two "Main Crown Doors" (found 2026-07-24, live).**
+   Under section granularity + `hard_sections`, `SectionGate` correctly holds the
+   normal sub-area connectors shut, but the two **"Main Crown Door" / "Main Crown Door
+   Variant"** doors — `CROWN_MAIN1` (→ 07B Bowling/Lebowski) and `CROWN_MAIN2` (→ 03B
+   Cars) — still open, so you can walk into those locked sub-areas. Root cause: unlike
+   the "Crowns Only Variant" chest doors, the Main Crown Door **auto-opens on a total-
+   crown-count threshold** via a path that ignores `canOpen` and never routes through
+   `OverworldButton2D.CheckOpen` — so neither SectionGate layer (the `canOpen=false`
+   poll nor the `ButtonCheckOpenPrefix` hard gate) catches it. Log proof: SectionGate
+   logged `holding connector 'CROWN_MAIN1' shut` yet the door opened with no `[GATE]
+   blocked` line. Not a softlock — purely out-of-logic reachability. **Fix (needs RE):**
+   find the crown-count open path for the Main Crown Door (candidate: a `GetFlagsLeft`/
+   `CanDoorBeOpened`-style crown check, mirror the PercentGate `GetFlagsLeft` override)
+   and force "not enough crowns" for a still-locked Main Crown Door, AND actively close
+   it if it's already open in `OPEN_DOORS`. Only these two door OIDs are affected.
+
 1. **Content options** (all additive, apworld Options): DLC Sporty Sports; ball
    shapes / Transmogrif (stretch, needs RE). (Chests + crown-door gating are DONE —
    the `crowns` option; see the numbered list above.)
