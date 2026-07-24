@@ -75,6 +75,15 @@ public class Mod : MelonMod
     // collectible is worth building. Read-only (only calls Load); keep OFF.
     public const bool BallShapeProbeEnabled = false;
 
+    // DEV/TEST: computer-boss-door diagnostic probe. When true, F6 in the overworld
+    // dumps every OverworldMainDoorRobot's state + each plate's isOn/area/areaState +
+    // goal-completion counts -> diagnoses why a boss won't light despite a cleared
+    // chamber (Computer 8 / Western). Read-only (reads fields + IsOpen/IsCompleted/
+    // GetIsMainDoorOpen; writes nothing). Keep OFF. (Used 2026-07-24 to diagnose
+    // Computer 8 / Western -> confirmed BossPlateSync heal; left in place, off, for
+    // future boss-door debugging.)
+    public const bool BossDoorProbeEnabled = false;
+
     // MelonLoader GUI callback -> draw the connection panel (and read its hotkey).
     public override void OnGUI()
     {
@@ -82,6 +91,7 @@ public class Mod : MelonMod
         ConsoleUI.OnGUI();
         if (DebugTrapHotkeys) HandleTrapHotkeys();
         if (BallShapeProbeEnabled) HandleBallShapeProbeHotkey();
+        if (BossDoorProbeEnabled) HandleBossDoorProbeHotkey();
     }
 
     private static void HandleBallShapeProbeHotkey()
@@ -91,6 +101,17 @@ public class Mod : MelonMod
             var e = UnityEngine.Event.current;
             if (e == null || e.type != UnityEngine.EventType.KeyDown) return;
             if (e.keyCode == UnityEngine.KeyCode.F7) Mapping.BallShapeProbe.CycleNext();
+        }
+        catch { }
+    }
+
+    private static void HandleBossDoorProbeHotkey()
+    {
+        try
+        {
+            var e = UnityEngine.Event.current;
+            if (e == null || e.type != UnityEngine.EventType.KeyDown) return;
+            if (e.keyCode == UnityEngine.KeyCode.F6) Mapping.BossDoorProbe.Dump();
         }
         catch { }
     }
@@ -238,12 +259,15 @@ public class Mod : MelonMod
                         if (now - _lastGate >= 0.34f)
                         {
                             _lastGate = now;
-                            switch (_gateSlot++ % 4)
+                            switch (_gateSlot++ % 5)
                             {
                                 case 0: Mapping.BossGate.Tick(); break;
                                 case 1: Mapping.SectionGate.Tick(); break;
                                 case 2: Mapping.ChestGate.Tick(); break;
                                 case 3: Mapping.PortalGate.Tick(); break;
+                                // boss_keys OFF only: relight computer plates whose area
+                                // is complete but stayed dark after a teleport reload.
+                                case 4: Mapping.BossPlateSync.Tick(); break;
                             }
                         }
 

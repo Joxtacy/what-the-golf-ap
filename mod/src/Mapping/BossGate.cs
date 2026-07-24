@@ -56,6 +56,11 @@ public static class BossGate
         Plugin.Log.LogInfo($"BossGate: {(on ? "ENABLED" : "disabled")}.");
     }
 
+    /// <summary>Is boss-key gating on for this seed? When true BossGate + the
+    /// CanBeOpened override own the computer doors; when false the doors follow native
+    /// area-completion (see BossPlateSync, which heals unlit-but-complete plates).</summary>
+    public static bool Enabled => _enabled;
+
     public static bool Handles(string itemName) => _bossByItem.ContainsKey(itemName);
 
     /// <summary>Is this computer door one we gate at all (boss keys on + a known
