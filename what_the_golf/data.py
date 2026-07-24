@@ -346,6 +346,29 @@ def boss_scene_for_computer(n: int):
     return None
 
 
+def boss_chamber_access_items(level) -> list:
+    """Access-key items for EVERY gate unit in the boss hole's chamber.
+
+    With boss_keys OFF a computer door lights only when its chamber's sub-areas are
+    natively completed (the mod's BossPlateSync restores this after teleport reloads),
+    so a boss's Clear/Crown is truly reachable only once ALL those sub-areas are
+    accessible -- not just the one section the boss hole sits in. Rules.py adds these
+    on top of the boss's own region rule, but ONLY in section granularity with
+    boss_keys off (in chamber granularity the sub-areas share one key = the region
+    rule already covers it; with boss_keys on, BossGate force-lights the door on key
+    receipt so plate/sub-area completion is bypassed).
+
+    We require the WHOLE chamber rather than the precise door plate-area subset: the
+    door-plate dump is unreliable for the low chambers, and over-requiring is always
+    safe -- every sub-area key is obtainable, so it can never make a seed unwinnable;
+    it only keeps the boss out of logic until the chamber is fully unlocked (exactly
+    the desired behaviour). Returns [] if the scene isn't in any gate unit."""
+    chamber = _SCENE_CHAMBER.get(level.scene)
+    if chamber is None:
+        return []
+    return [access_item(g.name) for g in GATE_UNITS if g.chamber == chamber]
+
+
 def all_boss_scenes():
     """Scenes of every REQUIRED boss for the all_bosses goal: each chamber's
     computer boss plus the Final boss.

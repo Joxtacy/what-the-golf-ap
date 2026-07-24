@@ -5,6 +5,7 @@ from worlds.generic.Rules import set_rule, add_rule
 from .data import (
     gates, BOSS_HOLES, boss_key_item, clear_loc, crown_loc, all_boss_scenes,
     CHESTS, chest_loc, chest_key_item, boss_scene_for_computer, episode_gates,
+    boss_chamber_access_items, SECTION,
 )
 from .Items import flag_pool
 
@@ -56,6 +57,26 @@ def set_rules(world) -> None:
             for loc_name in names:
                 loc = multiworld.get_location(loc_name, player)
                 set_rule(loc, lambda state, k=key: state.has(k, player))
+
+    # Boss reachability with boss_keys OFF (section granularity only): the computer
+    # door lights only once its whole chamber's sub-areas are natively completed (the
+    # mod's BossPlateSync heals the plates), so a boss's Clear/Crown needs EVERY
+    # sub-area Access key of its chamber -- not just the section the boss hole sits in.
+    # Without this the tracker shows a boss in logic with one sub-area key (e.g.
+    # Computer 1 with just Platformers, though it needs all of chamber 08). Skipped
+    # when boss_keys is on (BossGate force-lights on key) or under chamber granularity
+    # (the one chamber key already covers all sub-areas; the section keys don't exist).
+    elif mode == SECTION:
+        for level, _n in BOSS_HOLES:
+            keys = boss_chamber_access_items(level)
+            if not keys:
+                continue
+            names = [clear_loc(level.scene)]
+            if level.challenges > 0:
+                names.append(crown_loc(level.scene))
+            for loc_name in names:
+                loc = multiworld.get_location(loc_name, player)
+                add_rule(loc, lambda state, ks=keys: state.has_all(ks, player))
 
     # Crown-chest gating. Two independent requirements can apply on top of the
     # chest's region Access rule:
