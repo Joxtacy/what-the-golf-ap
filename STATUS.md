@@ -585,6 +585,34 @@ skip this next time). See the mod-UX section above.
    of `DeathLinkHud`. Files: `DeathLinkHud.cs`, `DeathLinkHandler.cs` (DeathsSent),
    `Preferences.cs` (HudAnimate), `ConnectionUI.cs` (F8 toggle).
 3. Polish: friendlier area/section display names.
+
+   **Location-name sub-area prefixes ✅ DONE (2026-07-25).** Every Main-campaign
+   check now carries a location prefix, mirroring the episode `"Snow: <name>"`
+   convention, so a bare AP location tells you which section it's in:
+   - normal hole -> full sub-area code, e.g. `07A: 2D 100meter - Clear`;
+   - boss hole -> **chamber number only**, e.g. `07: Computer 2 (Basic) - Clear`
+     (a computer boss is a chamber-level encounter lit by several sub-areas, not
+     tied to one section, so the sub-area letter would mislead);
+   - chest -> sub-area code, e.g. `03B: Cars Chest` (the chest KEY item name is
+     deliberately NOT prefixed — keys are items, not checks);
+   - episodes keep their existing `"<Episode>: <name>"` prefix, unchanged.
+
+   Implemented at the single `display`-name chokepoint in `data.py`
+   (`_area_prefix()` / `prefixed_display()`; `Chest` gained a `subarea` field;
+   `chest_loc()` now takes the `Chest`). Because location names flow through
+   `display` -> `name_by_scene`, both the AP location names AND the mod's scene->
+   location resolution pick it up automatically — **no mod C# change**, only a
+   `wtg_ids.json` regen. `Regions.py`/`Rules.py` needed only the two
+   `chest_loc(chest.display)` callers updated to `chest_loc(chest)`.
+
+   **This is a full RENAME of every location name** (item names/IDs unchanged, and
+   location IDs are position-stable), so in-progress pre-rename seeds/spoilers won't
+   match — but a freshly generated seed + the redeployed mod are fully consistent.
+   VALIDATED: `export_ids.py` duplicate-name asserts pass (379 locs / 114 items all
+   unique); every `get_location()` reference the rules perform (Main clears/crowns,
+   all boss clears, chests, episode holes, `chest_loc_by_oid`) resolves against the
+   ID table. Mod rebuilt + `wtg_ids.json` redeployed; apworld reinstalled into the
+   0.6.7 checkout.
 4. Optional: rebuild `data.py` from the **real hub sections** (`wtg_goals.json`)
    for authentic, spatially-coherent areas.
 5. **Event-driven crown/section door gating. ✅ DONE + LIVE-VALIDATED (2026-07-23).**

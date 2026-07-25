@@ -127,6 +127,27 @@ def pretty_episode(scene: str, campaign: str, episode: str) -> str:
     return f"{episode}: {bare}"
 
 
+# --- Sub-area prefix for Main-campaign display names --------------------------
+# Mirrors the episode "Snow: <name>" prefix: every Main hole's display name is
+# prefixed with WHERE it lives, so a bare AP location tells you the section.
+#   * a normal hole  -> its full sub-area code, e.g. "07A: OL Golf 1".
+#   * a boss hole    -> just the CHAMBER number, e.g. "07: Computer 2 (...)". A
+#     computer boss is a chamber-level encounter (lit by several of the chamber's
+#     sub-areas), not tied to one section, so the sub-area letter would be
+#     misleading. The 2-digit chamber is the leading part of the sub-area code.
+def _area_prefix(subarea: str, boss: bool) -> str:
+    if not subarea:
+        return ""
+    return subarea[:2] if boss else subarea
+
+
+def prefixed_display(scene: str, subarea: str, boss: bool) -> str:
+    """Main-hole display name with its area prefix (see _area_prefix)."""
+    p = _area_prefix(subarea, boss)
+    base = pretty(scene)
+    return f"{p}: {base}" if p else base
+
+
 @dataclass(frozen=True)
 class Level:
     id: str          # opaque LevelData.ID (e.g. "DI3JRA")
@@ -158,6 +179,7 @@ class Chest:
     id: str          # OverworldID.ID (e.g. "CHEST_CARS") -- the mod matches on this
     display: str     # human name (e.g. "Cars", "Gravity Main")
     chamber: int
+    subarea: str     # its sub-area code (e.g. "03B"); prefixes the location name
     trigger: str     # its sub-area's unlockTriggerId (places it in that region)
     gated: bool      # True = behind a crown door (needs a key); False = free
     door: str        # the crown-door OverworldID.ID to hold shut ("" if free)
@@ -183,7 +205,8 @@ def _load():
         Area(a["name"],
              tuple(Level(l["id"], l["scene"], bool(l["boss"]),
                          int(l["challenges"]), l.get("trigger", ""),
-                         pretty(l["scene"]))
+                         prefixed_display(l["scene"], l.get("subarea", ""),
+                                          bool(l["boss"])))
                    for l in a["levels"]))
         for a in w["areas"]
     )
@@ -198,8 +221,9 @@ def _load():
     boss_doors = tuple(dict(d) for d in w.get("boss_doors", ()))
     # Overworld crown chests (the "crowns" option). See build_levels.py CHESTS.
     chests = tuple(
-        Chest(c["id"], pretty(c["display"]), int(c["chamber"]), c.get("trigger", ""),
-              bool(c["gated"]), c.get("door") or "", int(c.get("boss", 0)))
+        Chest(c["id"], pretty(c["display"]), int(c["chamber"]), c.get("subarea", ""),
+              c.get("trigger", ""), bool(c["gated"]), c.get("door") or "",
+              int(c.get("boss", 0)))
         for c in w.get("chests", ())
     )
     # Extra episodes (DLC). Reuse Level (trigger="" -- episodes aren't door-gated
@@ -313,9 +337,11 @@ def boss_key_item(n: int) -> str:
     return f"Computer {n} Key (Chamber {ch:02d})" if ch is not None else f"Computer {n} Key"
 
 
-def chest_loc(display: str) -> str:
-    """AP location name for a crown chest (e.g. "Cars Chest")."""
-    return f"{display} Chest"
+def chest_loc(chest: "Chest") -> str:
+    """AP location name for a crown chest, sub-area-prefixed like the holes
+    (e.g. "03B: Cars Chest"). The chest KEY item name is NOT prefixed."""
+    return f"{chest.subarea}: {chest.display} Chest" if chest.subarea \
+        else f"{chest.display} Chest"
 
 
 def chest_key_item(display: str) -> str:
@@ -450,7 +476,7 @@ def chest_key_names():
 
 def chest_location_names():
     """AP location names for every chest (gated + free)."""
-    return [chest_loc(c.display) for c in CHESTS]
+    return [chest_loc(c) for c in CHESTS]
 
 
 def chest_region(chest: "Chest", mode: str) -> str:
@@ -473,7 +499,7 @@ def chest_doors_by_item():
 def chest_loc_by_oid():
     """Chest OverworldID.ID -> its AP location name (the mod resolves the just-
     opened chest to this and sends the check)."""
-    return {c.id: chest_loc(c.display) for c in CHESTS}
+    return {c.id: chest_loc(c) for c in CHESTS}
 
 
 # --- Region layout per granularity option ------------------------------------

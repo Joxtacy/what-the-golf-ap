@@ -88,7 +88,7 @@ def set_rules(world) -> None:
     #     just its sub-area key (e.g. the Lebowski secret behind Computer 2).
     if world.options.crowns.value:
         for chest in CHESTS:
-            loc = multiworld.get_location(chest_loc(chest.display), player)
+            loc = multiworld.get_location(chest_loc(chest), player)
             if chest.gated:
                 key = chest_key_item(chest.display)
                 set_rule(loc, lambda state, k=key: state.has(k, player))

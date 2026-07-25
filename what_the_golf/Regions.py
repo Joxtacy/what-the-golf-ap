@@ -57,7 +57,7 @@ def create_regions(world) -> None:
     if world.options.crowns.value:
         for chest in CHESTS:
             region = multiworld.get_region(chest_region(chest, mode), player)
-            _add_location(region, chest_loc(chest.display))
+            _add_location(region, chest_loc(chest))
 
     # Campaign victory: an internal event placed in the Final boss region, so it's
     # reachable exactly when that region is accessible.

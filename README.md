@@ -88,9 +88,10 @@ tools/
 - [x] Goal options: `campaign`, `all_bosses`, `door_50/75/100`
 - [x] In-game connection UI (F8), passive-until-connected lifecycle
 - [x] DeathLink (count-based throttle + on-screen HUD)
+- [x] Sub-area-prefixed location names (`07A: …`, boss `07: …`, chest `03B: …`)
 - [ ] Real 2-player multiworld test (all live tests so far have been solo)
 - [ ] Packaged release (`.apworld` + mod install bundle)
-- [ ] Stretch: DLC (Sporty Sports), ball shapes / Transmogrif, friendlier names
+- [ ] Stretch: ball shapes / Transmogrif
 
 ## Testing the apworld
 
@@ -107,5 +108,5 @@ needed. `data.py` and `tools/export_ids.py` are framework-free.
 
 Validated against the **released Archipelago 0.6.7** (and `main`/0.6.8): the
 world loads and generates a solvable multiworld across all option combinations
-(59 item names / up to 276 locations). To test a specific version,
+(114 item names / up to 379 locations). To test a specific version,
 `git checkout <tag>` in the Archipelago checkout before generating.
