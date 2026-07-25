@@ -3,7 +3,7 @@ from BaseClasses import Item, ItemClassification
 from .data import (
     item_name_to_id, access_item_names, chamber_access_names,
     section_access_names, boss_key_names, chest_key_names,
-    FLAG_ITEM, FILLER_ITEMS, TRAP_ITEMS, num_holes, CHAMBER, SECTION,
+    FLAG_ITEM, FLAG_ITEMS, FILLER_ITEMS, TRAP_ITEMS, num_holes, CHAMBER, SECTION,
     episode_access_names, episode_access_item, episode_names,
     episode_hole_count,
 )
@@ -51,8 +51,9 @@ def item_classification(name: str) -> ItemClassification:
     if (name in ACCESS_ITEMS or name in BOSS_KEY_ITEMS or name in CHEST_KEY_ITEMS
             or name in EPISODE_ACCESS_ITEMS):
         return IC.progression
-    if name == FLAG_ITEM:
-        # Counted for the % goals -> progression, no cross-player balancing.
+    if name in FLAG_ITEMS:
+        # Every flag-name variant. Counted for the % goals -> progression, no
+        # cross-player balancing.
         return IC.progression_skip_balancing
     if name in TRAP_ITEMS:
         return IC.trap
@@ -68,4 +69,5 @@ def flag_pool(enabled_episodes=()) -> int:
 __all__ = ["WTGItem", "item_name_to_id", "item_classification",
            "ACCESS_ITEMS", "BOSS_KEY_ITEMS", "CHEST_KEY_ITEMS", "TRAP_ITEMS",
            "EPISODE_ACCESS_ITEMS", "access_items_for", "episode_access_items_for",
-           "FLAG_ITEM", "FILLER_ITEMS", "flag_pool", "CHAMBER", "SECTION"]
+           "FLAG_ITEM", "FLAG_ITEMS", "FILLER_ITEMS", "flag_pool", "CHAMBER",
+           "SECTION"]

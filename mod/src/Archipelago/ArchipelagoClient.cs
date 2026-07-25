@@ -164,6 +164,14 @@ public class ArchipelagoClient
         EpisodeGate.SetEnabled(Data.Episodes);
         // Flag target for the door_* goals (0 otherwise) -> drives the Flag HUD.
         Data.FlagGoal = slotData.TryGetValue("flag_goal", out var fg) ? Convert.ToInt32(fg) : 0;
+        // Every name that counts as a Flag (real + joke variants). ItemApplier
+        // matches received items against this to tally FlagsCollected. Older seeds
+        // omit it -> keep the default {"Flag"}.
+        if (slotData.TryGetValue("flag_items", out var fi))
+        {
+            var names = ToStringList(fi);
+            if (names.Count > 0) Data.FlagItems = new System.Collections.Generic.HashSet<string>(names);
+        }
     }
 
     // A slot-data list value may arrive as a Newtonsoft JArray or a plain

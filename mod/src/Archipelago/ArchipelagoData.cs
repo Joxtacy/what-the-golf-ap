@@ -47,4 +47,9 @@ public class ArchipelagoData
     // full item history on connect (ItemIndex starts at -1), so this rebuilds from
     // scratch each session.
     public int FlagsCollected;
+    // Every item name that counts as a Flag (the apworld's FLAG_ITEMS -- a mix of
+    // real-world and joke flag names, all gameplay-identical). ItemApplier tallies
+    // FlagsCollected by matching against this set. Populated from the "flag_items"
+    // slot-data list; defaults to just "Flag" so pre-variant seeds still count.
+    public HashSet<string> FlagItems = new() { "Flag" };
 }

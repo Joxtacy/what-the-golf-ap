@@ -7,7 +7,7 @@ from .data import (
     CHESTS, chest_loc, chest_key_item, boss_scene_for_computer, episode_gates,
     boss_chamber_access_items, SECTION,
 )
-from .Items import flag_pool
+from .Items import flag_pool, FLAG_ITEMS
 
 
 def flag_goal(world) -> int:
@@ -116,5 +116,7 @@ def set_rules(world) -> None:
             all(state.can_reach_location(n, player) for n in names)
     else:
         need = flag_goal(world)
+        # Flags come in many named variants (FLAG_ITEMS) but all count the same, so
+        # sum across the whole set rather than the single "Flag" name.
         multiworld.completion_condition[player] = \
-            lambda state, n=need: state.has("Flag", player, n)
+            lambda state, n=need: state.has_from_list(FLAG_ITEMS, player, n)

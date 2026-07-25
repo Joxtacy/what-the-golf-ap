@@ -235,6 +235,50 @@ _BOSS_CHAMBER = {int(bd["computer"]): _SCENE_CHAMBER[bd["scene"]]
                  for bd in BOSS_DOORS if bd["scene"] in _SCENE_CHAMBER}
 
 FLAG_ITEM = "Flag"
+# Flag tokens with variety. Every one of these is a Flag for gameplay purposes --
+# same classification, same role, all counted together for the % goals (see the
+# "Flags" item-name group + Rules.flag win condition). The ONLY difference is the
+# displayed name, so a multiworld's item feed shows a mix of real-world and joke
+# flags instead of "Flag" x N. The pool cycles through FLAG_ITEMS deterministically
+# (create_items), so Universal Tracker's regen reproduces the exact same pool.
+# FLAG_NAMES_EXTRA is appended LAST in all_item_names() so adding it never shifts a
+# pre-existing ID; "Flag" itself keeps its original ID and stays in the rotation as
+# the plain one.
+FLAG_NAMES_EXTRA = (
+    # National flags that have a genuine proper name -- use it (ASCII spellings so
+    # the in-game font renders cleanly).
+    "Dannebrog",            # Denmark
+    "Hinomaru",             # Japan
+    "Taegukgi",             # South Korea
+    "Auriverde",            # Brazil
+    "The Maple Leaf",       # Canada
+    "Tricolore",            # France
+    "Il Tricolore",         # Italy
+    "La Rojigualda",        # Spain
+    "Galanolefki",          # Greece
+    "Schwarz-Rot-Gold",     # Germany
+    "Union Jack",           # United Kingdom
+    "Old Glory",            # USA
+    "Stars and Stripes",    # USA
+    "Star-Spangled Banner", # USA
+    "Tiranga",              # India
+    "The Saltire",          # Scotland
+    "Y Ddraig Goch",        # Wales
+    "Ay Yildiz",            # Turkey
+    # National flags with no distinct proper name -- keep the generic form.
+    "Sweden Flag", "Norway Flag", "Finland Flag", "Iceland Flag",
+    "Argentina Flag", "Mexico Flag", "Jamaica Flag", "Portugal Flag",
+    "Ireland Flag", "Switzerland Flag", "Nepal Flag", "Australia Flag",
+    "New Zealand Flag", "Kenya Flag",
+    # Real novelty flags (actual flags/flag names -- no invented puns).
+    "White Flag of Surrender", "Jolly Roger", "Checkered Flag", "Black Flag",
+    "Red Flag", "Green Flag", "Yellow Flag", "Flag of Truce", "Rainbow Flag",
+    "Prayer Flag", "Pennant", "Semaphore Flag", "Signal Flag",
+    "Beach Warning Flag",
+)
+# Every flag token (the plain one + the variety). Single source of truth for the
+# rotation, the classification check, the "Flags" item group and the win condition.
+FLAG_ITEMS = (FLAG_ITEM,) + FLAG_NAMES_EXTRA
 FILLER_ITEMS = (
     "Silly Hat", "Golf Ball Skin", "Confetti Burst",
     "Trophy", "Extra Putt", "Rubber Duck",
@@ -582,12 +626,14 @@ def access_item_names():
 def all_item_names():
     # Universe of every item any option can produce (IDs must stay stable): all
     # access keys (both granularities) + all boss keys + crown-chest keys + Flag +
-    # filler + traps + episode access keys. A seed only CREATES the subset its
-    # options need. Episode access keys are appended LAST (after traps) so this
-    # addition didn't shift any pre-episode ID.
+    # filler + traps + episode access keys + the extra flag names. A seed only
+    # CREATES the subset its options need. Episode access keys, then FLAG_NAMES_EXTRA,
+    # are appended LAST so these additions never shift a pre-existing ID (the plain
+    # "Flag" keeps its original position/ID).
     return (list(access_item_names()) + list(boss_key_names())
             + list(chest_key_names()) + [FLAG_ITEM] + list(FILLER_ITEMS)
-            + list(TRAP_ITEMS) + list(episode_access_names()))
+            + list(TRAP_ITEMS) + list(episode_access_names())
+            + list(FLAG_NAMES_EXTRA))
 
 
 def all_location_names():

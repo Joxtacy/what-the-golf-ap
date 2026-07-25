@@ -5,7 +5,7 @@ from .Options import WTGOptions
 from .Items import (
     WTGItem, item_name_to_id, item_classification,
     access_items_for, episode_access_items_for, BOSS_KEY_ITEMS, CHEST_KEY_ITEMS,
-    TRAP_ITEMS, FLAG_ITEM, FILLER_ITEMS, flag_pool,
+    TRAP_ITEMS, FLAG_ITEM, FLAG_ITEMS, FILLER_ITEMS, flag_pool,
 )
 from .data import CHAMBER, SECTION
 from .Locations import location_name_to_id
@@ -46,6 +46,10 @@ class WTGWorld(World):
 
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
+
+    # All flag-name variants count as one for hints/tracker grouping. The win
+    # condition sums the same set directly (see Rules.set_rules).
+    item_name_groups = {"Flags": set(FLAG_ITEMS)}
 
     # -- generation pipeline --------------------------------------------------
 
@@ -97,9 +101,11 @@ class WTGWorld(World):
             pool.append(self.create_item(name))
 
         # Progression: one Flag per hole (Main + enabled episodes), counted for
-        # the % goals.
-        for _ in range(flag_pool(self.enabled_episodes())):
-            pool.append(self.create_item(FLAG_ITEM))
+        # the % goals. Cycle through the named variants (deterministic, so UT's
+        # regen reproduces the same pool) purely for feed variety -- every variant
+        # is gameplay-identical to a plain Flag.
+        for i in range(flag_pool(self.enabled_episodes())):
+            pool.append(self.create_item(FLAG_ITEMS[i % len(FLAG_ITEMS)]))
 
         # Fill the remainder so pool size == number of real (non-event) checks.
         total_locations = sum(
@@ -149,6 +155,11 @@ class WTGWorld(World):
             # win condition is set_rules' completion_condition. Not applied in
             # _apply_slot_data (no generation effect), so UT ignores it.
             "flag_goal": flag_goal(self),
+            # Every name that counts as a Flag. The mod tallies FlagsCollected (Flag
+            # HUD + % door hard-lock) by matching received items against this set, so
+            # the named variants all count. Older seeds omit it -> the mod falls back
+            # to just "Flag".
+            "flag_items": list(FLAG_ITEMS),
         }
 
     def _apply_slot_data(self, slot_data: dict) -> None:
