@@ -3,8 +3,9 @@
 An [Archipelago](https://archipelago.gg) (multiworld randomizer) integration for
 [WHAT THE GOLF?](https://store.steampowered.com/app/785790/WHAT_THE_GOLF/).
 Works end-to-end: generate a seed, launch the game with the mod, connect, and
-play the campaign as a multiworld. See `what_the_golf/docs/setup_en.md` for the
-player setup guide and `STATUS.md` for detailed project status.
+play the campaign as a multiworld. See the
+[player setup guide](what_the_golf/docs/setup_en.md) and [`STATUS.md`](STATUS.md)
+for detailed project status.
 
 ## The two pieces
 
@@ -20,30 +21,42 @@ An AP integration is two separate projects, both here:
 
 Confirmed engine: **Unity 2020.3.48f1, IL2CPP** (inspected in the installed game).
 (We use MelonLoader rather than BepInEx 6 because BepInEx's Dobby detour
-hard-crashes this game at graphics init — see `STATUS.md`.)
+hard-crashes this game at graphics init — see [`STATUS.md`](STATUS.md).)
 
 ## How the game maps onto Archipelago
 
 - **Locations (checks):** every hole `<scene> - Clear`, plus `<scene> - Crown`
-  for holes with a crown challenge, plus (optionally) each overworld crown chest.
-  **Up to 276 locations** — 133 clears + 119 crowns + 24 chests.
+  for holes with a crown challenge, plus (optionally) each overworld crown chest
+  and each enabled episode's holes. **Up to 379 locations** — 133 clears + 119
+  crowns + 24 chests + 100 episode holes + 3 episode crowns.
 - **Items** — progression is *decoupled* from the game's native gating; the mod
   opens the matching in-game door(s) when a key arrives:
   - **Access keys** — gate the themed areas. Granularity is the `area_access`
     option: `section` (17 keys, one per in-game sub-area unlock — default) or
     `chamber` (10 keys, one per chamber). See the looseness note below.
-  - **Computer Boss keys** — 7 keys (`boss_keys` option); each holds a computer
-    boss's door shut until received.
+  - **Computer Boss keys** — 7 keys (`boss_keys` option), for Computers 1, 2, 3,
+    4, 5, 7, 8; each holds a computer boss's door shut until received.
   - **Chest keys** — 18 keys for the crown-locked chests (`crowns` option).
-  - **Flag** — a *counted* token (one per hole); collecting X% satisfies the
-    50/75/100% completion-door goals.
+  - **Episode Access keys** — one per enabled episode (`episodes` option); the mod
+    keeps you out of a locked episode at the episodes hub until the key arrives.
+  - **Flag** — a *counted* token (one per hole, incl. episode holes); collecting
+    X% opens the 50/75/100% completion door for those goals.
+  - **Traps** — optional (`traps`/`trap_percentage`): Mulligan / Slow-Mo /
+    Fast-Forward / Transmogrify, replacing a share of filler.
   - **Filler** — cosmetics/trophies to pad the pool.
 - **Goals** (option): `campaign` (reach the Final boss), `all_bosses` (defeat all
   7 computers + the Final boss), or `door_50 / door_75 / door_100` (Flag %).
 - **DeathLink** (option) — a "death" is a level failure (ball OOB / water / lost),
   throttled by `death_link_amnesty` (one broadcast per N wipes).
+- **In-game UI** — the mod is passive until you connect it (F8 panel). It adds an
+  optional live event feed, a command console (`` ` ``), Flag/DeathLink progress
+  HUDs, and a keep-hub-portal-open QoL toggle. See the player guide.
 
-See `what_the_golf/Options.py` for the full option docstrings.
+For everything a **player** needs — what the mod changes, all options, in-game
+controls, install/connect/play — see the
+**[player setup guide](what_the_golf/docs/setup_en.md)**. See
+[`what_the_golf/Options.py`](what_the_golf/Options.py) for the full option
+docstrings.
 
 ### Real structure (dumped from the game)
 
@@ -51,8 +64,9 @@ The campaign is **11 chambers** counting **10 → 00** (10 = free intro, 00 =
 finale) containing **133 holes**, read from the game's own `OverworldLevelData`
 asset. Chambers subdivide into **21 sub-areas** which collapse to **17 unlockable
 "gate units"** (some sub-areas share one in-game door: `05A/B/C` and `06A/B`).
-Level names are the game's real scene names. See `mod/harvested-levels.md` and the
-dumped `mod/wtg_*.json`.
+Level names are the game's real scene names. See
+[`mod/harvested-levels.md`](mod/harvested-levels.md) and the dumped
+`mod/wtg_*.json`.
 
 > **Section-access looseness:** the game hard-gates chamber↔chamber (the
 > computer/boss doors), but sub-areas *within* a chamber share an open overworld
@@ -89,9 +103,10 @@ tools/
 - [x] In-game connection UI (F8), passive-until-connected lifecycle
 - [x] DeathLink (count-based throttle + on-screen HUD)
 - [x] Sub-area-prefixed location names (`07A: …`, boss `07: …`, chest `03B: …`)
-- [ ] Real 2-player multiworld test (all live tests so far have been solo)
+- [x] Episodes / DLC (`episodes`: Sporty Sports / Snow / Hotdog / Alive / Among Us)
+- [x] Traps (`traps` / `trap_percentage`) + in-game feed, command console, Flag HUD
+- [x] Real multiworld test (validated live with other players/games)
 - [ ] Packaged release (`.apworld` + mod install bundle)
-- [ ] Stretch: ball shapes / Transmogrif
 
 ## Testing the apworld
 
