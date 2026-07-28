@@ -84,6 +84,17 @@ public class Mod : MelonMod
     // future boss-door debugging.)
     public const bool BossDoorProbeEnabled = false;
 
+    // DEV/TEST: Main Crown Door diagnostic probe. When true, F5 in the overworld dumps
+    // each CROWN_ door's open-state + requireGoals (which holes gate it) + previous/
+    // previousBoss chain + position, plus the 07B/03A/03B hole goals with positions ->
+    // reveals whether CROWN_MAIN1/2 is the ENTRANCE to Bowling/Cars (hard_sections must
+    // hold it) or a separate crown-bonus door (hard_sections should ignore it). Read-only.
+    // Used 2026-07-27/28 to resolve the CROWN_MAIN mismodel (they're teleport-only section
+    // triggers, not walk-connectors -> SectionGate now excludes them) and to map the two
+    // crown-gated "gateway" levels (EvilFlag 2 / EvilFlag Magic 0; see REVERSE_ENGINEERING.md
+    // + STATUS 0b). F5 dumps all buttons + all goals w/ Pun. Kept OFF for future crown-door work.
+    public const bool CrownDoorProbeEnabled = false;
+
     // MelonLoader GUI callback -> draw the connection panel (and read its hotkey).
     public override void OnGUI()
     {
@@ -92,6 +103,18 @@ public class Mod : MelonMod
         if (DebugTrapHotkeys) HandleTrapHotkeys();
         if (BallShapeProbeEnabled) HandleBallShapeProbeHotkey();
         if (BossDoorProbeEnabled) HandleBossDoorProbeHotkey();
+        if (CrownDoorProbeEnabled) HandleCrownDoorProbeHotkey();
+    }
+
+    private static void HandleCrownDoorProbeHotkey()
+    {
+        try
+        {
+            var e = UnityEngine.Event.current;
+            if (e == null || e.type != UnityEngine.EventType.KeyDown) return;
+            if (e.keyCode == UnityEngine.KeyCode.F5) Mapping.CrownDoorProbe.Dump();
+        }
+        catch { }
     }
 
     private static void HandleBallShapeProbeHotkey()

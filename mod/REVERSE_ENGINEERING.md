@@ -106,6 +106,61 @@ destinations. That is why forcing Space's door flag never made it list. This is
 why unlocking is done via `ChamberUnlock` (runtime trigger open), not by writing a
 save set. (Confirmed by the now-removed `UnlockProbe` read-only diagnostic.)
 
+## Overworld doors: the two open-paths + crown doors (mapped 2026-07-27/28)
+
+`OverworldButton2D` is the overworld door/button class. Two *different* code paths
+open a door, which matters for gating (see `SectionGate`/`ChestGate`/`GamePatches`):
+
+1. **Ball-contact:** `OnCollisionEnter2D` → checks `canOpen` (field `0x74`) and
+   `openOrOpening` (`0x130`), then calls `CheckOpen()`. `CheckOpen` opens when
+   `GetFlagsLeft() <= 0` (then `SetDoorOpen(id)` + `OpenDoor`). Respects `canOpen`.
+2. **Navigation:** `GeneralCampaignStarter.CheckDoors(level)` (its `<CheckDoors>b__1`
+   lambda) force-opens a level's *preceding* door via **`InstantOpenDoor()`** when you
+   head toward a level behind it — gated on that door's `CanDoorBeOpened()`.
+   `InstantOpenDoor` **bypasses `canOpen` AND `CheckOpen`** and still `SetDoorOpen`s the
+   id into `OPEN_DOORS`. A binary call-site scan confirmed `<CheckDoors>b__1` is the
+   ONLY game caller of `InstantOpenDoor`. `CanDoorBeOpened()` = `previousBoss.IsCompleted()`
+   if a previousBoss is set, else `GetIsDoorOpen(id) || requireGoals.All(r => r.<0x28>.
+   IsCompletedInSaveGame())` then `previous.openOrOpening`.
+
+   → To hard-gate a door you must block BOTH paths: a `CheckOpen` prefix (path 1) AND an
+   `InstantOpenDoor` prefix (path 2). Our own force-open uses `InstantOpenDoor` on
+   already-unlocked doors, so the prefix filters on `IsLocked`.
+
+**Two kinds of `CROWN_*` door — do not conflate:**
+
+- **Per-area crown-CHEST doors** — `CROWN_LEBOWSKI`, `CROWN_CARS`, `CROWN_OL`,
+  `CROWN_SPACE`, `CROWN_LIVINGROOM`, `CROWN_WESTERN1/2`, `CROWN_STEALTH`,
+  `CROWN_SUPERPUTT`, `CROWN_PLATFORMERS`, `CROWN_EASY2D`, … One per sub-area.
+  `OnlyAcceptCrowns=true`, `requireGoals` = that area's holes; open by CROWNing them →
+  a crown chest. This is the `crowns` option; `ChestGate` targets these (chest records'
+  `door` field = the real `CROWN_LEBOWSKI`/… OID).
+- **The two "Main Crown Doors"** — `CROWN_MAIN1` ("Main Crown Door", pos ≈ (-32.5, 53),
+  needs **5 crowns**) and `CROWN_MAIN2` ("Main Crown Door Variant", pos ≈ (-32.5, 206.5),
+  needs **10 crowns**, `previousBoss = ID_2D_HOLEINONE_7`). These are GLOBAL crown-count
+  gates on the walking path *between* chambers (`CROWN_MAIN1` before ch07, `CROWN_MAIN2`
+  before ch03); `requireGoals` ≈ the whole game (129 goals) for the count. They are NOT
+  sub-area walk-connectors. In our data they appear only as the section `unlockTriggerId`
+  for **07B (Bowling)** and **03B (Cars)** — the two sub-areas that have no normal
+  connector. Our AP key still `SetDoorOpen(CROWN_MAIN*)` → those sections become
+  teleport-available (validated in-game), which is why `SectionGate` EXCLUDES `CROWN*`
+  triggers (nothing to walk-lock). Read via the read-only `CrownDoorProbe` (F5, gated off).
+
+**Two "gateway" levels sit right at the Main Crown Doors** (one crown-gated level
+between the door and the chamber):
+
+- `CROWN_MAIN1` → **`EvilFlag 2`** (pun "CAMPER FLAG", live section "Hub Section - 07 area",
+  pos ≈ (-30.5, 48)). In the game's `OverworldLevelData` it belongs to **NO section** →
+  purely 5-crown-gated, and it has **no teleport spot**. `build_levels.py` drops it →
+  **NOT an AP location** (see STATUS "deferred" note for how to add it if ever wanted).
+- `CROWN_MAIN2` → **`EvilFlag Magic 0`** (pun "NOW YOU SEE ME", live "Hub Section - 03 area",
+  pos ≈ (-31, 202)). Here `OverworldLevelData` DOES place it in **03A (Jungle), trigger
+  `RVQTA`** → it's TRACKED and unlocks with the "03A: Jungle" key like its neighbours.
+
+(In-game the level-select shows these as "lab experiment #521 anger" / "#42 hate"; that
+string is neither the SceneName nor the `Pun`, so match them by scene/pun/position, not
+that label.)
+
 ## Recommended hooks (what the mod patches)
 
 | Purpose | Patch (postfix) | Notes |

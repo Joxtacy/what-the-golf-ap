@@ -14,8 +14,10 @@ namespace WtgArchipelago.Patches;
 public static class GamePatches
 {
     // OIDs of locked crown/section doors we've already logged blocking (dedup so a
-    // player bumping a locked door repeatedly doesn't spam the log).
+    // player bumping a locked door repeatedly doesn't spam the log). Separate sets per
+    // open-path so both paths get a log line for the same OID.
     private static readonly HashSet<string> _loggedGateBlock = new();
+    private static readonly HashSet<string> _loggedInstantBlock = new();
 
     public static void Apply(HarmonyLib.Harmony harmony)
     {
@@ -78,6 +80,22 @@ public static class GamePatches
         // one patch covers both.
         TryPatchPrefix(harmony, "OverworldButton2D:CheckOpen",
                        nameof(ButtonCheckOpenPrefix));
+
+        // Crown-chest + section HARD gate, SECOND open-path. Besides the ball-contact
+        // CheckOpen path, a door is also force-opened by GeneralCampaignStarter.CheckDoors
+        // when the player navigates toward a level sitting behind it: it calls the door's
+        // InstantOpenDoor() directly, which BYPASSES both canOpen and CheckOpen (so neither
+        // the SectionGate/ChestGate canOpen poll nor the CheckOpen prefix above catches it).
+        // A prefix on InstantOpenDoor that returns false for a still-locked door OID closes
+        // that path; InstantOpenDoor also persists via SetDoorOpen, so skipping the whole
+        // method keeps it out of OPEN_DOORS too. Guards genuine walk-connectors and crown-
+        // chest doors (SectionGate/ChestGate IsLocked). NOTE: the "Main Crown Door(s)"
+        // CROWN_MAIN1/2 (07B/03B) are deliberately NOT gated -- those sub-areas are
+        // teleport-only, so SectionGate excludes them (see SectionGate.WalkConnectorTriggers).
+        // Our own force-open of KEYED crown doors (ChestGate.Tick) calls InstantOpenDoor on
+        // UNLOCKED doors, so IsLocked is false there -> unaffected.
+        TryPatchPrefix(harmony, "OverworldButton2D:InstantOpenDoor",
+                       nameof(ButtonInstantOpenPrefix));
 
         // Door goal LABEL: the % door's requirement text natively shows the game's
         // completion % ("4/50%"); retarget the goal-tier door's label to AP progress
@@ -287,26 +305,51 @@ public static class GamePatches
     {
         try
         {
-            if (__instance == null) return true;
-            string oid = null;
-            try
-            {
-                var o = __instance.gameObject.GetComponent<Il2Cpp.OverworldID>();
-                if (o != null) oid = o.ID;
-            }
-            catch { }
-            if (string.IsNullOrEmpty(oid)) return true;
-
-            if (Mapping.ChestGate.IsLocked(oid) || Mapping.SectionGate.IsLocked(oid))
-            {
-                // Dedup: a player can bump a locked door repeatedly -> log once per OID.
-                if (_loggedGateBlock.Add(oid))
-                    Plugin.Log.LogInfo($"[GATE] blocked opening locked door '{oid}' (need its key)");
-                return false;   // skip original -> door stays shut
-            }
+            if (!IsLockedGatedDoor(__instance, out string oid)) return true;
+            // Dedup: a player can bump a locked door repeatedly -> log once per OID.
+            if (_loggedGateBlock.Add(oid))
+                Plugin.Log.LogInfo($"[GATE] blocked opening locked door '{oid}' (need its key)");
+            return false;   // skip original -> door stays shut
         }
         catch (Exception e) { Plugin.Log.LogError($"ButtonCheckOpenPrefix: {e}"); }
         return true;   // not gated / unlocked -> open as normal
+    }
+
+    // PREFIX on OverworldButton2D.InstantOpenDoor() -- the SECOND open-path (see Apply).
+    // GeneralCampaignStarter.CheckDoors force-opens a level's preceding door via this
+    // method, bypassing canOpen and CheckOpen. For a still-locked gated door we skip it so
+    // the door stays shut (InstantOpenDoor also SetDoorOpen()s, so skipping keeps it out of
+    // OPEN_DOORS). Filtered to our locked OIDs; keyed / non-gated doors defer to the game --
+    // including ChestGate's own InstantOpenDoor on already-unlocked crown doors.
+    private static bool ButtonInstantOpenPrefix(Il2Cpp.OverworldButton2D __instance)
+    {
+        try
+        {
+            if (!IsLockedGatedDoor(__instance, out string oid)) return true;
+            if (_loggedInstantBlock.Add(oid))
+                Plugin.Log.LogInfo($"[GATE] blocked InstantOpenDoor on locked door '{oid}' (need its key)");
+            return false;   // skip original -> door stays shut, not persisted
+        }
+        catch (Exception e) { Plugin.Log.LogError($"ButtonInstantOpenPrefix: {e}"); }
+        return true;   // not gated / unlocked -> open as normal
+    }
+
+    // Shared filter for the two door-open prefixes: read a button's OverworldID and report
+    // whether it's a still-locked crown-chest door (crowns) or section connector
+    // (hard_sections). Both gates return false when their option is off, so a plain install
+    // never restricts anything.
+    private static bool IsLockedGatedDoor(Il2Cpp.OverworldButton2D button, out string oid)
+    {
+        oid = null;
+        if (button == null) return false;
+        try
+        {
+            var o = button.gameObject.GetComponent<Il2Cpp.OverworldID>();
+            if (o != null) oid = o.ID;
+        }
+        catch { }
+        if (string.IsNullOrEmpty(oid)) return false;
+        return Mapping.ChestGate.IsLocked(oid) || Mapping.SectionGate.IsLocked(oid);
     }
 
     // PREFIX on OverworldButton2D.CanDoorBeOpened(). For the seed's goal-tier %

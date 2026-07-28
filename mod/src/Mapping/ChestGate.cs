@@ -14,11 +14,15 @@ namespace WtgArchipelago.Mapping;
 /// the matching "<Area> Chest Key" arrives from the multiworld, then release it.
 /// Freely-reachable chests have no door/key -- just a check.
 ///
-/// Two-layer gate (mirrors BossGate):
-///  * HARD (correctness): a Harmony prefix on OverworldButton2D.CheckOpen (see
+/// Three-layer gate (mirrors BossGate):
+///  * HARD, ball-contact: a Harmony prefix on OverworldButton2D.CheckOpen (see
 ///    GamePatches.ButtonCheckOpenPrefix) returns false for a still-locked door OID,
 ///    so the natural ball-contact open can never fire -- race-free, and unaffected by
 ///    a teleport (which skips the overworld poll burst). Driven by IsLocked().
+///  * HARD, navigation: a Harmony prefix on OverworldButton2D.InstantOpenDoor (see
+///    GamePatches.ButtonInstantOpenPrefix) blocks GeneralCampaignStarter.CheckDoors,
+///    which force-opens a level's preceding door via InstantOpenDoor (bypassing canOpen
+///    and CheckOpen) when you navigate toward it. Same IsLocked() filter.
 ///  * SOFT (visual + force-open): Tick still polls -- it holds a locked door's
 ///    canOpen=false so it SHOWS as locked, and force-opens a keyed door via
 ///    InstantOpenDoor (a crown door also gates on crown count, so canOpen=true alone

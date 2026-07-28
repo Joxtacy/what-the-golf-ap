@@ -503,21 +503,67 @@ skip this next time). See the mod-UX section above.
 
 ## Suggested next steps
 
-0. **OPEN BUG — `hard_sections` leaks the two "Main Crown Doors" (found 2026-07-24, live).**
-   Under section granularity + `hard_sections`, `SectionGate` correctly holds the
-   normal sub-area connectors shut, but the two **"Main Crown Door" / "Main Crown Door
-   Variant"** doors — `CROWN_MAIN1` (→ 07B Bowling/Lebowski) and `CROWN_MAIN2` (→ 03B
-   Cars) — still open, so you can walk into those locked sub-areas. Root cause: unlike
-   the "Crowns Only Variant" chest doors, the Main Crown Door **auto-opens on a total-
-   crown-count threshold** via a path that ignores `canOpen` and never routes through
-   `OverworldButton2D.CheckOpen` — so neither SectionGate layer (the `canOpen=false`
-   poll nor the `ButtonCheckOpenPrefix` hard gate) catches it. Log proof: SectionGate
-   logged `holding connector 'CROWN_MAIN1' shut` yet the door opened with no `[GATE]
-   blocked` line. Not a softlock — purely out-of-logic reachability. **Fix (needs RE):**
-   find the crown-count open path for the Main Crown Door (candidate: a `GetFlagsLeft`/
-   `CanDoorBeOpened`-style crown check, mirror the PercentGate `GetFlagsLeft` override)
-   and force "not enough crowns" for a still-locked Main Crown Door, AND actively close
-   it if it's already open in `OPEN_DOORS`. Only these two door OIDs are affected.
+0. **`hard_sections` mis-modelled 07B Bowling / 03B Cars — ✅ FIXED + LIVE-VALIDATED 2026-07-28.**
+   Under section granularity + `hard_sections`, `SectionGate` was trying to clamp the two
+   **"Main Crown Door" / "…Variant"** doors — `CROWN_MAIN1` (07B Bowling/Lebowski) and
+   `CROWN_MAIN2` (03B Cars) — as if they were walk-connectors. They aren't.
+
+   **Root cause (found via `CrownDoorProbe`, a read-only F5 dev probe, + `disq_objdump`):**
+   07B and 03B are the ONLY two sub-areas whose section `unlockTriggerId` is a crown-based
+   id (`CROWN_MAIN1/2`) rather than a genuine `door_*`/short-code walk-connector. Confirmed
+   in-game: those two sub-areas have **no walk-connector at all** — they're reached by
+   teleport (works — `ChamberUnlock.SetDoorOpen(CROWN_MAIN*)` makes them teleport-available)
+   / boss-clearing, and there's no walkable sibling path into them. So there is no
+   within-chamber looseness to close there, and the "Main Crown Door" our data points at is
+   NOT their entrance (it's a global crown gate). Note: each sub-area ALSO has a separate
+   *crown-collection* door (`CROWN_LEBOWSKI`, `CROWN_CARS`, `CROWN_OL`, …) opened by
+   crowning that area's holes → a crown chest; those are the `crowns`/ChestGate doors and
+   were already correct (`chests[].door` = `CROWN_LEBOWSKI`/`CROWN_CARS`, matching the live
+   objects). `CROWN_MAIN1/2` were only ever the *section trigger* for 07B/03B.
+
+   **Fix:** `SectionGate` now gates only genuine walk-connectors —
+   `SectionGate.WalkConnectorTriggers()` excludes any `CROWN*` trigger, so 07B/03B are no
+   longer clamped (their AP key still opens the teleport flag via `ChamberUnlock`,
+   untouched). No apworld/data/seed/ID change. Every other sub-area (real connectors, e.g.
+   08/09) is unaffected.
+
+   **Also kept (general hardening, from the same investigation):** a Harmony prefix on
+   `OverworldButton2D:InstantOpenDoor` (`GamePatches.ButtonInstantOpenPrefix`). The game
+   has a SECOND door-open path — `GeneralCampaignStarter.CheckDoors(level)` →
+   `<CheckDoors>b__1` → `InstantOpenDoor()` (the only game caller, per a binary call-site
+   scan) — that force-opens a level's preceding door when you navigate toward it, bypassing
+   both `canOpen` and `CheckOpen` (and `SetDoorOpen`-persisting it). The prefix blocks it
+   for any still-locked gated OID (`ChestGate.IsLocked || SectionGate.IsLocked`, shared via
+   `IsLockedGatedDoor`), closing that race for real connectors + crown-chest doors.
+   `CROWN_MAIN1/2` are deliberately out of scope now (SectionGate excludes them).
+
+   Builds clean + deployed. `CrownDoorProbe` left in place, gated OFF (`Mod.
+   CrownDoorProbeEnabled`). **LIVE-VALIDATED 2026-07-28** (section + hard_sections, fresh
+   save, seed `ap-build/crownfix`): keyed 07B/03B teleported in and played fine with no
+   `[SECTIONGATE]`/`[GATE]` lines about `CROWN_MAIN*`; the real connector 09A→09B still
+   hard-locked (`[SECTIONGATE] holding connector 'Z4UZC' shut`).
+
+0b. **DEFERRED / not built — add the two crown-gateway holes (`EvilFlag 2`, `EvilFlag Magic 0`).**
+   Investigating item 0 mapped the two levels that sit between each Main Crown Door and its
+   chamber (full details in `mod/REVERSE_ENGINEERING.md` → "Overworld doors … crown doors"):
+   - **`EvilFlag Magic 0`** (pun "NOW YOU SEE ME", ch03 / `CROWN_MAIN2`) — the game's
+     `OverworldLevelData` already puts it in **03A (Jungle), trigger `RVQTA`**, so it's
+     **already an AP location**, unlocked by the "03A: Jungle" key. Nothing to do (worth a
+     one-time sanity check that teleport-to-Jungle actually reaches it, but the game's own
+     grouping says `RVQTA` gates it, and crown-gated 03B/Cars teleported fine, so low risk).
+   - **`EvilFlag 2`** (pun "CAMPER FLAG", ch07 / `CROWN_MAIN1`) — belongs to **NO section**
+     in `OverworldLevelData` (purely 5-crown-gated) and has **no teleport spot**, so
+     `build_levels.py` drops it → NOT an AP location. Deliberately left out (tracking a hole
+     with no key/teleport home risks an unreachable check).
+   **If you want it in later:** it shares `CROWN_MAIN1` with 07B, so fold it into the 07B
+   gate unit (trigger `CROWN_MAIN1`) — the existing "07B: Lebowski" key already `SetDoorOpen`s
+   that flag. Steps: (1) **first verify in-game** it's physically walk-reachable once
+   `CROWN_MAIN1` is open (teleport to 07A/07B, walk to the door, confirm you can enter
+   `EvilFlag 2` — it has no teleport spot, so this is the risk); (2) inject it into 07B via a
+   `build_levels.py` `INJECT_LEVELS`-style entry (mirror the Computer-5 injection) so its
+   location ID is **appended last** and no existing IDs shift; (3) regen `levels.json` +
+   `export_ids.py`, rebuild+reinstall the apworld, redeploy `wtg_ids.json`. Adds 1 Clear
+   (+Crown if it has challenges). `CrownDoorProbe` (F5) is the tool to re-inspect.
 
 1. **Content options** (all additive, apworld Options): DLC Sporty Sports; ball
    shapes / Transmogrif (stretch, needs RE). (Chests + crown-door gating are DONE —

@@ -11,14 +11,25 @@ namespace WtgArchipelago.Mapping;
 /// (door_space_00, VJ69W, ...). So with plain section access you can physically
 /// walk into a not-yet-keyed sibling once any sibling of the chamber is reachable.
 ///
-/// When enabled we close that leak with a two-layer gate (mirrors BossGate/ChestGate):
-///  * HARD (correctness): a Harmony prefix on OverworldButton2D.CheckOpen (see
+/// When enabled we close that leak with a three-layer gate (mirrors BossGate/ChestGate):
+///  * HARD, ball-contact: a Harmony prefix on OverworldButton2D.CheckOpen (see
 ///    GamePatches.ButtonCheckOpenPrefix) returns false for a still-locked connector
 ///    OID, so it can never open on ball contact -- race-free, and unaffected by a
 ///    teleport (which skips the overworld poll burst). Driven by IsLocked().
+///  * HARD, navigation: a Harmony prefix on OverworldButton2D.InstantOpenDoor (see
+///    GamePatches.ButtonInstantOpenPrefix) blocks the OTHER open-path --
+///    GeneralCampaignStarter.CheckDoors force-opens a level's preceding door via
+///    InstantOpenDoor when you navigate toward it, bypassing both canOpen and CheckOpen.
+///    Same IsLocked() filter.
 ///  * SOFT (visual): <see cref="Tick"/> still polls -- forcing <c>canOpen = false</c>
 ///    on a locked connector so it SHOWS locked, and restoring <c>canOpen = true</c>
 ///    once its key arrives.
+///
+/// SCOPE: only genuine walk-connectors are gated (see <see cref="WalkConnectorTriggers"/>).
+/// The two crown-based triggers CROWN_MAIN1 (07B Bowling) / CROWN_MAIN2 (03B Cars) are
+/// EXCLUDED: those sub-areas are teleport-only (no walkable sibling path), so there is no
+/// looseness to close and the "Main Crown Door" is not their entrance. Their AP key still
+/// makes them teleport-reachable via ChamberUnlock -- unaffected by this gate.
 ///
 /// Notes:
 /// - VALIDATED in-game on a FRESH save (a progressed save re-derives door state
@@ -45,6 +56,24 @@ public static class SectionGate
         Plugin.Log.LogInfo($"SectionGate: {(on ? "ENABLED" : "disabled")}.");
     }
 
+    /// <summary>The set of section triggers this gate should hold as WALK-CONNECTORS.
+    /// It excludes crown-based triggers (CROWN_*) -- those belong to the two teleport-only
+    /// sub-areas 07B Bowling (CROWN_MAIN1) and 03B Cars (CROWN_MAIN2), which have NO
+    /// walk-connector into them (reached by teleport / boss-clearing, confirmed in-game
+    /// 2026-07-27). Their AP key still opens the trigger flag for teleport reachability
+    /// (ChamberUnlock, unaffected); there is simply no walkable sibling path to close, so
+    /// hard_sections must not try to clamp the "Main Crown Door" (that door isn't their
+    /// entrance -- it's a global crown gate). Every other sub-area's trigger is a genuine
+    /// OverworldButton2D connector and stays gated.</summary>
+    private static HashSet<string> WalkConnectorTriggers()
+    {
+        var set = new HashSet<string>();
+        foreach (var t in ChamberUnlock.AllTriggers())
+            if (!string.IsNullOrEmpty(t) && !t.StartsWith("CROWN"))
+                set.Add(t);
+        return set;
+    }
+
     /// <summary>Is this connector OID a section trigger the seed has NOT unlocked?
     /// Used by the event-driven hard gate (the CheckOpen prefix in GamePatches) to
     /// block the natural ball-contact open regardless of the per-tick canOpen poll.
@@ -52,7 +81,7 @@ public static class SectionGate
     public static bool IsLocked(string oid)
     {
         if (!_enabled || string.IsNullOrEmpty(oid)) return false;
-        _triggers ??= ChamberUnlock.AllTriggers();
+        _triggers ??= WalkConnectorTriggers();
         return _triggers.Contains(oid) && !ChamberUnlock.IsTriggerUnlocked(oid);
     }
 
@@ -63,7 +92,7 @@ public static class SectionGate
         if (!_enabled) return;
         try
         {
-            _triggers ??= ChamberUnlock.AllTriggers();
+            _triggers ??= WalkConnectorTriggers();
             if (_triggers.Count == 0) return;
 
             var btns = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldButton2D>();
