@@ -41,11 +41,13 @@ public static class EpisodeGate
     private static readonly HashSet<string> Unlocked = new();  // packIds whose key arrived
     private static readonly HashSet<string> _loggedBlock = new();
 
+#pragma warning disable 0649 // fields assigned by Newtonsoft.Json via reflection
     private class IdsFile
     {
         public Dictionary<string, string> episode_pack_by_item;
         public Dictionary<string, string> episode_pack_by_name;
     }
+#pragma warning restore 0649
 
     public static void Load()
     {

@@ -30,7 +30,9 @@ public static class BossGate
     private static readonly HashSet<string> _loggedSuppress = new();// doors we've logged suppressing
     private static readonly HashSet<string> _loggedSeen = new();    // gated doors we've logged seeing
 
+#pragma warning disable 0649 // fields assigned by Newtonsoft.Json via reflection
     private class IdsFile { public Dictionary<string, string> boss_by_item; }
+#pragma warning restore 0649
 
     public static void Load()
     {

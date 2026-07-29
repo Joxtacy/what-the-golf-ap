@@ -50,10 +50,12 @@ public static class ChamberUnlock
     private static readonly HashSet<string> Requested = new();
     private static readonly HashSet<string> Available = new();  // sections we've logged as available (once)
 
+#pragma warning disable 0649 // fields assigned by Newtonsoft.Json via reflection
     private class IdsFile
     {
         public Dictionary<string, List<string>> unlocks_by_item;
     }
+#pragma warning restore 0649
 
     /// <summary>Every section trigger known to the seed (all door ids we manage).</summary>
     public static HashSet<string> AllTriggers()

@@ -1,0 +1,60 @@
+WHAT THE GOLF? -- Archipelago mod -- INSTALL
+============================================
+
+You need first
+--------------
+- WHAT THE GOLF? on Steam (plus any DLC for episodes you enable).
+- Archipelago 0.6.7+    https://github.com/ArchipelagoMW/Archipelago/releases
+- MelonLoader v0.7.3    https://melonwiki.xyz/
+- This release's two files:
+    what_the_golf.apworld            (the Archipelago world)
+    WtgArchipelago-mod-*.zip         (this bundle)
+
+1. Install the apworld
+----------------------
+Double-click what_the_golf.apworld -- the Archipelago Launcher installs it.
+(Or copy it into  Archipelago\custom_worlds\ )
+
+2. Install MelonLoader into the game
+------------------------------------
+a. Find the game folder: in Steam, right-click WHAT THE GOLF? ->
+   Manage -> Browse local files.
+b. Run the MelonLoader v0.7.3 installer against that folder (or copy
+   version.dll + the MelonLoader\ folder into the game root).
+c. LAUNCH THE GAME ONCE AND QUIT. This lets MelonLoader generate its
+   interop assemblies (first launch is slow -- that's normal).
+
+3. Install the mod
+------------------
+Place the files from this zip into the game folder:
+
+    WtgArchipelago.dll               ->  <game>\Mods\
+    Archipelago.MultiClient.Net.dll  ->  <game>\UserLibs\
+    wtg_ids.json                     ->  <game>\   (root, next to the .exe)
+
+Create the Mods\ / UserLibs\ folders if they don't exist.
+
+Installed but not connected, the mod does nothing -- the game plays exactly
+like vanilla until you press F8 and connect.
+
+Playing
+-------
+1. Generate/host an Archipelago game that includes a WHAT THE GOLF? YAML.
+2. Start a FRESH save slot (never your 100% save -- the mod writes door state).
+3. Launch via Steam, press F8, enter host / port / slot name / (password),
+   Connect. Tick "Auto-connect on launch" to skip this next time.
+4. Play the campaign. Clears send checks; received items open areas -- hop to
+   them with the pause-menu teleporter. Win by satisfying your goal.
+
+Controls:  F8 = connection panel & toggles   `  = command console
+
+Troubleshooting
+---------------
+- Mod not loading? Check <game>\MelonLoader\Latest.log. Confirm
+  WtgArchipelago.dll is in the game-root Mods\ (NOT MelonLoader\Mods\).
+- ID / generate mismatches? Use the apworld and mod from the SAME release.
+- Episode area won't open? You must own that DLC.
+- First launch hangs? MelonLoader is generating interop assemblies -- let it
+  finish once, then quit and relaunch.
+
+Full guide: what_the_golf/docs/setup_en.md in the source repo.

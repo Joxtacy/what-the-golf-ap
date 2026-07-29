@@ -90,6 +90,7 @@ mod/                    the MelonLoader (IL2CPP) game mod (C#)
 tools/
   build_levels.py       builds what_the_golf/levels.json from the game dump
   export_ids.py         dumps data.py's ID maps + unlock map to mod/ids.json
+  build_release.ps1     packs the .apworld + Release mod bundle into dist/
 ```
 
 ## Roadmap
@@ -106,7 +107,9 @@ tools/
 - [x] Episodes / DLC (`episodes`: Sporty Sports / Snow / Hotdog / Alive / Among Us)
 - [x] Traps (`traps` / `trap_percentage`) + in-game feed, command console, Flag HUD
 - [x] Real multiworld test (validated live with other players/games)
-- [ ] Packaged release (`.apworld` + mod install bundle)
+- [x] Packaged release (`.apworld` + mod install bundle) — `tools/build_release.ps1`
+- [x] Clean up build warnings (`CS0162` unreachable code from `const` debug
+  flags → `static readonly`; `CS0649` JSON-DTO fields → scoped `#pragma`)
 
 ## Testing the apworld
 
@@ -120,6 +123,30 @@ python Generate.py            # with a WHAT THE GOLF? YAML in Players/
 
 A successful generate proves the whole item/location/logic model — no game
 needed. `data.py` and `tools/export_ids.py` are framework-free.
+
+## Building a release
+
+`tools/build_release.ps1` produces both distributable artifacts in `dist/` in one
+shot (requires `python` on PATH and the .NET 6 SDK):
+
+```powershell
+tools\build_release.ps1
+```
+
+It regenerates `mod/ids.json` from the apworld, packs
+`dist/what_the_golf.apworld` (a zip of `what_the_golf/`, `__pycache__` excluded),
+Release-builds the mod (which skips the Debug auto-deploy to a local game
+install), and bundles the mod into
+`dist/WtgArchipelago-mod-v<version>.zip` alongside `wtg_ids.json` and
+`mod/INSTALL.txt`. The version is read from `<Version>` in
+`mod/WtgArchipelago.csproj`.
+
+To cut a release: bump `<Version>` in the csproj (and `world_version` in
+`what_the_golf/archipelago.json`) to match, run the script, and upload both
+`dist/` files as assets to a GitHub Release tagged `v<version>`. Ship the apworld
+and mod from the **same tag** — the mod's `wtg_ids.json` is generated from the
+apworld, so mixing versions can mismatch IDs. Do **not** redistribute MelonLoader
+or any game/Unity DLLs; players supply those (see the setup guide).
 
 Validated against the **released Archipelago 0.6.7** (and `main`/0.6.8): the
 world loads and generates a solvable multiworld across all option combinations

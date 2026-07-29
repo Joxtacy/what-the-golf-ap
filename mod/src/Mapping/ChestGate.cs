@@ -49,11 +49,13 @@ public static class ChestGate
     private static readonly HashSet<string> _loggedOpen = new();
     private static readonly HashSet<string> _loggedSent = new();
 
+#pragma warning disable 0649 // fields assigned by Newtonsoft.Json via reflection
     private class IdsFile
     {
         public Dictionary<string, string> chest_doors_by_item;
         public Dictionary<string, string> chest_loc_by_oid;
     }
+#pragma warning restore 0649
 
     public static void Load()
     {

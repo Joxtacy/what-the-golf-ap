@@ -21,19 +21,19 @@ public class Mod : MelonMod
     // Resources.FindObjectsOfTypeAll (scans ALL loaded objects) + write JSON every
     // few seconds -> a visible frame stall. We already have the data (mod/wtg_*.json),
     // so keep OFF; flip to true + rebuild only when re-capturing game data.
-    public const bool DumpersEnabled = false;
+    public static readonly bool DumpersEnabled = false;
 
     // DEV/TEST: run ShortcutPortalDumper (captures the shortcut-portal topology to
     // wtg_portals.json) to identify the chamber-10 hub portal for PortalGate.TargetKeys.
     // Read-only scan; keep OFF except during a capture session.
-    public const bool PortalProbeEnabled = false;
+    public static readonly bool PortalProbeEnabled = false;
 
     // DEV/TEST: episode-enforcement research probe (read-only). Dumps the content-pack
     // registry (RuntimeStoreData.contentPacksDefs) to wtg_episodes.json and logs every
     // OverworldSceneLoader.LoadOverworld call, so we can see how an episode is entered
     // and get the packId<->episode mapping before building the gate. Keep OFF; flip on
     // for one capture run (enter each episode once), then off again.
-    public const bool EpisodeProbeEnabled = false;
+    public static readonly bool EpisodeProbeEnabled = false;
 
     public override void OnInitializeMelon()
     {
@@ -67,13 +67,13 @@ public class Mod : MelonMod
     // DEV/TEST: fire trap effects locally via F9-F12 (no server round-trip / no
     // tabbing out to send). Set true only for local testing. Read from Event.current
     // in OnGUI (works regardless of the game's input backend, same as the F8 toggle).
-    public const bool DebugTrapHotkeys = false;
+    public static readonly bool DebugTrapHotkeys = false;
 
     // DEV/TEST: ball-shape render probe. When true, F7 in the overworld steps
     // OverworldBallManager.Load through all 15 BALLSHAPES (one per press) so we can
     // SEE which shapes actually render -> decides whether a cosmetic ball-skin
     // collectible is worth building. Read-only (only calls Load); keep OFF.
-    public const bool BallShapeProbeEnabled = false;
+    public static readonly bool BallShapeProbeEnabled = false;
 
     // DEV/TEST: computer-boss-door diagnostic probe. When true, F6 in the overworld
     // dumps every OverworldMainDoorRobot's state + each plate's isOn/area/areaState +
@@ -82,7 +82,7 @@ public class Mod : MelonMod
     // GetIsMainDoorOpen; writes nothing). Keep OFF. (Used 2026-07-24 to diagnose
     // Computer 8 / Western -> confirmed BossPlateSync heal; left in place, off, for
     // future boss-door debugging.)
-    public const bool BossDoorProbeEnabled = false;
+    public static readonly bool BossDoorProbeEnabled = false;
 
     // DEV/TEST: Main Crown Door diagnostic probe. When true, F5 in the overworld dumps
     // each CROWN_ door's open-state + requireGoals (which holes gate it) + previous/
@@ -93,7 +93,7 @@ public class Mod : MelonMod
     // triggers, not walk-connectors -> SectionGate now excludes them) and to map the two
     // crown-gated "gateway" levels (EvilFlag 2 / EvilFlag Magic 0; see REVERSE_ENGINEERING.md
     // + STATUS 0b). F5 dumps all buttons + all goals w/ Pun. Kept OFF for future crown-door work.
-    public const bool CrownDoorProbeEnabled = false;
+    public static readonly bool CrownDoorProbeEnabled = false;
 
     // MelonLoader GUI callback -> draw the connection panel (and read its hotkey).
     public override void OnGUI()

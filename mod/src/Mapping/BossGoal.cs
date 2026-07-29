@@ -30,11 +30,13 @@ public static class BossGoal
     private static readonly HashSet<string> _required = new();
     private static readonly HashSet<string> _defeated = new();
 
+#pragma warning disable 0649 // fields assigned by Newtonsoft.Json via reflection
     private class IdsFile
     {
         public List<string> boss_scenes;
         public string final_boss_scene;
     }
+#pragma warning restore 0649
 
     public static void Load()
     {

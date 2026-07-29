@@ -18,12 +18,14 @@ public static class LocationMap
     private static Dictionary<string, long> _nameToId = new();
     private static Dictionary<string, string> _nameByScene = new();
 
+#pragma warning disable 0649 // fields assigned by Newtonsoft.Json via reflection
     private class IdsFile
     {
         public Dictionary<string, long> items;
         public Dictionary<string, long> locations;
         public Dictionary<string, string> name_by_scene;
     }
+#pragma warning restore 0649
 
     public static void Load()
     {
