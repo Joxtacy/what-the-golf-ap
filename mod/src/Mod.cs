@@ -204,6 +204,11 @@ public class Mod : MelonMod
         // queue + renders here on the main thread; no-op when disabled or empty.
         MessageFeed.Tick();
 
+        // Publish which chamber/sub-area we're in to AP data storage, so an external
+        // tracker can follow along. Self-gates on connected + the preference; the
+        // network write is queued off-thread. Cheap enough to call every frame.
+        Mapping.CurrentArea.Tick();
+
         // In-game command console scrollback: drain queued server messages (main thread).
         ConsoleUI.Tick();
 

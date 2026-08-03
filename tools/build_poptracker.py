@@ -690,13 +690,19 @@ class Emitter:
                     L.append(f'    "{self.location_mapping[d.location_name_to_id[d.crown_loc(lv.scene)]]}",')
             L.append("  },")
         L.append("} }\n")
+        # Area code -> map tab title, for the auto-switch. Keyed by BOTH the bare
+        # chamber code and every sub-area code, because the mod may report either
+        # granularity and a boss location's prefix is chamber-only. Chambers with a
+        # single sub-area share the code (01, 02, 10, 00), hence the de-dupe.
         L.append("-- area code (chamber / sub-area / episode) -> map tab title")
         L.append("AREA_TABS = {")
+        tabs = {}
         for mp in placer.maps:
-            L.append(f'  ["{mp["area"]}"] = "{mp["title"]}",')
+            tabs[mp["area"]] = mp["title"]
         for sa in m.subarea_order:
-            ch = f'{m.subarea_chamber[sa]:02d}'
-            L.append(f'  ["{sa}"] = "Chamber {ch}",')
+            tabs.setdefault(sa, f"Chamber {m.subarea_chamber[sa]:02d}")
+        for key in sorted(tabs):
+            L.append(f'  ["{key}"] = "{tabs[key]}",')
         L.append("}")
         self._wt("scripts/wtg_data.lua", "\n".join(L) + "\n")
 

@@ -57,7 +57,13 @@ order, `hard_sections` forcing the walk-in hint off, retiring disabled features,
 `flag_goal` vs the whole pool, all 47 Flag names feeding one counter,
 `onLocation` idempotency).
 
-To run either one:
+`autotab_cases.lua` covers the map auto-switch: payload parsing, area→tab
+routing, the check-inference fallback, connect-burst suppression, and the
+one-way handover from fallback to the mod's data-storage signal.
+`AutoTab.apply()` is public precisely so that path can be driven with no live
+server (the data-storage key name needs a connection to build).
+
+To run any of them:
 
 1. Copy the pack to PopTracker's `packs/`, then copy the `.lua` into its
    `scripts/` and append to that copy's `init.lua`:
@@ -70,10 +76,28 @@ To run either one:
    `%APPDATA%\PopTracker\log.txt` — `print()` output lands there.
 4. Restore the config and reinstall the clean pack.
 
-Last run (PopTracker 0.35.1): `PARITY: 240/240`, `SLOTDATA: 28/28`.
+Last run (PopTracker 0.35.1): `PARITY: 240/240`, `SLOTDATA: 28/28`,
+`AUTOTAB: 42/42`.
 
 ## What none of this covers
 
-A live Archipelago session. Connecting requires clicking **AP** in the UI, so it
-can't be driven headlessly — the handler wiring (`AddClearHandler` etc.) and the
-real item/check feed still want one manual pass against a hosted room.
+**A live Archipelago session.** Connecting requires clicking **AP** in the UI, so
+it can't be driven headlessly — the handler wiring (`AddClearHandler` etc.) and
+the real item/check feed still want one manual pass against a hosted room.
+
+**The mod's half of the auto-switch.** `mod/src/Mapping/CurrentArea.cs` builds
+clean but has never run in-game. One play session validates it, and the same
+session can do the `GoalDumper` position walk that Phase 3's real map
+coordinates need:
+
+1. Set `Mod.DumpersEnabled = true` (`mod/src/Mod.cs`), `dotnet build -c Debug`.
+2. Fresh save, connect via F8, and confirm `Publish current area (tracker map
+   auto-switch)` is ticked.
+3. Walk/teleport around every chamber, then enter each of the five episode
+   overworlds. Watch for `[AREA]` lines in the MelonLoader log and the tracker's
+   map tab following you; `[GOALS] N with live pos` should climb.
+4. Set `DumpersEnabled = false`, rebuild, and commit the refreshed
+   `mod/wtg_goals.json`.
+
+The dumper merges across sessions now, so a partial walk is still useful and a
+later pass adds to it rather than replacing it.

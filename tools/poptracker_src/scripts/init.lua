@@ -27,4 +27,5 @@ ScriptHost:LoadScript("scripts/logic.lua")
 
 if Archipelago then
     ScriptHost:LoadScript("scripts/autotracking.lua")
+    ScriptHost:LoadScript("scripts/autotab.lua")
 end

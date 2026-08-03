@@ -87,7 +87,7 @@ public static class ConnectionUI
         try
         {
             const float x = 20f, y = 20f, w = 320f, rowH = 22f, gap = 6f;
-            float h = 760f;
+            float h = 792f;   // +1 row for the publish-area toggle
             GUI.Box(new Rect(x, y, w, h), "WHAT THE GOLF?  —  Archipelago");
 
             float ix = x + 14f, iw = w - 28f, cy = y + 34f;
@@ -121,6 +121,13 @@ public static class ConnectionUI
             bool hp = Preferences.OpenHubPortal.Value;
             bool nhp = GUI.Toggle(new Rect(ix, cy, iw, rowH), hp, " Keep hub portal open (chamber 10)");
             if (nhp != hp) { Preferences.OpenHubPortal.Value = nhp; Preferences.Save(); }
+            cy += rowH + gap;
+
+            // Tell an external tracker which chamber you're in (see CurrentArea).
+            bool pa = Preferences.PublishArea.Value;
+            bool npa = GUI.Toggle(new Rect(ix, cy, iw, rowH), pa,
+                                  " Publish current area (tracker map auto-switch)");
+            if (npa != pa) { Preferences.PublishArea.Value = npa; Preferences.Save(); }
             cy += rowH + gap;
 
             var client = Plugin.Client;

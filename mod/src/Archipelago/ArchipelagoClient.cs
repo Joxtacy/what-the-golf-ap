@@ -75,6 +75,9 @@ public class ArchipelagoClient
             // Forget what GoalWatcher has sent so a reconnect re-reconciles node state.
             Mapping.GoalWatcher.Reset();
             Mapping.PercentGate.Reset();
+            // Drop the cached area so a reconnect republishes it (the tracker Gets
+            // the key on connect, but only the mod can refresh a stale value).
+            Mapping.CurrentArea.Reset();
             Plugin.Log.LogInfo("AP disconnected — mod is passive (vanilla) until you reconnect.");
         }
     }

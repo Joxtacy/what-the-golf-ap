@@ -15,7 +15,18 @@ import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PY = os.path.join(ROOT, "what_the_golf", "data.py")
+SECTIONS = os.path.join(ROOT, "mod", "wtg_sections.json")
 OUT = os.path.join(ROOT, "mod", "ids.json")
+
+# Episode campaign tag (ECampaignType) -> the episode's AP display name. The mod
+# reads CampaignInfo.Current() and needs to name the episode the player is in.
+EPISODE_BY_CAMPAIGN = {
+    "Olympics": "Sporty Sports",
+    "Snow": "Snow",
+    "Hotdog": "Hotdog",
+    "Alive": "Alive",
+    "Amongus": "Among Us",
+}
 
 
 def _load_data():
@@ -25,12 +36,39 @@ def _load_data():
     return module
 
 
+def _area_maps(data):
+    """Lookups the mod's CurrentArea uses to answer "which area am I in", so a
+    PopTracker pack can auto-switch to that chamber's map tab.
+
+    Three granularities because the mod has three signals of differing quality:
+    the scene while you're inside a hole, the SavePosition respawn id while
+    you're in the overworld, and the campaign tag while you're in an episode.
+    """
+    world = data._read_levels_json()
+    subarea_by_scene = {
+        lv["scene"]: (lv.get("subarea") or "")
+        for area in world["areas"] for lv in area["levels"]
+    }
+    chamber_by_subarea = {sa: sa[:2] for sa in sorted(set(subarea_by_scene.values())) if sa}
+    # saveSpotId -> sub-area. The 21 spots are 1:1 with the 21 sub-areas, so this
+    # is exact (if lagging -- it is the last respawn point, not where you stand).
+    # Entries with no campaign tag predate the campaign-aware dumper = Main.
+    with open(SECTIONS, encoding="utf-8") as f:
+        sections = json.load(f)
+    subarea_by_savespot = {
+        s["saveSpotId"]: s["name"] for s in sections
+        if s.get("saveSpotId") and s.get("campaign", "Main") == "Main"
+    }
+    return subarea_by_scene, chamber_by_subarea, subarea_by_savespot
+
+
 def main():
     data = _load_data()
     # scene -> area name, so the mod can gate each overworld goal by its area.
     area_by_scene = {
         level.scene: area.name for area in data.AREAS for level in area.levels
     }
+    subarea_by_scene, chamber_by_subarea, subarea_by_savespot = _area_maps(data)
     # access-item name -> in-game unlockTriggerId(s) it opens. The mod applies any
     # received "* Access" item by opening these doors, so it works identically for
     # chamber-granularity and section-granularity seeds.
@@ -63,6 +101,11 @@ def main():
         "locations": data.location_name_to_id,
         "name_by_scene": name_by_scene,
         "area_by_scene": area_by_scene,
+        # --- CurrentArea lookups (tracker map auto-switch) ---
+        "subarea_by_scene": subarea_by_scene,
+        "chamber_by_subarea": chamber_by_subarea,
+        "subarea_by_savespot": subarea_by_savespot,
+        "episode_by_campaign": EPISODE_BY_CAMPAIGN,
         "unlocks_by_item": unlocks_by_item,
         "boss_by_item": boss_by_item,
         "boss_scenes": boss_scenes,
@@ -81,7 +124,8 @@ def main():
           f"{len(boss_by_item)} boss keys, "
           f"{len(boss_scenes)} boss scenes, "
           f"{len(chest_loc_by_oid)} chests ({len(chest_doors_by_item)} keyed), "
-          f"{len(episode_pack_by_name)} episode packs")
+          f"{len(episode_pack_by_name)} episode packs, "
+          f"{len(subarea_by_savespot)} save spots")
 
 
 if __name__ == "__main__":
