@@ -1,0 +1,59 @@
+{
+  "settings_popup": {
+    "type": "array",
+    "orientation": "vertical",
+    "margin": "6,6,6,6",
+    "content": [
+      {
+        "type": "text",
+        "text": "Set automatically when you connect to Archipelago."
+      },
+      {
+        "type": "text",
+        "text": "Change by hand only for offline / manual tracking."
+      },
+      {
+        "type": "itemgrid",
+        "item_size": "40,40",
+        "rows": [
+          [
+            "opt_area",
+            "opt_goal",
+            "opt_boss_keys",
+            "opt_crowns"
+          ]
+        ]
+      },
+      {
+        "type": "group",
+        "header": "Episodes",
+        "content": {
+          "type": "itemgrid",
+          "rows": [
+            [
+              "opt_ep_olympics",
+              "opt_ep_snow",
+              "opt_ep_hotdog",
+              "opt_ep_alive",
+              "opt_ep_amongus"
+            ]
+          ]
+        }
+      },
+      {
+        "type": "group",
+        "header": "Display",
+        "content": {
+          "type": "itemgrid",
+          "rows": [
+            [
+              "opt_hard",
+              "opt_walk",
+              "autotab_off"
+            ]
+          ]
+        }
+      }
+    ]
+  }
+}

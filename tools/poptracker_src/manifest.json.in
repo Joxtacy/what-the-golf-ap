@@ -1,0 +1,16 @@
+{
+  "name": "WHAT THE GOLF? Map Tracker",
+  "game_name": "WHAT THE GOLF?",
+  "package_uid": "joxtacy_what_the_golf",
+  "package_version": "{package_version}",
+  "platform": "pc",
+  "author": "Joxtacy",
+  "variants": {
+    "ap": {
+      "display_name": "Archipelago",
+      "flags": ["ap"]
+    }
+  },
+  "min_poptracker_version": "0.26.2",
+  "target_poptracker_version": "0.35.1"
+}

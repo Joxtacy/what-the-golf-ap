@@ -1,0 +1,151 @@
+{
+  "maps_tabbed": {
+    "type": "tabbed",
+    "tabs": [
+      {
+        "title": "Chamber 10",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_10"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 09",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_09"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 08",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_08"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 07",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_07"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 06",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_06"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 05",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_05"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 04",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_04"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 03",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_03"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 02",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_02"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 01",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_01"
+          ]
+        }
+      },
+      {
+        "title": "Chamber 00",
+        "content": {
+          "type": "map",
+          "maps": [
+            "chamber_00"
+          ]
+        }
+      },
+      {
+        "title": "Sporty Sports",
+        "content": {
+          "type": "map",
+          "maps": [
+            "ep_olympics"
+          ]
+        }
+      },
+      {
+        "title": "Snow",
+        "content": {
+          "type": "map",
+          "maps": [
+            "ep_snow"
+          ]
+        }
+      },
+      {
+        "title": "Hotdog",
+        "content": {
+          "type": "map",
+          "maps": [
+            "ep_hotdog"
+          ]
+        }
+      },
+      {
+        "title": "Alive",
+        "content": {
+          "type": "map",
+          "maps": [
+            "ep_alive"
+          ]
+        }
+      },
+      {
+        "title": "Among Us",
+        "content": {
+          "type": "map",
+          "maps": [
+            "ep_amongus"
+          ]
+        }
+      }
+    ]
+  }
+}

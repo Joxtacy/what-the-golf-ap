@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Flags",
+    "type": "consumable",
+    "img": "images/items/flag.png",
+    "codes": "flag",
+    "min_quantity": 0,
+    "max_quantity": 233,
+    "increment": 1,
+    "decrement": 1,
+    "overlay_align": "right",
+    "overlay_font_size": 14,
+    "overlay_background": "#80000000"
+  }
+]

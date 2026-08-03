@@ -1,0 +1,3 @@
+# poptracker/ is generated wholesale by tools/build_poptracker.py -- collapse it
+# in diffs and exclude it from language stats so it never masks real changes.
+poptracker/** linguist-generated=true

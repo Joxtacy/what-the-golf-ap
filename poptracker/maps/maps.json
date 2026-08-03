@@ -1,0 +1,114 @@
+[
+  {
+    "name": "chamber_10",
+    "img": "images/maps/chamber_10.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_09",
+    "img": "images/maps/chamber_09.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_08",
+    "img": "images/maps/chamber_08.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_07",
+    "img": "images/maps/chamber_07.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_06",
+    "img": "images/maps/chamber_06.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_05",
+    "img": "images/maps/chamber_05.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_04",
+    "img": "images/maps/chamber_04.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_03",
+    "img": "images/maps/chamber_03.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_02",
+    "img": "images/maps/chamber_02.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_01",
+    "img": "images/maps/chamber_01.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "chamber_00",
+    "img": "images/maps/chamber_00.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "ep_olympics",
+    "img": "images/maps/ep_olympics.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "ep_snow",
+    "img": "images/maps/ep_snow.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "ep_hotdog",
+    "img": "images/maps/ep_hotdog.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "ep_alive",
+    "img": "images/maps/ep_alive.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  },
+  {
+    "name": "ep_amongus",
+    "img": "images/maps/ep_amongus.png",
+    "location_size": 22,
+    "location_border_thickness": 2,
+    "location_shape": "rect"
+  }
+]
