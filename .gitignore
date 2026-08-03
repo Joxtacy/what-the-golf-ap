@@ -12,6 +12,9 @@ __pycache__/
 # Scratch output from tools/disq_objdump.py (disassembly slice buffer)
 tools/_slice.bin
 
+# Generated replay harness from tools/check_poptracker_logic.py --dump-lua
+parity_cases.lua
+
 # Editor / OS
 .vs/
 .idea/
