@@ -74,6 +74,12 @@ public static class LocationMap
         name != null && _nameToId.TryGetValue(name, out var id) ? id : Missing;
 
     // --- CurrentArea lookups -------------------------------------------------
+    /// <summary>True if this scene is one of the campaign/episode holes the apworld
+    /// knows about. Menu, daily and special-event levels are not, which is how
+    /// OverworldSnapshot tells a real overworld from the mode-select hub.</summary>
+    public static bool IsKnownScene(string scene) =>
+        scene != null && _nameByScene.ContainsKey(scene);
+
     /// <summary>Sub-area code a hole lives in, e.g. "SpaceGolf6" -> "08C". Null if
     /// unknown (episode holes aren't in this map -- episodes are one area each).</summary>
     public static string SubAreaOf(string scene) =>

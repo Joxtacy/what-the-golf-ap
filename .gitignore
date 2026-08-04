@@ -25,3 +25,6 @@ dist/
 
 # Live AP test scratch output (tools/watch_area_key.py)
 area_watch*.log
+
+# Staging dir for reviewing captured overworld renders
+mapshots/

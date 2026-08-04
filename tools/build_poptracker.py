@@ -47,6 +47,10 @@ CHESTS_JSON = os.path.join(ROOT, "mod", "wtg_chests.json")
 DOORS_JSON = os.path.join(ROOT, "mod", "wtg_doors.json")
 SRC = os.path.join(ROOT, "tools", "poptracker_src")
 OUT = os.path.join(ROOT, "poptracker")
+# Real overworld renders captured in-game by mod/src/Mapping/OverworldSnapshot.cs,
+# each with the exact camera rect it covered. Those rects ARE the map projections,
+# so markers land pixel-exact on the art. Absent -> schematic maps get drawn.
+SNAPSHOTS = os.path.join(SRC, "images", "maps", "snapshots.json")
 
 # --- palette -----------------------------------------------------------------
 BG = hex_rgb("#12141a")
@@ -101,6 +105,11 @@ def _load_json(path, default):
             return json.load(f)
     except Exception:
         return default
+
+
+def load_snapshots():
+    """map name -> {w, h, minx, miny, maxx, maxy} for maps rendered from the game."""
+    return {s["map"]: s for s in _load_json(SNAPSHOTS, [])}
 
 
 def load_world_positions(world):
@@ -806,14 +815,51 @@ class GridPlacer:
     MIN_PROJ_PTS = 3
     MIN_PROJ_SPAN = 6.0        # world units across the larger axis
 
-    def __init__(self, model, positions=None):
+    def __init__(self, model, positions=None, snapshots=None):
         self.m = model
         self.pos = positions or {}
+        self.snaps = snapshots or {}
         self.maps = []
         self._pts = {}
         self.stats = {"dumped": 0, "grid": 0}
         self._build_chambers()
         self._build_episodes()
+
+    def _snapshot_layout(self, name, keys):
+        """Placement for a map backed by a real in-game render.
+
+        The recorded camera rect is the projection -- no bbox fitting, no
+        guessing. Returns (map_dict, emitted) or None if there's no render.
+        """
+        s = self.snaps.get(name)
+        if not s:
+            return None
+        w, h = int(s["w"]), int(s["h"])
+        dx = max(1e-6, s["maxx"] - s["minx"])
+        dy = max(1e-6, s["maxy"] - s["miny"])
+
+        placed, missing = [], []
+        for k in keys:
+            p = self.pos.get(k)
+            if p is None:
+                missing.append(k)
+                continue
+            px = int(round((p[0] - s["minx"]) / dx * w))
+            py = int(round((s["maxy"] - p[1]) / dy * h))   # Unity y-up -> image y-down
+            # Keep the marker fully on the image even if a flag sits on the very edge.
+            px = max(self.DOT, min(w - self.DOT, px))
+            py = max(self.DOT, min(h - self.DOT, py))
+            placed.append((k, px, py))
+        # Anything with no dumped position (Computer 9 has none) goes in a row along
+        # the bottom rather than on a grid, which would sit oddly over real art.
+        for i, k in enumerate(missing):
+            placed.append((k, self.MARGIN + self.DOT + i * self.CELL, h - self.DOT * 2))
+
+        self.stats["dumped"] += len(keys) - len(missing)
+        self.stats["grid"] += len(missing)
+        for k, px, py in placed:
+            self._emit(name, k, (px, py))
+        return {"w": w, "h": h, "rendered": True}
 
     # -- projection ----------------------------------------------------------
     def _world_bbox(self, keys):
@@ -928,6 +974,14 @@ class GridPlacer:
             all_keys = [k for sa in subs
                         for k in holes_by_sa.get(sa, []) + chest_by_sa.get(sa, [])]
 
+            snap = self._snapshot_layout(name, all_keys)
+            if snap:
+                self.maps.append({"name": name, "title": f"Chamber {ch:02d}",
+                                  "area": f"{ch:02d}", "w": snap["w"], "h": snap["h"],
+                                  "header": f"CHAMBER {ch:02d}", "cols": [],
+                                  "projected": True, "rendered": True})
+                continue
+
             # Real overworld geometry for the whole chamber at once, so sub-areas
             # keep their true spatial relationship to each other.
             body_y = self.HEADER + self.PAD
@@ -983,6 +1037,14 @@ class GridPlacer:
         for ep in m.data.EPISODES:
             name = f"ep_{ep.campaign.lower()}"
             ents = [f"scene:{lv.scene}" for lv in ep.levels]
+
+            snap = self._snapshot_layout(name, ents)
+            if snap:
+                self.maps.append({"name": name, "title": ep.name, "area": ep.name,
+                                  "w": snap["w"], "h": snap["h"],
+                                  "header": ep.name.upper(), "cols": [],
+                                  "projected": True, "rendered": True})
+                continue
             body_y = self.HEADER + self.PAD
             have = self._projectable(ents)
             n_missing = sum(1 for k in ents if k not in self.pos)
@@ -1021,6 +1083,10 @@ class GridPlacer:
         d = os.path.join(out_dir, "images", "maps")
         os.makedirs(d, exist_ok=True)
         for mp in self.maps:
+            # Backed by a real in-game render, which copy_static already placed --
+            # don't draw a schematic over it.
+            if mp.get("rendered"):
+                continue
             c = Canvas(mp["w"], mp["h"], BG)
             c.fill_rect(0, 0, mp["w"], self.HEADER - 8, PANEL)
             c.text(self.MARGIN, 14, mp["header"], INK, 3)
@@ -1214,7 +1280,9 @@ def validate(model, em, placer):
 
 
 # --- static files + packaging -----------------------------------------------
-SKIP_SRC = {"manifest.json.in", "pack_version.txt"}
+# snapshots.json is build input (the camera rects), not pack content.
+SKIP_SRC = {"manifest.json.in", "pack_version.txt",
+            "images/maps/snapshots.json"}
 
 
 def copy_static(out_dir):
@@ -1244,7 +1312,7 @@ def build(out_dir, version):
         raise SystemExit("mod/ids.json is stale -- run: python tools/export_ids.py")
 
     model = Model(data, world, ids)
-    placer = GridPlacer(model, load_world_positions(world))
+    placer = GridPlacer(model, load_world_positions(world), load_snapshots())
     em = Emitter(model, out_dir)
 
     em.items()
