@@ -7,8 +7,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 61,
-            "y": 87
+            "x": 262,
+            "y": 268
           }
         ],
         "access_rules": [
@@ -39,8 +39,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 119,
-            "y": 87
+            "x": 366,
+            "y": 247
           }
         ],
         "access_rules": [
@@ -71,8 +71,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 177,
-            "y": 87
+            "x": 257,
+            "y": 830
           }
         ],
         "access_rules": [
@@ -98,8 +98,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 235,
-            "y": 87
+            "x": 69,
+            "y": 587
           }
         ],
         "access_rules": [
@@ -130,8 +130,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 293,
-            "y": 87
+            "x": 277,
+            "y": 116
           }
         ],
         "access_rules": [
@@ -157,8 +157,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 351,
-            "y": 87
+            "x": 276,
+            "y": 554
           }
         ],
         "access_rules": [
@@ -184,8 +184,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 409,
-            "y": 87
+            "x": 171,
+            "y": 209
           }
         ],
         "access_rules": [
@@ -211,8 +211,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 467,
-            "y": 87
+            "x": 270,
+            "y": 402
           }
         ],
         "access_rules": [
@@ -238,8 +238,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 525,
-            "y": 87
+            "x": 67,
+            "y": 167
           }
         ],
         "access_rules": [
@@ -265,8 +265,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 583,
-            "y": 87
+            "x": 224,
+            "y": 650
           }
         ],
         "access_rules": [
@@ -292,8 +292,8 @@
         "map_locations": [
           {
             "map": "ep_olympics",
-            "x": 641,
-            "y": 87
+            "x": 54,
+            "y": 419
           }
         ],
         "access_rules": [
@@ -324,8 +324,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 61,
-            "y": 87
+            "x": 237,
+            "y": 285
           }
         ],
         "access_rules": [
@@ -351,8 +351,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 119,
-            "y": 87
+            "x": 259,
+            "y": 331
           }
         ],
         "access_rules": [
@@ -378,8 +378,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 177,
-            "y": 87
+            "x": 269,
+            "y": 115
           }
         ],
         "access_rules": [
@@ -405,8 +405,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 235,
-            "y": 87
+            "x": 297,
+            "y": 277
           }
         ],
         "access_rules": [
@@ -432,8 +432,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 293,
-            "y": 87
+            "x": 168,
+            "y": 552
           }
         ],
         "access_rules": [
@@ -459,8 +459,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 351,
-            "y": 87
+            "x": 273,
+            "y": 335
           }
         ],
         "access_rules": [
@@ -486,8 +486,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 409,
-            "y": 87
+            "x": 133,
+            "y": 427
           }
         ],
         "access_rules": [
@@ -513,8 +513,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 467,
-            "y": 87
+            "x": 254,
+            "y": 254
           }
         ],
         "access_rules": [
@@ -540,8 +540,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 525,
-            "y": 87
+            "x": 310,
+            "y": 259
           }
         ],
         "access_rules": [
@@ -567,8 +567,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 583,
-            "y": 87
+            "x": 151,
+            "y": 711
           }
         ],
         "access_rules": [
@@ -594,8 +594,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 641,
-            "y": 87
+            "x": 128,
+            "y": 831
           }
         ],
         "access_rules": [
@@ -621,8 +621,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 699,
-            "y": 87
+            "x": 152,
+            "y": 477
           }
         ],
         "access_rules": [
@@ -648,8 +648,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 757,
-            "y": 87
+            "x": 152,
+            "y": 669
           }
         ],
         "access_rules": [
@@ -675,8 +675,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 815,
-            "y": 87
+            "x": 141,
+            "y": 749
           }
         ],
         "access_rules": [
@@ -702,8 +702,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 873,
-            "y": 87
+            "x": 275,
+            "y": 213
           }
         ],
         "access_rules": [
@@ -729,8 +729,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 931,
-            "y": 87
+            "x": 151,
+            "y": 766
           }
         ],
         "access_rules": [
@@ -756,8 +756,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 61,
-            "y": 145
+            "x": 143,
+            "y": 545
           }
         ],
         "access_rules": [
@@ -783,8 +783,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 119,
-            "y": 145
+            "x": 110,
+            "y": 769
           }
         ],
         "access_rules": [
@@ -810,8 +810,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 177,
-            "y": 145
+            "x": 218,
+            "y": 398
           }
         ],
         "access_rules": [
@@ -837,8 +837,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 235,
-            "y": 145
+            "x": 289,
+            "y": 369
           }
         ],
         "access_rules": [
@@ -864,8 +864,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 293,
-            "y": 145
+            "x": 161,
+            "y": 578
           }
         ],
         "access_rules": [
@@ -891,8 +891,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 351,
-            "y": 145
+            "x": 128,
+            "y": 796
           }
         ],
         "access_rules": [
@@ -918,8 +918,8 @@
         "map_locations": [
           {
             "map": "ep_snow",
-            "x": 409,
-            "y": 145
+            "x": 148,
+            "y": 415
           }
         ],
         "access_rules": [
@@ -950,8 +950,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 61,
-            "y": 87
+            "x": 154,
+            "y": 115
           }
         ],
         "access_rules": [
@@ -977,8 +977,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 119,
-            "y": 87
+            "x": 313,
+            "y": 831
           }
         ],
         "access_rules": [
@@ -1004,8 +1004,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 177,
-            "y": 87
+            "x": 283,
+            "y": 799
           }
         ],
         "access_rules": [
@@ -1031,8 +1031,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 235,
-            "y": 87
+            "x": 342,
+            "y": 758
           }
         ],
         "access_rules": [
@@ -1058,8 +1058,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 293,
-            "y": 87
+            "x": 81,
+            "y": 341
           }
         ],
         "access_rules": [
@@ -1085,8 +1085,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 351,
-            "y": 87
+            "x": 231,
+            "y": 369
           }
         ],
         "access_rules": [
@@ -1112,8 +1112,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 409,
-            "y": 87
+            "x": 145,
+            "y": 466
           }
         ],
         "access_rules": [
@@ -1139,8 +1139,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 467,
-            "y": 87
+            "x": 110,
+            "y": 459
           }
         ],
         "access_rules": [
@@ -1166,8 +1166,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 525,
-            "y": 87
+            "x": 308,
+            "y": 566
           }
         ],
         "access_rules": [
@@ -1193,8 +1193,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 583,
-            "y": 87
+            "x": 268,
+            "y": 456
           }
         ],
         "access_rules": [
@@ -1220,8 +1220,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 641,
-            "y": 87
+            "x": 288,
+            "y": 758
           }
         ],
         "access_rules": [
@@ -1247,8 +1247,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 699,
-            "y": 87
+            "x": 309,
+            "y": 779
           }
         ],
         "access_rules": [
@@ -1274,8 +1274,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 757,
-            "y": 87
+            "x": 135,
+            "y": 274
           }
         ],
         "access_rules": [
@@ -1301,8 +1301,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 815,
-            "y": 87
+            "x": 256,
+            "y": 646
           }
         ],
         "access_rules": [
@@ -1328,8 +1328,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 873,
-            "y": 87
+            "x": 312,
+            "y": 638
           }
         ],
         "access_rules": [
@@ -1355,8 +1355,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 931,
-            "y": 87
+            "x": 258,
+            "y": 572
           }
         ],
         "access_rules": [
@@ -1382,8 +1382,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 61,
-            "y": 145
+            "x": 246,
+            "y": 820
           }
         ],
         "access_rules": [
@@ -1409,8 +1409,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 119,
-            "y": 145
+            "x": 180,
+            "y": 449
           }
         ],
         "access_rules": [
@@ -1436,8 +1436,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 177,
-            "y": 145
+            "x": 142,
+            "y": 337
           }
         ],
         "access_rules": [
@@ -1463,8 +1463,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 235,
-            "y": 145
+            "x": 78,
+            "y": 274
           }
         ],
         "access_rules": [
@@ -1490,8 +1490,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 293,
-            "y": 145
+            "x": 237,
+            "y": 469
           }
         ],
         "access_rules": [
@@ -1517,8 +1517,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 351,
-            "y": 145
+            "x": 135,
+            "y": 311
           }
         ],
         "access_rules": [
@@ -1544,8 +1544,8 @@
         "map_locations": [
           {
             "map": "ep_hotdog",
-            "x": 409,
-            "y": 145
+            "x": 167,
+            "y": 527
           }
         ],
         "access_rules": [
@@ -1576,8 +1576,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 61,
-            "y": 87
+            "x": 217,
+            "y": 671
           }
         ],
         "access_rules": [
@@ -1603,8 +1603,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 119,
-            "y": 87
+            "x": 66,
+            "y": 475
           }
         ],
         "access_rules": [
@@ -1630,8 +1630,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 177,
-            "y": 87
+            "x": 181,
+            "y": 798
           }
         ],
         "access_rules": [
@@ -1657,8 +1657,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 235,
-            "y": 87
+            "x": 296,
+            "y": 673
           }
         ],
         "access_rules": [
@@ -1684,8 +1684,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 293,
-            "y": 87
+            "x": 290,
+            "y": 694
           }
         ],
         "access_rules": [
@@ -1711,8 +1711,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 351,
-            "y": 87
+            "x": 264,
+            "y": 694
           }
         ],
         "access_rules": [
@@ -1738,8 +1738,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 409,
-            "y": 87
+            "x": 274,
+            "y": 246
           }
         ],
         "access_rules": [
@@ -1765,8 +1765,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 467,
-            "y": 87
+            "x": 260,
+            "y": 232
           }
         ],
         "access_rules": [
@@ -1792,8 +1792,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 525,
-            "y": 87
+            "x": 354,
+            "y": 394
           }
         ],
         "access_rules": [
@@ -1819,8 +1819,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 583,
-            "y": 87
+            "x": 103,
+            "y": 450
           }
         ],
         "access_rules": [
@@ -1846,8 +1846,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 641,
-            "y": 87
+            "x": 75,
+            "y": 456
           }
         ],
         "access_rules": [
@@ -1873,8 +1873,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 699,
-            "y": 87
+            "x": 107,
+            "y": 396
           }
         ],
         "access_rules": [
@@ -1900,8 +1900,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 757,
-            "y": 87
+            "x": 179,
+            "y": 610
           }
         ],
         "access_rules": [
@@ -1927,8 +1927,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 815,
-            "y": 87
+            "x": 96,
+            "y": 645
           }
         ],
         "access_rules": [
@@ -1954,8 +1954,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 873,
-            "y": 87
+            "x": 319,
+            "y": 285
           }
         ],
         "access_rules": [
@@ -1981,8 +1981,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 931,
-            "y": 87
+            "x": 66,
+            "y": 599
           }
         ],
         "access_rules": [
@@ -2008,8 +2008,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 61,
-            "y": 145
+            "x": 164,
+            "y": 520
           }
         ],
         "access_rules": [
@@ -2035,8 +2035,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 119,
-            "y": 145
+            "x": 98,
+            "y": 482
           }
         ],
         "access_rules": [
@@ -2062,8 +2062,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 177,
-            "y": 145
+            "x": 141,
+            "y": 115
           }
         ],
         "access_rules": [
@@ -2089,8 +2089,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 235,
-            "y": 145
+            "x": 96,
+            "y": 611
           }
         ],
         "access_rules": [
@@ -2116,8 +2116,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 293,
-            "y": 145
+            "x": 182,
+            "y": 831
           }
         ],
         "access_rules": [
@@ -2143,8 +2143,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 351,
-            "y": 145
+            "x": 254,
+            "y": 673
           }
         ],
         "access_rules": [
@@ -2170,8 +2170,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 409,
-            "y": 145
+            "x": 142,
+            "y": 390
           }
         ],
         "access_rules": [
@@ -2197,8 +2197,8 @@
         "map_locations": [
           {
             "map": "ep_alive",
-            "x": 467,
-            "y": 145
+            "x": 83,
+            "y": 624
           }
         ],
         "access_rules": [
@@ -2229,8 +2229,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 61,
-            "y": 87
+            "x": 218,
+            "y": 532
           }
         ],
         "access_rules": [
@@ -2256,8 +2256,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 119,
-            "y": 87
+            "x": 351,
+            "y": 370
           }
         ],
         "access_rules": [
@@ -2283,8 +2283,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 177,
-            "y": 87
+            "x": 628,
+            "y": 424
           }
         ],
         "access_rules": [
@@ -2310,8 +2310,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 235,
-            "y": 87
+            "x": 65,
+            "y": 455
           }
         ],
         "access_rules": [
@@ -2337,8 +2337,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 293,
-            "y": 87
+            "x": 408,
+            "y": 211
           }
         ],
         "access_rules": [
@@ -2364,8 +2364,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 351,
-            "y": 87
+            "x": 425,
+            "y": 809
           }
         ],
         "access_rules": [
@@ -2391,8 +2391,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 409,
-            "y": 87
+            "x": 337,
+            "y": 749
           }
         ],
         "access_rules": [
@@ -2418,8 +2418,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 467,
-            "y": 87
+            "x": 212,
+            "y": 650
           }
         ],
         "access_rules": [
@@ -2445,8 +2445,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 525,
-            "y": 87
+            "x": 447,
+            "y": 611
           }
         ],
         "access_rules": [
@@ -2472,8 +2472,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 583,
-            "y": 87
+            "x": 188,
+            "y": 318
           }
         ],
         "access_rules": [
@@ -2499,8 +2499,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 641,
-            "y": 87
+            "x": 319,
+            "y": 606
           }
         ],
         "access_rules": [
@@ -2526,8 +2526,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 699,
-            "y": 87
+            "x": 495,
+            "y": 694
           }
         ],
         "access_rules": [
@@ -2553,8 +2553,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 757,
-            "y": 87
+            "x": 250,
+            "y": 730
           }
         ],
         "access_rules": [
@@ -2580,8 +2580,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 815,
-            "y": 87
+            "x": 421,
+            "y": 553
           }
         ],
         "access_rules": [
@@ -2607,8 +2607,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 873,
-            "y": 87
+            "x": 242,
+            "y": 267
           }
         ],
         "access_rules": [
@@ -2634,8 +2634,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 931,
-            "y": 87
+            "x": 261,
+            "y": 435
           }
         ],
         "access_rules": [
@@ -2661,8 +2661,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 61,
-            "y": 145
+            "x": 254,
+            "y": 830
           }
         ],
         "access_rules": [
@@ -2688,8 +2688,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 119,
-            "y": 145
+            "x": 249,
+            "y": 116
           }
         ],
         "access_rules": [
@@ -2715,8 +2715,8 @@
         "map_locations": [
           {
             "map": "ep_amongus",
-            "x": 177,
-            "y": 145
+            "x": 473,
+            "y": 473
           }
         ],
         "access_rules": [

@@ -7,8 +7,8 @@
         "map_locations": [
           {
             "map": "chamber_10",
-            "x": 61,
-            "y": 87
+            "x": 199,
+            "y": 262
           }
         ],
         "sections": [
@@ -29,8 +29,8 @@
         "map_locations": [
           {
             "map": "chamber_10",
-            "x": 119,
-            "y": 87
+            "x": 221,
+            "y": 684
           }
         ],
         "sections": [
@@ -51,8 +51,8 @@
         "map_locations": [
           {
             "map": "chamber_10",
-            "x": 177,
-            "y": 87
+            "x": 199,
+            "y": 364
           }
         ],
         "sections": [
@@ -78,8 +78,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 61,
-            "y": 87
+            "x": 166,
+            "y": 183
           }
         ],
         "access_rules": [
@@ -113,8 +113,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 119,
-            "y": 87
+            "x": 320,
+            "y": 198
           }
         ],
         "access_rules": [
@@ -148,8 +148,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 177,
-            "y": 87
+            "x": 228,
+            "y": 183
           }
         ],
         "access_rules": [
@@ -183,8 +183,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 235,
-            "y": 87
+            "x": 197,
+            "y": 283
           }
         ],
         "access_rules": [
@@ -218,8 +218,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 293,
-            "y": 87
+            "x": 88,
+            "y": 185
           }
         ],
         "access_rules": [
@@ -257,8 +257,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 553,
-            "y": 87
+            "x": 552,
+            "y": 198
           }
         ],
         "access_rules": [
@@ -292,8 +292,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 611,
-            "y": 87
+            "x": 637,
+            "y": 266
           }
         ],
         "access_rules": [
@@ -327,8 +327,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 669,
-            "y": 87
+            "x": 653,
+            "y": 189
           }
         ],
         "access_rules": [
@@ -362,8 +362,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 727,
-            "y": 87
+            "x": 829,
+            "y": 191
           }
         ],
         "access_rules": [
@@ -397,8 +397,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 785,
-            "y": 87
+            "x": 683,
+            "y": 266
           }
         ],
         "access_rules": [
@@ -432,8 +432,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 843,
-            "y": 87
+            "x": 868,
+            "y": 268
           }
         ],
         "access_rules": [
@@ -467,8 +467,8 @@
         "map_locations": [
           {
             "map": "chamber_09",
-            "x": 901,
-            "y": 87
+            "x": 936,
+            "y": 185
           }
         ],
         "access_rules": [
@@ -506,8 +506,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 61,
-            "y": 295
+            "x": 563,
+            "y": 305
           }
         ],
         "access_rules": [
@@ -541,8 +541,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 119,
-            "y": 295
+            "x": 454,
+            "y": 315
           }
         ],
         "access_rules": [
@@ -576,8 +576,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 177,
-            "y": 295
+            "x": 395,
+            "y": 324
           }
         ],
         "access_rules": [
@@ -611,8 +611,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 61,
-            "y": 353
+            "x": 550,
+            "y": 305
           }
         ],
         "access_rules": [
@@ -646,8 +646,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 119,
-            "y": 353
+            "x": 657,
+            "y": 571
           }
         ],
         "access_rules": [
@@ -690,8 +690,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 421,
-            "y": 231
+            "x": 381,
+            "y": 356
           }
         ],
         "access_rules": [
@@ -729,7 +729,7 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 307,
+            "x": 647,
             "y": 295
           }
         ],
@@ -759,7 +759,7 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 365,
+            "x": 681,
             "y": 295
           }
         ],
@@ -794,8 +794,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 423,
-            "y": 295
+            "x": 751,
+            "y": 268
           }
         ],
         "access_rules": [
@@ -829,8 +829,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 307,
-            "y": 353
+            "x": 711,
+            "y": 336
           }
         ],
         "access_rules": [
@@ -864,8 +864,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 365,
-            "y": 353
+            "x": 751,
+            "y": 336
           }
         ],
         "access_rules": [
@@ -899,8 +899,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 423,
-            "y": 353
+            "x": 711,
+            "y": 268
           }
         ],
         "access_rules": [
@@ -934,8 +934,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 700,
-            "y": 166
+            "x": 781,
+            "y": 262
           }
         ],
         "access_rules": [
@@ -968,8 +968,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 756,
-            "y": 203
+            "x": 862,
+            "y": 316
           }
         ],
         "access_rules": [
@@ -1005,8 +1005,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 553,
-            "y": 295
+            "x": 127,
+            "y": 351
           }
         ],
         "access_rules": [
@@ -1040,8 +1040,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 611,
-            "y": 295
+            "x": 177,
+            "y": 225
           }
         ],
         "access_rules": [
@@ -1075,8 +1075,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 669,
-            "y": 295
+            "x": 158,
+            "y": 96
           }
         ],
         "access_rules": [
@@ -1110,8 +1110,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 553,
-            "y": 353
+            "x": 252,
+            "y": 97
           }
         ],
         "access_rules": [
@@ -1145,8 +1145,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 611,
-            "y": 353
+            "x": 310,
+            "y": 135
           }
         ],
         "access_rules": [
@@ -1180,8 +1180,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 216,
-            "y": 133
+            "x": 88,
+            "y": 215
           }
         ],
         "access_rules": [
@@ -1219,8 +1219,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 799,
-            "y": 295
+            "x": 768,
+            "y": 100
           }
         ],
         "access_rules": [
@@ -1254,8 +1254,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 857,
-            "y": 295
+            "x": 708,
+            "y": 218
           }
         ],
         "access_rules": [
@@ -1289,8 +1289,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 915,
-            "y": 295
+            "x": 754,
+            "y": 171
           }
         ],
         "access_rules": [
@@ -1324,8 +1324,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 799,
-            "y": 353
+            "x": 764,
+            "y": 171
           }
         ],
         "access_rules": [
@@ -1359,8 +1359,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 857,
-            "y": 353
+            "x": 748,
+            "y": 100
           }
         ],
         "access_rules": [
@@ -1394,8 +1394,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 915,
-            "y": 353
+            "x": 819,
+            "y": 124
           }
         ],
         "access_rules": [
@@ -1429,8 +1429,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 799,
-            "y": 411
+            "x": 896,
+            "y": 167
           }
         ],
         "access_rules": [
@@ -1464,8 +1464,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 857,
-            "y": 411
+            "x": 819,
+            "y": 185
           }
         ],
         "access_rules": [
@@ -1499,8 +1499,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 915,
-            "y": 411
+            "x": 896,
+            "y": 140
           }
         ],
         "access_rules": [
@@ -1534,8 +1534,8 @@
         "map_locations": [
           {
             "map": "chamber_08",
-            "x": 808,
-            "y": 77
+            "x": 936,
+            "y": 135
           }
         ],
         "access_rules": [
@@ -1573,8 +1573,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 61,
-            "y": 295
+            "x": 216,
+            "y": 228
           }
         ],
         "access_rules": [
@@ -1608,8 +1608,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 119,
-            "y": 295
+            "x": 152,
+            "y": 228
           }
         ],
         "access_rules": [
@@ -1643,8 +1643,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 177,
-            "y": 295
+            "x": 233,
+            "y": 214
           }
         ],
         "access_rules": [
@@ -1678,8 +1678,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 235,
-            "y": 295
+            "x": 88,
+            "y": 228
           }
         ],
         "access_rules": [
@@ -1713,8 +1713,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 293,
-            "y": 295
+            "x": 284,
+            "y": 361
           }
         ],
         "access_rules": [
@@ -1755,8 +1755,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 88,
-            "y": 186
+            "x": 98,
+            "y": 168
           }
         ],
         "access_rules": [
@@ -1794,8 +1794,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 553,
-            "y": 295
+            "x": 416,
+            "y": 109
           }
         ],
         "access_rules": [
@@ -1824,8 +1824,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 611,
-            "y": 295
+            "x": 429,
+            "y": 109
           }
         ],
         "access_rules": [
@@ -1859,8 +1859,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 669,
-            "y": 295
+            "x": 441,
+            "y": 109
           }
         ],
         "access_rules": [
@@ -1894,8 +1894,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 727,
-            "y": 295
+            "x": 544,
+            "y": 107
           }
         ],
         "access_rules": [
@@ -1929,8 +1929,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 785,
-            "y": 295
+            "x": 699,
+            "y": 180
           }
         ],
         "access_rules": [
@@ -1964,8 +1964,8 @@
         "map_locations": [
           {
             "map": "chamber_07",
-            "x": 624,
-            "y": 122
+            "x": 628,
+            "y": 105
           }
         ],
         "access_rules": [
@@ -1999,7 +1999,7 @@
           {
             "map": "chamber_07",
             "x": 936,
-            "y": 167
+            "y": 149
           }
         ],
         "access_rules": [
@@ -2051,8 +2051,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 61,
-            "y": 87
+            "x": 283,
+            "y": 191
           }
         ],
         "access_rules": [
@@ -2081,8 +2081,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 119,
-            "y": 87
+            "x": 395,
+            "y": 150
           }
         ],
         "access_rules": [
@@ -2116,8 +2116,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 177,
-            "y": 87
+            "x": 417,
+            "y": 169
           }
         ],
         "access_rules": [
@@ -2151,8 +2151,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 235,
-            "y": 87
+            "x": 151,
+            "y": 226
           }
         ],
         "access_rules": [
@@ -2186,8 +2186,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 293,
-            "y": 87
+            "x": 88,
+            "y": 201
           }
         ],
         "access_rules": [
@@ -2221,8 +2221,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 351,
-            "y": 87
+            "x": 376,
+            "y": 150
           }
         ],
         "access_rules": [
@@ -2256,8 +2256,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 409,
-            "y": 87
+            "x": 461,
+            "y": 362
           }
         ],
         "access_rules": [
@@ -2297,8 +2297,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 467,
-            "y": 87
+            "x": 254,
+            "y": 161
           }
         ],
         "access_rules": [
@@ -2336,8 +2336,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 553,
-            "y": 87
+            "x": 524,
+            "y": 194
           }
         ],
         "access_rules": [
@@ -2371,8 +2371,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 611,
-            "y": 87
+            "x": 536,
+            "y": 120
           }
         ],
         "access_rules": [
@@ -2406,8 +2406,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 669,
-            "y": 87
+            "x": 497,
+            "y": 201
           }
         ],
         "access_rules": [
@@ -2441,8 +2441,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 727,
-            "y": 87
+            "x": 583,
+            "y": 140
           }
         ],
         "access_rules": [
@@ -2476,8 +2476,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 785,
-            "y": 87
+            "x": 936,
+            "y": 350
           }
         ],
         "access_rules": [
@@ -2511,8 +2511,8 @@
         "map_locations": [
           {
             "map": "chamber_06",
-            "x": 843,
-            "y": 87
+            "x": 614,
+            "y": 104
           }
         ],
         "access_rules": [
@@ -2550,8 +2550,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 61,
-            "y": 295
+            "x": 694,
+            "y": 637
           }
         ],
         "access_rules": [
@@ -2585,8 +2585,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 119,
-            "y": 295
+            "x": 684,
+            "y": 716
           }
         ],
         "access_rules": [
@@ -2626,8 +2626,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 177,
-            "y": 295
+            "x": 742,
+            "y": 495
           }
         ],
         "access_rules": [
@@ -2661,8 +2661,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 235,
-            "y": 295
+            "x": 618,
+            "y": 451
           }
         ],
         "access_rules": [
@@ -2696,8 +2696,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 293,
-            "y": 295
+            "x": 684,
+            "y": 222
           }
         ],
         "access_rules": [
@@ -2737,8 +2737,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 565,
-            "y": 171
+            "x": 600,
+            "y": 430
           }
         ],
         "access_rules": [
@@ -2774,8 +2774,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 389,
-            "y": 295
+            "x": 247,
+            "y": 412
           }
         ],
         "access_rules": [
@@ -2809,8 +2809,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 447,
-            "y": 295
+            "x": 88,
+            "y": 381
           }
         ],
         "access_rules": [
@@ -2844,8 +2844,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 505,
-            "y": 295
+            "x": 141,
+            "y": 442
           }
         ],
         "access_rules": [
@@ -2879,8 +2879,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 563,
-            "y": 295
+            "x": 123,
+            "y": 338
           }
         ],
         "access_rules": [
@@ -2914,8 +2914,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 621,
-            "y": 295
+            "x": 141,
+            "y": 235
           }
         ],
         "access_rules": [
@@ -2949,8 +2949,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 389,
-            "y": 353
+            "x": 225,
+            "y": 495
           }
         ],
         "access_rules": [
@@ -2984,8 +2984,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 447,
-            "y": 353
+            "x": 149,
+            "y": 473
           }
         ],
         "access_rules": [
@@ -3019,8 +3019,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 505,
-            "y": 353
+            "x": 141,
+            "y": 570
           }
         ],
         "access_rules": [
@@ -3054,8 +3054,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 410,
-            "y": 71
+            "x": 95,
+            "y": 107
           }
         ],
         "access_rules": [
@@ -3088,8 +3088,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 413,
-            "y": 237
+            "x": 104,
+            "y": 646
           }
         ],
         "access_rules": [
@@ -3125,8 +3125,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 717,
-            "y": 295
+            "x": 830,
+            "y": 275
           }
         ],
         "access_rules": [
@@ -3160,8 +3160,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 775,
-            "y": 295
+            "x": 878,
+            "y": 283
           }
         ],
         "access_rules": [
@@ -3195,8 +3195,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 833,
-            "y": 295
+            "x": 839,
+            "y": 160
           }
         ],
         "access_rules": [
@@ -3230,8 +3230,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 891,
-            "y": 295
+            "x": 878,
+            "y": 151
           }
         ],
         "access_rules": [
@@ -3265,8 +3265,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 949,
-            "y": 295
+            "x": 936,
+            "y": 217
           }
         ],
         "access_rules": [
@@ -3300,8 +3300,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 717,
-            "y": 353
+            "x": 821,
+            "y": 160
           }
         ],
         "access_rules": [
@@ -3335,8 +3335,8 @@
         "map_locations": [
           {
             "map": "chamber_05",
-            "x": 614,
-            "y": 85
+            "x": 758,
+            "y": 152
           }
         ],
         "access_rules": [
@@ -3374,8 +3374,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 61,
-            "y": 87
+            "x": 306,
+            "y": 238
           }
         ],
         "access_rules": [
@@ -3409,8 +3409,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 119,
-            "y": 87
+            "x": 128,
+            "y": 273
           }
         ],
         "access_rules": [
@@ -3444,8 +3444,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 177,
-            "y": 87
+            "x": 543,
+            "y": 183
           }
         ],
         "access_rules": [
@@ -3479,8 +3479,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 235,
-            "y": 87
+            "x": 88,
+            "y": 224
           }
         ],
         "access_rules": [
@@ -3518,8 +3518,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 553,
-            "y": 87
+            "x": 833,
+            "y": 164
           }
         ],
         "access_rules": [
@@ -3553,8 +3553,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 611,
-            "y": 87
+            "x": 710,
+            "y": 177
           }
         ],
         "access_rules": [
@@ -3588,8 +3588,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 669,
-            "y": 87
+            "x": 795,
+            "y": 172
           }
         ],
         "access_rules": [
@@ -3623,8 +3623,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 727,
-            "y": 87
+            "x": 755,
+            "y": 172
           }
         ],
         "access_rules": [
@@ -3658,8 +3658,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 785,
-            "y": 87
+            "x": 880,
+            "y": 164
           }
         ],
         "access_rules": [
@@ -3693,8 +3693,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 843,
-            "y": 87
+            "x": 871,
+            "y": 304
           }
         ],
         "access_rules": [
@@ -3728,8 +3728,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 901,
-            "y": 87
+            "x": 841,
+            "y": 304
           }
         ],
         "access_rules": [
@@ -3763,8 +3763,8 @@
         "map_locations": [
           {
             "map": "chamber_04",
-            "x": 959,
-            "y": 87
+            "x": 936,
+            "y": 162
           }
         ],
         "access_rules": [
@@ -3802,8 +3802,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 61,
-            "y": 295
+            "x": 587,
+            "y": 444
           }
         ],
         "access_rules": [
@@ -3832,8 +3832,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 119,
-            "y": 295
+            "x": 469,
+            "y": 283
           }
         ],
         "access_rules": [
@@ -3867,8 +3867,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 177,
-            "y": 295
+            "x": 437,
+            "y": 358
           }
         ],
         "access_rules": [
@@ -3902,8 +3902,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 235,
-            "y": 295
+            "x": 415,
+            "y": 315
           }
         ],
         "access_rules": [
@@ -3937,8 +3937,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 293,
-            "y": 295
+            "x": 330,
+            "y": 305
           }
         ],
         "access_rules": [
@@ -3972,8 +3972,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 351,
-            "y": 295
+            "x": 330,
+            "y": 326
           }
         ],
         "access_rules": [
@@ -4007,8 +4007,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 409,
-            "y": 295
+            "x": 233,
+            "y": 358
           }
         ],
         "access_rules": [
@@ -4042,8 +4042,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 467,
-            "y": 295
+            "x": 190,
+            "y": 358
           }
         ],
         "access_rules": [
@@ -4077,8 +4077,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 61,
-            "y": 353
+            "x": 179,
+            "y": 273
           }
         ],
         "access_rules": [
@@ -4112,8 +4112,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 119,
-            "y": 353
+            "x": 93,
+            "y": 358
           }
         ],
         "access_rules": [
@@ -4147,8 +4147,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 451,
-            "y": 75
+            "x": 393,
+            "y": 101
           }
         ],
         "access_rules": [
@@ -4181,8 +4181,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 539,
-            "y": 233
+            "x": 618,
+            "y": 505
           }
         ],
         "access_rules": [
@@ -4234,8 +4234,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 553,
-            "y": 295
+            "x": 931,
+            "y": 466
           }
         ],
         "access_rules": [
@@ -4269,7 +4269,7 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 611,
+            "x": 705,
             "y": 295
           }
         ],
@@ -4304,8 +4304,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 669,
-            "y": 295
+            "x": 727,
+            "y": 466
           }
         ],
         "access_rules": [
@@ -4340,7 +4340,7 @@
           {
             "map": "chamber_03",
             "x": 727,
-            "y": 295
+            "y": 391
           }
         ],
         "access_rules": [
@@ -4374,8 +4374,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 785,
-            "y": 295
+            "x": 931,
+            "y": 316
           }
         ],
         "access_rules": [
@@ -4409,8 +4409,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 843,
-            "y": 295
+            "x": 802,
+            "y": 477
           }
         ],
         "access_rules": [
@@ -4444,8 +4444,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 901,
-            "y": 295
+            "x": 791,
+            "y": 220
           }
         ],
         "access_rules": [
@@ -4479,8 +4479,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 959,
-            "y": 295
+            "x": 866,
+            "y": 220
           }
         ],
         "access_rules": [
@@ -4514,8 +4514,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 553,
-            "y": 353
+            "x": 925,
+            "y": 391
           }
         ],
         "access_rules": [
@@ -4549,8 +4549,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 611,
-            "y": 353
+            "x": 571,
+            "y": 593
           }
         ],
         "access_rules": [
@@ -4591,8 +4591,8 @@
         "map_locations": [
           {
             "map": "chamber_03",
-            "x": 573,
-            "y": 117
+            "x": 704,
+            "y": 208
           }
         ],
         "access_rules": [
@@ -4630,8 +4630,8 @@
         "map_locations": [
           {
             "map": "chamber_02",
-            "x": 61,
-            "y": 87
+            "x": 350,
+            "y": 256
           }
         ],
         "access_rules": [
@@ -4665,8 +4665,8 @@
         "map_locations": [
           {
             "map": "chamber_02",
-            "x": 119,
-            "y": 87
+            "x": 54,
+            "y": 218
           }
         ],
         "access_rules": [
@@ -4700,8 +4700,8 @@
         "map_locations": [
           {
             "map": "chamber_02",
-            "x": 177,
-            "y": 87
+            "x": 171,
+            "y": 321
           }
         ],
         "access_rules": [
@@ -4735,8 +4735,8 @@
         "map_locations": [
           {
             "map": "chamber_02",
-            "x": 235,
-            "y": 87
+            "x": 402,
+            "y": 115
           }
         ],
         "access_rules": [
@@ -4770,8 +4770,8 @@
         "map_locations": [
           {
             "map": "chamber_02",
-            "x": 293,
-            "y": 87
+            "x": 472,
+            "y": 201
           }
         ],
         "access_rules": [
@@ -4805,8 +4805,8 @@
         "map_locations": [
           {
             "map": "chamber_02",
-            "x": 351,
-            "y": 87
+            "x": 471,
+            "y": 831
           }
         ],
         "access_rules": [
@@ -4842,8 +4842,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 61,
-            "y": 87
+            "x": 348,
+            "y": 226
           }
         ],
         "access_rules": [
@@ -4877,8 +4877,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 119,
-            "y": 87
+            "x": 115,
+            "y": 339
           }
         ],
         "access_rules": [
@@ -4912,8 +4912,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 177,
-            "y": 87
+            "x": 88,
+            "y": 322
           }
         ],
         "access_rules": [
@@ -4947,8 +4947,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 235,
-            "y": 87
+            "x": 745,
+            "y": 194
           }
         ],
         "access_rules": [
@@ -4982,8 +4982,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 293,
-            "y": 87
+            "x": 900,
+            "y": 164
           }
         ],
         "access_rules": [
@@ -5017,8 +5017,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 351,
-            "y": 87
+            "x": 828,
+            "y": 164
           }
         ],
         "access_rules": [
@@ -5052,8 +5052,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 409,
-            "y": 87
+            "x": 106,
+            "y": 282
           }
         ],
         "access_rules": [
@@ -5087,8 +5087,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 467,
-            "y": 87
+            "x": 725,
+            "y": 329
           }
         ],
         "access_rules": [
@@ -5122,8 +5122,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 525,
-            "y": 87
+            "x": 705,
+            "y": 329
           }
         ],
         "access_rules": [
@@ -5157,8 +5157,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 583,
-            "y": 87
+            "x": 467,
+            "y": 267
           }
         ],
         "access_rules": [
@@ -5192,8 +5192,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 641,
-            "y": 87
+            "x": 580,
+            "y": 267
           }
         ],
         "access_rules": [
@@ -5227,8 +5227,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 699,
-            "y": 87
+            "x": 936,
+            "y": 339
           }
         ],
         "access_rules": [
@@ -5262,8 +5262,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 757,
-            "y": 87
+            "x": 384,
+            "y": 266
           }
         ],
         "access_rules": [
@@ -5297,8 +5297,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 815,
-            "y": 87
+            "x": 296,
+            "y": 301
           }
         ],
         "access_rules": [
@@ -5332,8 +5332,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 873,
-            "y": 87
+            "x": 163,
+            "y": 335
           }
         ],
         "access_rules": [
@@ -5362,8 +5362,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 931,
-            "y": 87
+            "x": 197,
+            "y": 336
           }
         ],
         "access_rules": [
@@ -5397,8 +5397,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 61,
-            "y": 145
+            "x": 549,
+            "y": 137
           }
         ],
         "access_rules": [
@@ -5438,8 +5438,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 119,
-            "y": 145
+            "x": 781,
+            "y": 127
           }
         ],
         "access_rules": [
@@ -5472,8 +5472,8 @@
         "map_locations": [
           {
             "map": "chamber_01",
-            "x": 177,
-            "y": 145
+            "x": 472,
+            "y": 127
           }
         ],
         "access_rules": [

@@ -1,6 +1,8 @@
 {
   "areas": {
-    "OL_07A": {
+    "Main::OL_07A": {
+      "campaign": "Main",
+      "area": "OL_07A",
       "area_id": 7,
       "chamber": 7,
       "theme": "OL",
@@ -12,14 +14,18 @@
         "2D Golf Olympics Start"
       ]
     },
-    "INTRO_10": {
+    "Main::INTRO_10": {
+      "campaign": "Main",
+      "area": "INTRO_10",
       "area_id": 0,
       "chamber": 10,
       "theme": "INTRO",
       "boss_name": null,
       "levels": []
     },
-    "SUPERPUTT_06B": {
+    "Main::SUPERPUTT_06B": {
+      "campaign": "Main",
+      "area": "SUPERPUTT_06B",
       "area_id": 10,
       "chamber": 6,
       "theme": "SUPERPUTT",
@@ -31,7 +37,9 @@
         "SUPERGOLF6"
       ]
     },
-    "PORTAL_06A": {
+    "Main::PORTAL_06A": {
+      "campaign": "Main",
+      "area": "PORTAL_06A",
       "area_id": 9,
       "chamber": 6,
       "theme": "PORTAL",
@@ -45,7 +53,9 @@
         "2DBall Portal 1"
       ]
     },
-    "LIVINGROOM_09B": {
+    "Main::LIVINGROOM_09B": {
+      "campaign": "Main",
+      "area": "LIVINGROOM_09B",
       "area_id": 2,
       "chamber": 9,
       "theme": "LIVINGROOM",
@@ -59,7 +69,9 @@
         "SquareBall"
       ]
     },
-    "LEBOWSKI_07B": {
+    "Main::LEBOWSKI_07B": {
+      "campaign": "Main",
+      "area": "LEBOWSKI_07B",
       "area_id": 8,
       "chamber": 7,
       "theme": "LEBOWSKI",
@@ -72,7 +84,9 @@
         "ManyBowlings"
       ]
     },
-    "PLATFORMERS_08A": {
+    "Main::PLATFORMERS_08A": {
+      "campaign": "Main",
+      "area": "PLATFORMERS_08A",
       "area_id": 3,
       "chamber": 8,
       "theme": "PLATFORMERS",
@@ -84,7 +98,9 @@
         "AngryGolf"
       ]
     },
-    "EASY2D_09A": {
+    "Main::EASY2D_09A": {
+      "campaign": "Main",
+      "area": "EASY2D_09A",
       "area_id": 1,
       "chamber": 9,
       "theme": "EASY2D",
@@ -96,7 +112,9 @@
         "2DBall many balls 1"
       ]
     },
-    "SPACE_08C": {
+    "Main::SPACE_08C": {
+      "campaign": "Main",
+      "area": "SPACE_08C",
       "area_id": 5,
       "chamber": 8,
       "theme": "SPACE",
@@ -109,7 +127,9 @@
         "SpaceGolf6"
       ]
     },
-    "EXPLOSION_08D": {
+    "Main::EXPLOSION_08D": {
+      "campaign": "Main",
+      "area": "EXPLOSION_08D",
       "area_id": 6,
       "chamber": 8,
       "theme": "EXPLOSION",
@@ -126,7 +146,9 @@
         "Manball 3"
       ]
     },
-    "SOCCER_08B": {
+    "Main::SOCCER_08B": {
+      "campaign": "Main",
+      "area": "SOCCER_08B",
       "area_id": 4,
       "chamber": 8,
       "theme": "SOCCER",
@@ -140,7 +162,9 @@
         "SoccerBall tutorial"
       ]
     },
-    "WETERN_01": {
+    "Main::WETERN_01": {
+      "campaign": "Main",
+      "area": "WETERN_01",
       "area_id": 19,
       "chamber": 1,
       "theme": "WETERN",
@@ -161,7 +185,9 @@
         "Western Horse Shoe Throwing"
       ]
     },
-    "GRAVITY_05B": {
+    "Main::GRAVITY_05B": {
+      "campaign": "Main",
+      "area": "GRAVITY_05B",
       "area_id": 12,
       "chamber": 5,
       "theme": "GRAVITY",
@@ -177,7 +203,9 @@
         "2D Super Golf Boy 3"
       ]
     },
-    "FPG_05C": {
+    "Main::FPG_05C": {
+      "campaign": "Main",
+      "area": "FPG_05C",
       "area_id": 13,
       "chamber": 5,
       "theme": "FPG",
@@ -191,7 +219,9 @@
         "FPG Targets 2"
       ]
     },
-    "MUSIC_04A": {
+    "Main::MUSIC_04A": {
+      "campaign": "Main",
+      "area": "MUSIC_04A",
       "area_id": 14,
       "chamber": 4,
       "theme": "MUSIC",
@@ -202,7 +232,9 @@
         "Golf Hero 1"
       ]
     },
-    "CARS_03B": {
+    "Main::CARS_03B": {
+      "campaign": "Main",
+      "area": "CARS_03B",
       "area_id": 17,
       "chamber": 3,
       "theme": "CARS",
@@ -219,7 +251,9 @@
         "car zigzag"
       ]
     },
-    "STEALTH_04B": {
+    "Main::STEALTH_04B": {
+      "campaign": "Main",
+      "area": "STEALTH_04B",
       "area_id": 15,
       "chamber": 4,
       "theme": "STEALTH",
@@ -234,7 +268,9 @@
         "SquareBallSneak"
       ]
     },
-    "JUNGLE_03A": {
+    "Main::JUNGLE_03A": {
+      "campaign": "Main",
+      "area": "JUNGLE_03A",
       "area_id": 16,
       "chamber": 3,
       "theme": "JUNGLE",
@@ -250,10 +286,37 @@
         "2D Explosions Simple 0",
         "2D Explosions Sticky 1"
       ]
+    },
+    "Olympics::INTRO_10": {
+      "campaign": "Olympics",
+      "area": "INTRO_10",
+      "area_id": 0,
+      "chamber": 10,
+      "theme": "INTRO",
+      "boss_name": null,
+      "levels": [
+        "AHoleInAOne",
+        "CatBall",
+        "ClubBallMany"
+      ]
+    },
+    "Hub::INTRO_10": {
+      "campaign": "Hub",
+      "area": "INTRO_10",
+      "area_id": 0,
+      "chamber": 10,
+      "theme": "INTRO",
+      "boss_name": null,
+      "levels": [
+        "AHoleInAOne",
+        "CatBall",
+        "ClubBallMany"
+      ]
     }
   },
   "doors": {
-    "ID_2D_HOLEINONE_1": {
+    "Main::ID_2D_HOLEINONE_1": {
+      "campaign": "Main",
       "boss_level_id": "349CM9",
       "boss_level_name": "ID_2D_HOLEINONE_1",
       "chamber": 3,
@@ -261,59 +324,108 @@
         "CARS_03B",
         "EASY2D_09A",
         "LIVINGROOM_09B"
-      ]
+      ],
+      "pos": [
+        -32.503006,
+        7.008,
+        0.0
+      ],
+      "in_scene": true
     },
-    "ID_2D_HOLEINONE_5": {
+    "Main::ID_2D_HOLEINONE_5": {
+      "campaign": "Main",
       "boss_level_id": "0WUALV",
       "boss_level_name": "ID_2D_HOLEINONE_5",
       "chamber": 5,
       "plate_areas": [
         "FPG_05C",
         "GRAVITY_05B"
-      ]
+      ],
+      "pos": [
+        -32.5,
+        153.0,
+        0.0
+      ],
+      "in_scene": true
     },
-    "ID_2D_HOLEINONE_9": {
+    "Main::ID_2D_HOLEINONE_9": {
+      "campaign": "Main",
       "boss_level_id": "IKCV7",
       "boss_level_name": "ID_2D_HOLEINONE_9",
       "chamber": -1,
-      "plate_areas": []
+      "plate_areas": [],
+      "pos": [
+        -32.48,
+        355.13,
+        3.45
+      ],
+      "in_scene": true
     },
-    "ID_2D_HOLEINONE_8": {
+    "Main::ID_2D_HOLEINONE_8": {
+      "campaign": "Main",
       "boss_level_id": "AXCX7",
       "boss_level_name": "ID_2D_HOLEINONE_8",
       "chamber": 1,
       "plate_areas": [
         "WETERN_01"
-      ]
+      ],
+      "pos": [
+        -32.5,
+        307.0,
+        0.0
+      ],
+      "in_scene": true
     },
-    "ID_2D_HOLEINONE_7": {
+    "Main::ID_2D_HOLEINONE_7": {
+      "campaign": "Main",
       "boss_level_id": "DSCVS",
       "boss_level_name": "ID_2D_HOLEINONE_7",
       "chamber": 4,
       "plate_areas": [
         "MUSIC_04A",
         "STEALTH_04B"
-      ]
+      ],
+      "pos": [
+        -32.48,
+        188.13,
+        3.45
+      ],
+      "in_scene": true
     },
-    "ID_2D_HOLEINONE_3": {
+    "Main::ID_2D_HOLEINONE_3": {
+      "campaign": "Main",
       "boss_level_id": "C1C9DS",
       "boss_level_name": "ID_2D_HOLEINONE_3",
       "chamber": 7,
       "plate_areas": [
         "LEBOWSKI_07B",
         "OL_07A"
-      ]
+      ],
+      "pos": [
+        -32.5,
+        62.0,
+        0.0
+      ],
+      "in_scene": true
     },
-    "ID_2D_HOLEINONE_4": {
+    "Main::ID_2D_HOLEINONE_4": {
+      "campaign": "Main",
       "boss_level_id": "3VGKO4",
       "boss_level_name": "ID_2D_HOLEINONE_4",
       "chamber": 6,
       "plate_areas": [
         "PORTAL_06A",
         "SUPERPUTT_06B"
-      ]
+      ],
+      "pos": [
+        -32.5,
+        97.0,
+        0.0
+      ],
+      "in_scene": true
     },
-    "ID_2D_HOLEINONE_2": {
+    "Main::ID_2D_HOLEINONE_2": {
+      "campaign": "Main",
       "boss_level_id": "9ZBIZC",
       "boss_level_name": "ID_2D_HOLEINONE_2",
       "chamber": 8,
@@ -322,7 +434,26 @@
         "PLATFORMERS_08A",
         "SOCCER_08B",
         "SPACE_08C"
-      ]
+      ],
+      "pos": [
+        -32.5,
+        31.0,
+        0.0
+      ],
+      "in_scene": true
+    },
+    "Alive::ID_2D_HOLEINONE_1": {
+      "campaign": "Alive",
+      "boss_level_id": "349CM9",
+      "boss_level_name": "ID_2D_HOLEINONE_1",
+      "chamber": -1,
+      "plate_areas": [],
+      "pos": [
+        -24.5,
+        -22.010002,
+        5.0
+      ],
+      "in_scene": true
     }
   }
 }

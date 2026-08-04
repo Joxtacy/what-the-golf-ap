@@ -80,8 +80,21 @@ public static class GoalDumper
                 bool unlocked = false;
                 try { unlocked = g.IsUnlocked(); } catch { }
 
-                if (rec.section != sectionName) { rec.section = sectionName; changed = true; }
-                if (rec.requires != requires) { rec.requires = requires; changed = true; }
+                // NEVER clobber a known name with null. A goal can be observed
+                // while its ParentHubSection isn't resolved yet, and overwriting
+                // would lose it: build_levels.py drops episode goals by SECTION
+                // ("Hub Section - Special Day"), so a nulled section silently adds
+                // a hole to an episode and shifts every later location id.
+                if (!string.IsNullOrEmpty(sectionName) && rec.section != sectionName)
+                {
+                    rec.section = sectionName;
+                    changed = true;
+                }
+                if (!string.IsNullOrEmpty(requires) && rec.requires != requires)
+                {
+                    rec.requires = requires;
+                    changed = true;
+                }
                 if (rec.state != state) { rec.state = state; changed = true; }
                 if (rec.unlocked != unlocked) { rec.unlocked = unlocked; changed = true; }
 

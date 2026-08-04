@@ -120,6 +120,13 @@ def load_world_positions(world):
     pos = {}
     for g in _load_json(GOALS_JSON, []):
         p, scene = g.get("pos"), g.get("scene")
+        # "Hub" is not a real campaign -- it's what CampaignInfo reports at the
+        # main menu, and records captured there are a documented duplicate
+        # artifact (STATUS.md). Dropping them also stops a Hub-tagged copy of an
+        # episode scene from overwriting the real one, since these are keyed by
+        # scene rather than by campaign::scene.
+        if g.get("campaign") == "Hub":
+            continue
         if p and scene and g.get("in_scene"):
             pos[f"scene:{scene}"] = (float(p[0]), float(p[1]))
     for key, c in _load_json(CHESTS_JSON, {}).get("chests", {}).items():
@@ -809,6 +816,40 @@ class GridPlacer:
         self._build_episodes()
 
     # -- projection ----------------------------------------------------------
+    def _world_bbox(self, keys):
+        pts = [self.pos[k] for k in keys if k in self.pos]
+        if not pts:
+            return None
+        xs = [p[0] for p in pts]
+        ys = [p[1] for p in pts]
+        return min(xs), min(ys), max(xs), max(ys)
+
+    MAX_H, MIN_W = 900, 420
+
+    def _canvas_size(self, keys, body_y):
+        """Canvas shaped like the content, long edge 1024.
+
+        A fixed 1024-wide box wastes most of the image whenever a chamber isn't
+        landscape -- chamber 02 is a tall narrow strip, so it rendered as a sliver
+        in a sea of background. Fitting BOTH dimensions to the world bbox's aspect
+        keeps every map filled and keeps the scale honest (still uniform, so
+        distances stay comparable within a map).
+        """
+        bb = self._world_bbox(keys)
+        if bb is None:
+            return self.W, self.MIN_H
+        dx, dy = max(1e-6, bb[2] - bb[0]), max(1e-6, bb[3] - bb[1])
+        aspect = dy / dx
+        if aspect <= 1.0:
+            w = self.W
+            content_h = (w - 2 * self.MARGIN) * aspect
+        else:
+            content_h = self.MAX_H - body_y - self.PAD
+            w = int(content_h / aspect) + 2 * self.MARGIN
+        w = int(max(self.MIN_W, min(self.W, w)))
+        h = int(max(self.MIN_H, min(self.MAX_H, body_y + content_h + self.PAD)))
+        return w, h
+
     def _projectable(self, keys):
         pts = [self.pos[k] for k in keys if k in self.pos]
         if len(pts) < self.MIN_PROJ_PTS:
@@ -890,20 +931,22 @@ class GridPlacer:
             # Real overworld geometry for the whole chamber at once, so sub-areas
             # keep their true spatial relationship to each other.
             body_y = self.HEADER + self.PAD
-            body_h = self.MIN_H - body_y - self.PAD
             have = self._projectable(all_keys)
             n_missing = sum(1 for k in all_keys if k not in self.pos)
+            canvas_w, canvas_h = (self._canvas_size(all_keys, body_y) if have
+                                  else (self.W, self.MIN_H))
+            body_h = canvas_h - body_y - self.PAD
             # Split the canvas into a projected band on top and an "estimated"
             # band below, so grid slots can never land on top of real markers.
             proj_h = 0 if not have else (body_h if not n_missing else int(body_h * 0.55))
             grid_y = body_y + (proj_h + 16 if proj_h else 0)
             place, have = self._project(
-                all_keys, self.MARGIN, body_y, self.W - 2 * self.MARGIN, proj_h) \
+                all_keys, self.MARGIN, body_y, canvas_w - 2 * self.MARGIN, proj_h) \
                 if proj_h else ((lambda _k: None), False)
 
             cols, max_rows = [], 0
             ncol = max(1, len(subs))
-            col_w = (self.W - 2 * self.MARGIN) // ncol
+            col_w = (canvas_w - 2 * self.MARGIN) // ncol
             for i, sa in enumerate(subs):
                 x0 = self.MARGIN + i * col_w
                 ents = holes_by_sa.get(sa, []) + chest_by_sa.get(sa, [])
@@ -924,32 +967,51 @@ class GridPlacer:
                              "pos": [(k, x, y) for k, x, y in grid],
                              "dumped": dumped, "projected": have})
 
-            height = max(self.MIN_H, grid_y + max(0, max_rows) * self.CELL + self.PAD * 2)
+            height = max(canvas_h, grid_y + max(0, max_rows) * self.CELL + self.PAD * 2)
             for col in cols:
                 for key, cx, cy in col["pos"] + col["dumped"]:
                     self._emit(name, key, (cx, cy))
             self.maps.append({"name": name, "title": f"Chamber {ch:02d}",
-                              "area": f"{ch:02d}", "w": self.W, "h": height,
+                              "area": f"{ch:02d}", "w": canvas_w, "h": height,
                               "header": f"CHAMBER {ch:02d}", "cols": cols,
                               "projected": have})
 
     def _build_episodes(self):
+        """Same treatment as a chamber, but each episode is one region: its holes
+        are a flat set (no sub-areas) living in its own coordinate space."""
         m = self.m
         for ep in m.data.EPISODES:
             name = f"ep_{ep.campaign.lower()}"
             ents = [f"scene:{lv.scene}" for lv in ep.levels]
-            width = self.W - 2 * self.MARGIN
-            pos, rows = self._grid(ents, self.MARGIN, self.HEADER + self.PAD, width)
-            height = max(self.MIN_H, self.HEADER + self.PAD * 2
-                         + max(1, rows) * self.CELL + self.PAD)
-            for key, cx, cy in pos:
-                self._pts.setdefault(key, []).append({"map": name, "x": cx, "y": cy})
-            self.stats["grid"] += len(pos)
+            body_y = self.HEADER + self.PAD
+            have = self._projectable(ents)
+            n_missing = sum(1 for k in ents if k not in self.pos)
+            canvas_w, canvas_h = (self._canvas_size(ents, body_y) if have
+                                  else (self.W, self.MIN_H))
+            width = canvas_w - 2 * self.MARGIN
+            body_h = canvas_h - body_y - self.PAD
+            proj_h = 0 if not have else (body_h if not n_missing else int(body_h * 0.55))
+            grid_y = body_y + (proj_h + 16 if proj_h else 0)
+            place, have = self._project(ents, self.MARGIN, body_y, width, proj_h) \
+                if proj_h else ((lambda _k: None), False)
+
+            dumped, missing = [], []
+            for k in ents:
+                xy = place(k) if have else None
+                (missing if xy is None else dumped).append(
+                    k if xy is None else (k, xy[0], xy[1]))
+            grid, rows = self._grid(missing, self.MARGIN, grid_y, width)
+            height = max(canvas_h, grid_y + max(0, rows) * self.CELL + self.PAD * 2)
+
+            for key, cx, cy in list(grid) + dumped:
+                self._emit(name, key, (cx, cy))
+            self.stats["dumped"] += len(dumped)
+            self.stats["grid"] += len(missing)
             self.maps.append({
                 "name": name, "title": ep.name, "area": ep.name,
-                "w": self.W, "h": height, "header": ep.name.upper(), "projected": False,
-                "cols": [{"sa": ep.name, "x": self.MARGIN, "w": width, "pos": pos,
-                          "dumped": [], "projected": False}]})
+                "w": canvas_w, "h": height, "header": ep.name.upper(), "projected": have,
+                "cols": [{"sa": ep.name, "x": self.MARGIN, "w": width,
+                          "pos": list(grid), "dumped": dumped, "projected": have}]})
 
     # -- rendering -----------------------------------------------------------
     def render(self, out_dir):
