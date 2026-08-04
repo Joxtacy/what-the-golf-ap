@@ -51,6 +51,9 @@ OUT = os.path.join(ROOT, "poptracker")
 # each with the exact camera rect it covered. Those rects ARE the map projections,
 # so markers land pixel-exact on the art. Absent -> schematic maps get drawn.
 SNAPSHOTS = os.path.join(SRC, "images", "maps", "snapshots.json")
+# Variant whose map backgrounds are the generated diagrams instead of the real
+# renders. Must match a key in manifest.json.in's "variants".
+SCHEMATIC_VARIANT = "ap_schematic"
 
 # --- palette -----------------------------------------------------------------
 BG = hex_rgb("#12141a")
@@ -825,11 +828,14 @@ class GridPlacer:
         self._build_chambers()
         self._build_episodes()
 
-    def _snapshot_layout(self, name, keys):
+    def _snapshot_layout(self, name, groups):
         """Placement for a map backed by a real in-game render.
 
         The recorded camera rect is the projection -- no bbox fitting, no
-        guessing. Returns (map_dict, emitted) or None if there's no render.
+        guessing. `groups` is [(key, label, [entity keys])]; the resulting pixel
+        positions are kept per group so the schematic variant can draw a labelled
+        region around each sub-area using the SAME projection, which is what lets
+        both variants share one set of marker coordinates.
         """
         s = self.snaps.get(name)
         if not s:
@@ -838,28 +844,34 @@ class GridPlacer:
         dx = max(1e-6, s["maxx"] - s["minx"])
         dy = max(1e-6, s["maxy"] - s["miny"])
 
-        placed, missing = [], []
-        for k in keys:
-            p = self.pos.get(k)
-            if p is None:
-                missing.append(k)
-                continue
-            px = int(round((p[0] - s["minx"]) / dx * w))
-            py = int(round((s["maxy"] - p[1]) / dy * h))   # Unity y-up -> image y-down
-            # Keep the marker fully on the image even if a flag sits on the very edge.
-            px = max(self.DOT, min(w - self.DOT, px))
-            py = max(self.DOT, min(h - self.DOT, py))
-            placed.append((k, px, py))
-        # Anything with no dumped position (Computer 9 has none) goes in a row along
-        # the bottom rather than on a grid, which would sit oddly over real art.
-        for i, k in enumerate(missing):
-            placed.append((k, self.MARGIN + self.DOT + i * self.CELL, h - self.DOT * 2))
-
-        self.stats["dumped"] += len(keys) - len(missing)
-        self.stats["grid"] += len(missing)
-        for k, px, py in placed:
-            self._emit(name, k, (px, py))
-        return {"w": w, "h": h, "rendered": True}
+        out, n_missing = [], 0
+        for gkey, label, keys in groups:
+            pts, missing = [], []
+            for k in keys:
+                p = self.pos.get(k)
+                if p is None:
+                    missing.append(k)
+                    continue
+                px = int(round((p[0] - s["minx"]) / dx * w))
+                py = int(round((s["maxy"] - p[1]) / dy * h))  # Unity y-up -> y-down
+                # Keep the marker on the image even if a flag sits on the very edge.
+                px = max(self.DOT, min(w - self.DOT, px))
+                py = max(self.DOT, min(h - self.DOT, py))
+                self._emit(name, k, (px, py))
+                pts.append((px, py))
+            # Anything with no dumped position (Computer 9 has none) goes in a row
+            # along the bottom rather than on a grid over the art.
+            for i, k in enumerate(missing):
+                xy = (self.MARGIN + self.DOT + (n_missing + i) * self.CELL,
+                      h - self.DOT * 2)
+                self._emit(name, k, xy)
+                pts.append(xy)
+            n_missing += len(missing)
+            self.stats["dumped"] += len(keys) - len(missing)
+            self.stats["grid"] += len(missing)
+            if pts:
+                out.append({"key": gkey, "label": label, "pts": pts})
+        return {"w": w, "h": h, "rendered": True, "groups": out}
 
     # -- projection ----------------------------------------------------------
     def _world_bbox(self, keys):
@@ -974,12 +986,16 @@ class GridPlacer:
             all_keys = [k for sa in subs
                         for k in holes_by_sa.get(sa, []) + chest_by_sa.get(sa, [])]
 
-            snap = self._snapshot_layout(name, all_keys)
+            snap = self._snapshot_layout(name, [
+                (sa, f"{sa} {m.subarea_theme.get(sa, sa)}",
+                 holes_by_sa.get(sa, []) + chest_by_sa.get(sa, []))
+                for sa in subs])
             if snap:
                 self.maps.append({"name": name, "title": f"Chamber {ch:02d}",
                                   "area": f"{ch:02d}", "w": snap["w"], "h": snap["h"],
                                   "header": f"CHAMBER {ch:02d}", "cols": [],
-                                  "projected": True, "rendered": True})
+                                  "projected": True, "rendered": True,
+                                  "groups": snap["groups"]})
                 continue
 
             # Real overworld geometry for the whole chamber at once, so sub-areas
@@ -1038,12 +1054,13 @@ class GridPlacer:
             name = f"ep_{ep.campaign.lower()}"
             ents = [f"scene:{lv.scene}" for lv in ep.levels]
 
-            snap = self._snapshot_layout(name, ents)
+            snap = self._snapshot_layout(name, [(ep.name, ep.name, ents)])
             if snap:
                 self.maps.append({"name": name, "title": ep.name, "area": ep.name,
                                   "w": snap["w"], "h": snap["h"],
                                   "header": ep.name.upper(), "cols": [],
-                                  "projected": True, "rendered": True})
+                                  "projected": True, "rendered": True,
+                                  "groups": snap["groups"]})
                 continue
             body_y = self.HEADER + self.PAD
             have = self._projectable(ents)
@@ -1147,6 +1164,53 @@ class GridPlacer:
                 for _key, cx, cy in col["pos"]:
                     c.fill_rect(cx - s // 2, cy - s // 2, s, s, mix(BG, tint, 0.18))
                     c.frame(cx - s // 2, cy - s // 2, s, s, mix(tint, BG, 0.6))
+            c.write_png(os.path.join(d, mp["name"] + ".png"))
+
+
+    def render_schematic(self, out_dir, variant):
+        """Draw the diagram-style backgrounds for the alternate variant.
+
+        Same canvas size and same projection as the real render, so both variants
+        share ONE set of marker coordinates -- only the background image differs.
+        Without that they would each need their own locations JSON.
+        """
+        m = self.m
+        tint_of = {sa: hex_rgb(SUBAREA_TINTS[i % len(SUBAREA_TINTS)])
+                   for i, sa in enumerate(m.subarea_order)}
+        d = os.path.join(out_dir, variant, "images", "maps")
+        os.makedirs(d, exist_ok=True)
+        for mp in self.maps:
+            groups = mp.get("groups")
+            if not groups:
+                # No in-game render for this map: the primary image is already the
+                # schematic, so reuse it rather than drawing a second one.
+                src = os.path.join(out_dir, "images", "maps", mp["name"] + ".png")
+                if os.path.exists(src):
+                    shutil.copyfile(src, os.path.join(d, mp["name"] + ".png"))
+                continue
+
+            c = Canvas(mp["w"], mp["h"], BG)
+            c.fill_rect(0, 0, mp["w"], self.HEADER - 8, PANEL)
+            c.text(self.MARGIN, 14, mp["header"], INK, 3)
+            for g in groups:
+                tint = tint_of.get(g["key"], hex_rgb("#4c6fb0"))
+                xs = [p[0] for p in g["pts"]]
+                ys = [p[1] for p in g["pts"]]
+                pad = self.DOT
+                x = max(0, min(xs) - pad)
+                y = max(self.HEADER, min(ys) - pad - 12)
+                w = min(mp["w"], max(xs) + pad) - x
+                h = min(mp["h"], max(ys) + pad) - y
+                c.blend_rect(x, y, w, h, tint, 0.20)
+                c.frame(x, y, w, h, mix(tint, INK, 0.25))
+                label = g["label"].upper()
+                if text_width(label, 2) > w - 12:
+                    label = g["key"].upper()
+                c.text(x + 6, y + 4, label, mix(tint, INK, 0.75), 2)
+                s = self.DOT
+                for px, py in g["pts"]:
+                    c.fill_rect(px - s // 2, py - s // 2, s, s, mix(BG, tint, 0.35))
+                    c.frame(px - s // 2, py - s // 2, s, s, mix(tint, BG, 0.35))
             c.write_png(os.path.join(d, mp["name"] + ".png"))
 
 
@@ -1262,6 +1326,18 @@ def validate(model, em, placer):
     if dup_children:
         problems.append(f"duplicate child names in a parent: {sorted(set(dup_children))[:6]}")
 
+    # Every map needs a background in BOTH variants. PopTracker falls back to the
+    # pack root when a variant lacks a file, so a gap here would silently show the
+    # real art inside the schematic variant instead of failing.
+    with open(os.path.join(em.out, "manifest.json"), encoding="utf-8") as f:
+        variants = list(json.load(f).get("variants", {}))
+    for mp in placer.maps:
+        for v in variants:
+            rel = (f"{v}/images/maps/{mp['name']}.png" if v == SCHEMATIC_VARIANT
+                   else f"images/maps/{mp['name']}.png")
+            if not os.path.exists(os.path.join(em.out, rel.replace("/", os.sep))):
+                problems.append(f"missing map image for variant {v}: {rel}")
+
     map_names = {mp["name"] for mp in placer.maps}
     for key, pts in placer._pts.items():
         for p in pts:
@@ -1323,6 +1399,10 @@ def build(out_dir, version):
     em.manifest(version)
     copy_static(out_dir)
     placer.render(out_dir)
+    # Alternate variant: same maps, diagram backgrounds. PopTracker resolves an
+    # image from <variant>/ before the pack root, so only these 16 files differ --
+    # locations, layouts, items and Lua are all shared.
+    placer.render_schematic(out_dir, SCHEMATIC_VARIANT)
     render_icons(out_dir, em.icons)
     render_sections(out_dir)
     render_pack_icon(out_dir)

@@ -14,6 +14,22 @@ Everything configures itself from slot data — goal, area access granularity,
 boss keys, crown chests and which episodes are in your seed. The settings popup
 is only needed for offline / manual tracking.
 
+## Two map styles
+
+The pack ships two variants; pick one when you load it:
+
+| Variant | Maps |
+| --- | --- |
+| **Archipelago** | the game's own overworld art, captured in-game |
+| **Archipelago (schematic maps)** | tinted boxes per sub-area, labelled |
+
+Both use identical marker positions, logic and autotracking -- only the
+background image differs. The schematic style is easier to scan when the real art
+gets busy; the real art is easier to navigate by if you know the game.
+
+Note PopTracker saves tracker state per variant, so switching mid-seed starts
+from an empty board. Choose before you begin.
+
 ## Reading the map
 
 Markers sit at their real overworld coordinates wherever the in-game dump has

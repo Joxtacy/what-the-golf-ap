@@ -9,6 +9,10 @@
     "ap": {
       "display_name": "Archipelago",
       "flags": ["ap"]
+    },
+    "ap_schematic": {
+      "display_name": "Archipelago (schematic maps)",
+      "flags": ["ap"]
     }
   },
   "min_poptracker_version": "0.26.2",
