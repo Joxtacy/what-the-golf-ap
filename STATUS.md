@@ -526,7 +526,17 @@ cover slot data (28/28) and the map auto-switch (42/42). Live-loaded in
 PopTracker 0.35.1 with zero warnings. **A live AP session is still untested** —
 connecting needs a UI click that can't be driven headlessly.
 
-**Map auto-switch:** `mod/src/Mapping/CurrentArea.cs` publishes the current
+**Map auto-switch — LIVE-VALIDATED 2026-08-03** (AP 0.6.7 + PopTracker 0.35.1,
+solo seed with all 17 Access keys in `start_inventory`): 15 publishes, correct
+chamber every time, no spam between changes, no errors, and the tracker's map tab
+followed. All three signal tiers exercised: `src=scene` in a hole
+(`1|09|09B|Main|1|scene|Livingroom couch`), `src=save` teleporting the overworld
+(`1|08|08B|Main|0|save|`), `src=campaign` inside an episode
+(`1|Among Us||Amongus|0|campaign|` -- episode holes have no sub-area, so the
+episode name is the routing key). `tools/watch_area_key.py` reads the key
+server-side, which validates the mod half with no UI clicks.
+
+`mod/src/Mapping/CurrentArea.cs` publishes the current
 chamber/sub-area to data storage under `WTG:CurrentArea:<team>:<slot>`; the pack
 `SetNotify`s on it, with a no-mod-needed fallback that reads the sub-area prefix
 off each location check. **Gotcha:** you cannot pass a `JObject`/`JToken` to

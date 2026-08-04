@@ -22,3 +22,6 @@ parity_cases.lua
 .DS_Store
 Thumbs.db
 dist/
+
+# Live AP test scratch output (tools/watch_area_key.py)
+area_watch*.log

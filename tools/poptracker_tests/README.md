@@ -79,25 +79,48 @@ To run any of them:
 Last run (PopTracker 0.35.1): `PARITY: 240/240`, `SLOTDATA: 28/28`,
 `AUTOTAB: 42/42`.
 
+## 4. Live session against a real server
+
+Validated 2026-08-03 against Archipelago 0.6.7 + PopTracker 0.35.1. To redo it:
+
+```powershell
+# Generate. SKIP_REQUIREMENTS_UPDATE avoids a stdin prompt for an unrelated
+# apworld's missing dep (dolphin-memory-engine); the Bash tool does NOT
+# propagate env vars to python here, so run this from PowerShell.
+$env:SKIP_REQUIREMENTS_UPDATE = "1"
+python Generate.py --player_files_path Players_wtg --outputpath output_wtg
+python MultiServer.py --port 38281 output_wtg\AP_*.zip
+```
+
+The test YAML puts **all 17 Access keys in `start_inventory`**, so every sub-area
+is teleport-reachable immediately and you can hop between chambers at will.
+
+Set `autoConnect = true` in `<game>\UserData\MelonPreferences.cfg` and the mod
+connects on launch with no F8 click. PopTracker still needs one **AP** click —
+`at_uri`/`at_slot` only prefill the dialog.
+
+`tools/watch_area_key.py` is the server's-eye view: it connects as a tracker and
+Get/SetNotify's the area key, printing every update. That validates the mod half
+with no UI at all.
+
+**Use a fresh save slot, never the 100% save** — connected, `GoalWatcher` would
+fire ~250 checks at once and `ChamberUnlock` writes door state to whatever slot
+is loaded.
+
+Results: 15 publishes, correct chamber for every one, no spam between changes,
+no errors. All three signal tiers exercised —
+
+| tier | fires when | observed |
+| --- | --- | --- |
+| `src=scene` | inside a hole | `1\|09\|09B\|Main\|1\|scene\|Livingroom couch` |
+| `src=save` | overworld, base campaign | `1\|08\|08B\|Main\|0\|save\|` |
+| `src=campaign` | inside an episode | `1\|Among Us\|\|Amongus\|0\|campaign\|` |
+
+— and PopTracker followed along, switching map tabs as the key changed.
+
 ## What none of this covers
 
-**A live Archipelago session.** Connecting requires clicking **AP** in the UI, so
-it can't be driven headlessly — the handler wiring (`AddClearHandler` etc.) and
-the real item/check feed still want one manual pass against a hosted room.
-
-**The mod's half of the auto-switch.** `mod/src/Mapping/CurrentArea.cs` builds
-clean but has never run in-game. One play session validates it, and the same
-session can do the `GoalDumper` position walk that Phase 3's real map
-coordinates need:
-
-1. Set `Mod.DumpersEnabled = true` (`mod/src/Mod.cs`), `dotnet build -c Debug`.
-2. Fresh save, connect via F8, and confirm `Publish current area (tracker map
-   auto-switch)` is ticked.
-3. Walk/teleport around every chamber, then enter each of the five episode
-   overworlds. Watch for `[AREA]` lines in the MelonLoader log and the tracker's
-   map tab following you; `[GOALS] N with live pos` should climb.
-4. Set `DumpersEnabled = false`, rebuild, and commit the refreshed
-   `mod/wtg_goals.json`.
-
-The dumper merges across sessions now, so a partial walk is still useful and a
-later pass adds to it rather than replacing it.
+The item/check feed against a live server was only exercised incidentally. The
+handlers themselves are unit-tested (see 3), and the connection wiring is now
+proven, but a full playthrough comparing every check against the server has not
+been done.
