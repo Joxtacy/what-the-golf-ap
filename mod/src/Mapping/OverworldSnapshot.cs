@@ -48,6 +48,13 @@ public static class OverworldSnapshot
     // episode map. Require a real overworld's worth, and require the count to
     // hold steady for a tick so we don't catch a half-loaded scene.
     private const int MinGoals = 5;
+    // A LineRenderer at least this long in either axis is a decorative cord, not
+    // map content -- see HideLongLines.
+    private const float LongLineWorld = 40f;
+    // Set true to log the biggest renderers per map (how the lamp cords were found).
+    // static readonly, not const: a const false makes the call site unreachable
+    // (CS0162), and this repo builds warning-clean.
+    private static readonly bool DiagRenderers = false;
 
     private static readonly Dictionary<string, int> Rendered = new();  // campaign -> goals used
     private static readonly Dictionary<string, int> LastSeen = new();  // campaign -> prev count
@@ -176,6 +183,14 @@ public static class OverworldSnapshot
         if (dx / dy > aspect) halfH = (dx / aspect) / 2f;
         float cx = (minx + maxx) / 2f, cy = (miny + maxy) / 2f;
 
+        if (DiagRenderers) LogBigRenderers(map, minx, miny, maxx, maxy);
+
+        // Decorative lamp cords and cables are LineRenderers anchored far off,
+        // spanning 80-145 world units. At play zoom you only ever see the short
+        // stretch beside a lamp; zoomed out to a whole chamber they read as pale
+        // diagonal stripes across the entire map. Hide them for the shot.
+        var hidden = HideLongLines(minx, miny, maxx, maxy);
+
         var go = new GameObject("wtg_snapshot_cam");
         RenderTexture rt = null;
         Texture2D tex = null;
@@ -186,14 +201,39 @@ public static class OverworldSnapshot
             cam.orthographic = true;
             cam.orthographicSize = halfH;
             cam.aspect = aspect;
-            cam.transform.position = new Vector3(cx, cy, -100f);
             cam.transform.rotation = Quaternion.identity;
-            cam.nearClipPlane = 0.01f;
-            cam.farClipPlane = 500f;
-            cam.clearFlags = CameraClearFlags.SolidColor;
-            cam.backgroundColor = new Color(0.07f, 0.08f, 0.10f, 1f);
             cam.allowHDR = false;
             cam.allowMSAA = false;
+
+            // Inherit the game's own view rather than inventing one. Sitting at
+            // z=-100 with a 0.01 near plane rendered foreground overlays the game
+            // never shows -- chamber 06 came out with decorative diagonal light
+            // shafts striped across the whole image. Copying depth, clip planes
+            // and culling mask means we see exactly what the player sees, just
+            // orthographic and zoomed out.
+            var src = FindOverworldCamera();
+            float camZ = -100f;
+            if (src != null)
+            {
+                camZ = src.transform.position.z;
+                cam.nearClipPlane = src.nearClipPlane;
+                cam.farClipPlane = src.farClipPlane;
+                cam.cullingMask = src.cullingMask;
+                cam.clearFlags = src.clearFlags;
+                cam.backgroundColor = src.backgroundColor;
+                Plugin.Log.LogInfo($"[SNAP] copied camera '{src.name}' z={camZ:0.##} "
+                                   + $"near={src.nearClipPlane:0.##} far={src.farClipPlane:0.##} "
+                                   + $"mask=0x{src.cullingMask:X}");
+            }
+            else
+            {
+                cam.nearClipPlane = 0.01f;
+                cam.farClipPlane = 500f;
+                cam.clearFlags = CameraClearFlags.SolidColor;
+                cam.backgroundColor = new Color(0.07f, 0.08f, 0.10f, 1f);
+                Plugin.Log.LogWarning("[SNAP] no source camera found; using defaults");
+            }
+            cam.transform.position = new Vector3(cx, cy, camZ);
 
             rt = new RenderTexture(w, h, 24);
             cam.targetTexture = rt;
@@ -223,11 +263,123 @@ public static class OverworldSnapshot
         }
         finally
         {
+            foreach (var r in hidden)
+            {
+                try { r.enabled = true; } catch { }
+            }
             RenderTexture.active = prevActive;
             try { if (tex != null) UnityEngine.Object.Destroy(tex); } catch { }
             try { if (rt != null) { rt.Release(); UnityEngine.Object.Destroy(rt); } } catch { }
             try { UnityEngine.Object.Destroy(go); } catch { }
         }
+    }
+
+    /// <summary>Temporarily hide over-long LineRenderers overlapping the window, and
+    /// return them so the caller can switch them back on.
+    ///
+    /// Identified from the diagnostic below: "GravityLamp*" / "Cable" cords, 80-145
+    /// world units end to end. Matched by TYPE AND SIZE rather than by name, so a
+    /// differently-named cord elsewhere is caught too -- nothing that long and thin
+    /// is map content worth showing.</summary>
+    private static List<Renderer> HideLongLines(float minx, float miny,
+                                                float maxx, float maxy)
+    {
+        var hidden = new List<Renderer>();
+        try
+        {
+            var all = UnityEngine.Resources.FindObjectsOfTypeAll<LineRenderer>();
+            for (int i = 0; i < all.Length; i++)
+            {
+                var r = all[i];
+                if (r == null) continue;
+                bool live = false;
+                try { live = r.enabled && r.gameObject.activeInHierarchy
+                             && r.gameObject.scene.IsValid(); } catch { }
+                if (!live) continue;
+
+                Bounds b;
+                try { b = r.bounds; } catch { continue; }
+                if (b.size.x < LongLineWorld && b.size.y < LongLineWorld) continue;
+                if (b.max.x < minx || b.min.x > maxx || b.max.y < miny || b.min.y > maxy)
+                    continue;
+
+                try { r.enabled = false; hidden.Add(r); } catch { }
+            }
+        }
+        catch (Exception e) { Plugin.Log.LogWarning($"[SNAP] HideLongLines: {e.Message}"); }
+        return hidden;
+    }
+
+    /// <summary>DIAGNOSTIC: log the biggest renderers overlapping a map's window.
+    /// Chamber 06 came out with pale diagonal lines striped across the whole image;
+    /// they survived copying the game camera's depth/clip/culling, so they are real
+    /// scene objects. This says which, so they can be excluded by name or layer.</summary>
+    private static void LogBigRenderers(string map, float minx, float miny,
+                                        float maxx, float maxy)
+    {
+        try
+        {
+            var found = new List<string>();
+            var all = UnityEngine.Resources.FindObjectsOfTypeAll<Renderer>();
+            for (int i = 0; i < all.Length; i++)
+            {
+                var r = all[i];
+                if (r == null) continue;
+                bool live = false;
+                try { live = r.enabled && r.gameObject.activeInHierarchy
+                             && r.gameObject.scene.IsValid(); } catch { }
+                if (!live) continue;
+
+                Bounds b;
+                try { b = r.bounds; } catch { continue; }
+                // Big enough to stripe a whole chamber, and actually in this window.
+                if (b.size.x < 25f && b.size.y < 25f) continue;
+                if (b.max.x < minx || b.min.x > maxx || b.max.y < miny || b.min.y > maxy)
+                    continue;
+
+                string name = "?", parent = "?", sort = "?";
+                try { name = r.gameObject.name; } catch { }
+                try { parent = r.transform.parent != null ? r.transform.parent.name : "-"; } catch { }
+                try { sort = r.sortingLayerName + "/" + r.sortingOrder; } catch { }
+                found.Add($"      {name} (parent={parent}) layer={r.gameObject.layer} "
+                          + $"sort={sort} z={r.transform.position.z:0.##} "
+                          + $"size={b.size.x:0.#}x{b.size.y:0.#} type={r.GetIl2CppType().Name}");
+            }
+            if (found.Count == 0) return;
+            Plugin.Log.LogInfo($"[SNAPDIAG] {map}: {found.Count} large renderer(s)");
+            for (int i = 0; i < found.Count && i < 25; i++)
+                Plugin.Log.LogInfo(found[i]);
+        }
+        catch (Exception e) { Plugin.Log.LogWarning($"[SNAPDIAG] {e.Message}"); }
+    }
+
+    /// <summary>The camera the game is actually drawing the overworld with, so the
+    /// snapshot inherits its depth, clip planes and culling mask.</summary>
+    private static Camera FindOverworldCamera()
+    {
+        try
+        {
+            var main = Camera.main;
+            if (main != null && main.isActiveAndEnabled) return main;
+        }
+        catch { }
+        try
+        {
+            // Fall back to the enabled camera that renders last to the screen.
+            Camera best = null;
+            var all = UnityEngine.Resources.FindObjectsOfTypeAll<Camera>();
+            for (int i = 0; i < all.Length; i++)
+            {
+                var c = all[i];
+                if (c == null) continue;
+                bool live = false;
+                try { live = c.isActiveAndEnabled && c.gameObject.scene.IsValid(); } catch { }
+                if (!live || c.targetTexture != null) continue;
+                if (best == null || c.depth > best.depth) best = c;
+            }
+            return best;
+        }
+        catch { return null; }
     }
 
     private static void WriteManifest()
