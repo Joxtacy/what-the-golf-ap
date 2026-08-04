@@ -40,6 +40,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PY = os.path.join(ROOT, "what_the_golf", "data.py")
 LEVELS_JSON = os.path.join(ROOT, "what_the_golf", "levels.json")
 IDS_JSON = os.path.join(ROOT, "mod", "ids.json")
+# In-game dumps that carry world positions. Absent/partial is fine -- anything
+# without a position is grid-placed instead (see Placer).
+GOALS_JSON = os.path.join(ROOT, "mod", "wtg_goals.json")
+CHESTS_JSON = os.path.join(ROOT, "mod", "wtg_chests.json")
+DOORS_JSON = os.path.join(ROOT, "mod", "wtg_doors.json")
 SRC = os.path.join(ROOT, "tools", "poptracker_src")
 OUT = os.path.join(ROOT, "poptracker")
 
@@ -86,6 +91,52 @@ def load_levels():
 def load_ids():
     with open(IDS_JSON, encoding="utf-8") as f:
         return json.load(f)
+
+
+def _load_json(path, default):
+    if not os.path.exists(path):
+        return default
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return default
+
+
+def load_world_positions(world):
+    """entity key -> (x, y) in the game's overworld coordinate space.
+
+    Three sources, because no single dumper sees everything:
+      * wtg_goals.json  -- the hole "flag" objects (OverworldGoal), campaign-tagged
+      * wtg_chests.json -- the 24 crown chests
+      * wtg_doors.json  -- the computer doors. Boss holes are NOT OverworldGoals,
+                           so this is their only coordinate source.
+
+    Only positions captured from a LIVE scene instance are trusted:
+    FindObjectsOfTypeAll also returns prefab assets whose transforms hold
+    authoring-local coordinates, which would land markers in nonsense places.
+    Anything missing is simply absent here and gets grid-placed.
+    """
+    pos = {}
+    for g in _load_json(GOALS_JSON, []):
+        p, scene = g.get("pos"), g.get("scene")
+        if p and scene and g.get("in_scene"):
+            pos[f"scene:{scene}"] = (float(p[0]), float(p[1]))
+    for key, c in _load_json(CHESTS_JSON, {}).get("chests", {}).items():
+        p = c.get("pos")
+        cid = c.get("id") or key.split("::")[-1]
+        if p:
+            pos[f"chest:{cid}"] = (float(p[0]), float(p[1]))
+    # A door record identifies its boss by LevelData.ID, so join through
+    # levels.json's boss_doors to get the scene the pack keys markers by.
+    scene_by_boss_id = {bd["boss_level_id"]: bd["scene"]
+                        for bd in world.get("boss_doors", ())}
+    for d in _load_json(DOORS_JSON, {}).get("doors", {}).values():
+        p = d.get("pos")
+        scene = scene_by_boss_id.get(d.get("boss_level_id"))
+        if p and scene and d.get("in_scene"):
+            pos[f"scene:{scene}"] = (float(p[0]), float(p[1]))
+    return pos
 
 
 # --- name hygiene ------------------------------------------------------------
@@ -725,25 +776,75 @@ class Emitter:
         self._wt("manifest.json", raw.replace("{package_version}", version))
 
 
-# --- grid placement (Phase 1: real coordinates land in Phase 3) --------------
+# --- marker placement --------------------------------------------------------
 class GridPlacer:
-    """Deterministic fallback layout: sub-areas as columns, holes on a grid.
+    """Where each check's marker goes on its map.
 
-    Phase 3 replaces the coordinates with the real overworld positions once the
-    in-game dump exists. Everything else about the pack stays identical, which
-    is why the coordinates live behind this one interface.
+    Uses the REAL overworld coordinate for any entity the in-game dumps captured,
+    and falls back to a deterministic grid slot for the rest -- per entity, not
+    per map, so a partial dump still yields a correct map for what it covered.
+
+    Projection is per chamber, from the bounding box of that chamber's OWN
+    positioned members. It must not be a horizontal slice of the world: chambers
+    05/06 and 02/05 overlap in y, so slicing would mix them.
     """
     W, MARGIN, HEADER, PAD, CELL, DOT = 1024, 20, 46, 12, 58, 22
     # PopTracker letterboxes a map into the available area, so a 1024x180 image
     # (chamber 10 has 3 holes) floats in a sea of background. Floor the height.
     MIN_H = 420
+    # Padding around a chamber's world bbox, in world units / as a fraction.
+    PAD_WORLD, PAD_FRAC = 4.0, 0.08
+    # Don't project from too little evidence: two chests a few units apart would
+    # be blown up to fill the map and imply a geometry that isn't there.
+    MIN_PROJ_PTS = 3
+    MIN_PROJ_SPAN = 6.0        # world units across the larger axis
 
-    def __init__(self, model):
+    def __init__(self, model, positions=None):
         self.m = model
+        self.pos = positions or {}
         self.maps = []
         self._pts = {}
+        self.stats = {"dumped": 0, "grid": 0}
         self._build_chambers()
         self._build_episodes()
+
+    # -- projection ----------------------------------------------------------
+    def _projectable(self, keys):
+        pts = [self.pos[k] for k in keys if k in self.pos]
+        if len(pts) < self.MIN_PROJ_PTS:
+            return False
+        xs = [p[0] for p in pts]
+        ys = [p[1] for p in pts]
+        return max(max(xs) - min(xs), max(ys) - min(ys)) >= self.MIN_PROJ_SPAN
+
+    def _project(self, keys, x0, y0, w, h):
+        """Fit the positioned entities among `keys` into the pixel box, returning
+        (place(key) -> (px, py) or None, had_any)."""
+        pts = [self.pos[k] for k in keys if k in self.pos]
+        if not pts:
+            return (lambda _k: None), False
+        xs = [p[0] for p in pts]
+        ys = [p[1] for p in pts]
+        minx, maxx, miny, maxy = min(xs), max(xs), min(ys), max(ys)
+        padx = max(self.PAD_WORLD, (maxx - minx) * self.PAD_FRAC)
+        pady = max(self.PAD_WORLD, (maxy - miny) * self.PAD_FRAC)
+        minx, maxx, miny, maxy = minx - padx, maxx + padx, miny - pady, maxy + pady
+        dx, dy = max(1e-6, maxx - minx), max(1e-6, maxy - miny)
+        scale = min(w / dx, h / dy)
+        # Centre the fitted content in the box.
+        offx = x0 + (w - dx * scale) / 2.0
+        offy = y0 + (h - dy * scale) / 2.0
+
+        def place(key):
+            p = self.pos.get(key)
+            if p is None:
+                return None
+            px = offx + (p[0] - minx) * scale
+            # Unity is y-up, images are y-down.
+            py = offy + (maxy - p[1]) * scale
+            return (int(round(px)), int(round(py)))
+
+        return place, True
 
     def points(self, key):
         return self._pts.get(key, [])
@@ -760,39 +861,77 @@ class GridPlacer:
         rows = (len(entities) + per_row - 1) // per_row if entities else 0
         return pos, rows
 
-    def _build_chambers(self):
+    def _entities(self):
         m = self.m
-        chest_by_sa = {}
+        chest_by_sa, holes_by_sa = {}, {}
         for c in m.data.CHESTS:
             chest_by_sa.setdefault(c.subarea, []).append(f"chest:{c.id}")
-        holes_by_sa = {}
         for area in m.world["areas"]:
             for lv in area["levels"]:
                 holes_by_sa.setdefault(lv.get("subarea") or "", []).append(
                     f"scene:{lv['scene']}")
+        return holes_by_sa, chest_by_sa
+
+    def _emit(self, map_name, key, xy):
+        self._pts.setdefault(key, []).append(
+            {"map": map_name, "x": xy[0], "y": xy[1]})
+
+    def _build_chambers(self):
+        m = self.m
+        holes_by_sa, chest_by_sa = self._entities()
 
         for area in m.world["areas"]:
             ch = int(area["chamber"])
             name = f"chamber_{ch:02d}"
             subs = m.chamber_subareas.get(ch, [])
+            all_keys = [k for sa in subs
+                        for k in holes_by_sa.get(sa, []) + chest_by_sa.get(sa, [])]
+
+            # Real overworld geometry for the whole chamber at once, so sub-areas
+            # keep their true spatial relationship to each other.
+            body_y = self.HEADER + self.PAD
+            body_h = self.MIN_H - body_y - self.PAD
+            have = self._projectable(all_keys)
+            n_missing = sum(1 for k in all_keys if k not in self.pos)
+            # Split the canvas into a projected band on top and an "estimated"
+            # band below, so grid slots can never land on top of real markers.
+            proj_h = 0 if not have else (body_h if not n_missing else int(body_h * 0.55))
+            grid_y = body_y + (proj_h + 16 if proj_h else 0)
+            place, have = self._project(
+                all_keys, self.MARGIN, body_y, self.W - 2 * self.MARGIN, proj_h) \
+                if proj_h else ((lambda _k: None), False)
+
+            cols, max_rows = [], 0
             ncol = max(1, len(subs))
             col_w = (self.W - 2 * self.MARGIN) // ncol
-            cols, max_rows = [], 0
             for i, sa in enumerate(subs):
                 x0 = self.MARGIN + i * col_w
                 ents = holes_by_sa.get(sa, []) + chest_by_sa.get(sa, [])
-                pos, rows = self._grid(ents, x0, self.HEADER + self.PAD, col_w)
+                dumped, missing = [], []
+                for k in ents:
+                    xy = place(k) if have else None
+                    if xy is None:
+                        missing.append(k)
+                    else:
+                        dumped.append((k, xy[0], xy[1]))
+                # Anything the dump hasn't captured gets a deterministic grid slot
+                # in its own sub-area column, so a partial dump is still usable.
+                grid, rows = self._grid(missing, x0, grid_y, col_w)
                 max_rows = max(max_rows, rows)
-                cols.append({"sa": sa, "x": x0, "w": col_w, "pos": pos})
-            height = max(self.MIN_H, self.HEADER + self.PAD * 2
-                         + max(1, max_rows) * self.CELL + self.PAD)
+                self.stats["dumped"] += len(dumped)
+                self.stats["grid"] += len(missing)
+                cols.append({"sa": sa, "x": x0, "w": col_w,
+                             "pos": [(k, x, y) for k, x, y in grid],
+                             "dumped": dumped, "projected": have})
+
+            height = max(self.MIN_H, grid_y + max(0, max_rows) * self.CELL + self.PAD * 2)
             for col in cols:
-                for key, cx, cy in col["pos"]:
-                    self._pts.setdefault(key, []).append(
-                        {"map": name, "x": cx, "y": cy})
+                for key, cx, cy in col["pos"] + col["dumped"]:
+                    self._emit(name, key, (cx, cy))
             self.maps.append({"name": name, "title": f"Chamber {ch:02d}",
                               "area": f"{ch:02d}", "w": self.W, "h": height,
-                              "header": f"CHAMBER {ch:02d}", "cols": cols})
+                              "header": f"CHAMBER {ch:02d}", "cols": cols,
+                              "projected": have})
 
     def _build_episodes(self):
         m = self.m
@@ -805,10 +944,12 @@ class GridPlacer:
                          + max(1, rows) * self.CELL + self.PAD)
             for key, cx, cy in pos:
                 self._pts.setdefault(key, []).append({"map": name, "x": cx, "y": cy})
+            self.stats["grid"] += len(pos)
             self.maps.append({
                 "name": name, "title": ep.name, "area": ep.name,
-                "w": self.W, "h": height, "header": ep.name.upper(),
-                "cols": [{"sa": ep.name, "x": self.MARGIN, "w": width, "pos": pos}]})
+                "w": self.W, "h": height, "header": ep.name.upper(), "projected": False,
+                "cols": [{"sa": ep.name, "x": self.MARGIN, "w": width, "pos": pos,
+                          "dumped": [], "projected": False}]})
 
     # -- rendering -----------------------------------------------------------
     def render(self, out_dir):
@@ -821,23 +962,63 @@ class GridPlacer:
             c = Canvas(mp["w"], mp["h"], BG)
             c.fill_rect(0, 0, mp["w"], self.HEADER - 8, PANEL)
             c.text(self.MARGIN, 14, mp["header"], INK, 3)
+
+            # Divider + caption between the real-geometry band and the estimated
+            # one, so a half-dumped chamber can't be mistaken for a finished map.
+            est_ys = [y for col in mp["cols"] for _k, _x, y in col["pos"]]
+            if mp.get("projected") and est_ys:
+                dy = min(est_ys) - self.CELL // 2 - 16
+                c.hline(self.MARGIN, dy, mp["w"] - 2 * self.MARGIN, mix(BG, INK, 0.28))
+                c.text(self.MARGIN, dy + 5,
+                       "ESTIMATED POSITIONS - NOT YET DUMPED", mix(BG, INK, 0.55), 1)
+
             for col in mp["cols"]:
                 sa = col["sa"]
                 tint = tint_of.get(sa, hex_rgb("#4c6fb0"))
-                y0 = self.HEADER
-                h = mp["h"] - y0 - self.PAD // 2
-                c.blend_rect(col["x"] + 3, y0, col["w"] - 6, h, tint, 0.20)
-                c.frame(col["x"] + 3, y0, col["w"] - 6, h, mix(tint, INK, 0.25))
-                label = sa if sa in m.subarea_theme else ""
                 theme = m.subarea_theme.get(sa, sa)
-                head = f"{label} {theme}".strip().upper()
-                if text_width(head, 2) > col["w"] - 16:
-                    head = (label or theme).upper()
-                c.text(col["x"] + 9, y0 + 4, head, mix(tint, INK, 0.75), 2)
-                for _key, cx, cy in col["pos"]:
-                    s = self.DOT
+                label = (f"{sa} {theme}" if sa in m.subarea_theme else str(theme)).upper()
+
+                def region(x, y, w, h, text, short, strong):
+                    c.blend_rect(x, y, w, h, tint, 0.20 if strong else 0.10)
+                    c.frame(x, y, w, h, mix(tint, INK, 0.25 if strong else 0.05))
+                    # Fall back to the short form rather than truncating -- an
+                    # elided " EST" would hide that a marker is a guess.
+                    head = text if text_width(text, 2) <= w - 16 else short
+                    c.text(x + 6, y + 4, head, mix(tint, INK, 0.75 if strong else 0.4), 2)
+
+                if col["dumped"]:
+                    # Real geometry: hug the actual markers, so the sub-area's true
+                    # shape and its position relative to its siblings both show.
+                    xs = [x for _k, x, _y in col["dumped"]]
+                    ys = [y for _k, _x, y in col["dumped"]]
+                    pad = self.DOT
+                    region(min(xs) - pad, min(ys) - pad - 12,
+                           max(xs) - min(xs) + 2 * pad,
+                           max(ys) - min(ys) + 2 * pad + 12, label, sa, True)
+                if col["pos"] and not col["dumped"]:
+                    # Nothing dumped for this sub-area: fall back to the tidy
+                    # full-column block.
+                    y0 = self.HEADER
+                    region(col["x"] + 3, y0, col["w"] - 6,
+                           mp["h"] - y0 - self.PAD // 2, label, sa, True)
+                elif col["pos"]:
+                    xs = [x for _k, x, _y in col["pos"]]
+                    ys = [y for _k, _x, y in col["pos"]]
+                    pad = self.DOT
+                    region(min(xs) - pad, min(ys) - pad - 12,
+                           max(xs) - min(xs) + 2 * pad,
+                           max(ys) - min(ys) + 2 * pad + 12,
+                           label + " EST", sa + " EST", False)
+
+                s = self.DOT
+                for _key, cx, cy in col["dumped"]:
                     c.fill_rect(cx - s // 2, cy - s // 2, s, s, mix(BG, tint, 0.35))
                     c.frame(cx - s // 2, cy - s // 2, s, s, mix(tint, BG, 0.35))
+                # Estimated markers read dimmer, so it's obvious at a glance which
+                # holes the in-game dump hasn't reached yet.
+                for _key, cx, cy in col["pos"]:
+                    c.fill_rect(cx - s // 2, cy - s // 2, s, s, mix(BG, tint, 0.18))
+                    c.frame(cx - s // 2, cy - s // 2, s, s, mix(tint, BG, 0.6))
             c.write_png(os.path.join(d, mp["name"] + ".png"))
 
 
@@ -1001,7 +1182,7 @@ def build(out_dir, version):
         raise SystemExit("mod/ids.json is stale -- run: python tools/export_ids.py")
 
     model = Model(data, world, ids)
-    placer = GridPlacer(model)
+    placer = GridPlacer(model, load_world_positions(world))
     em = Emitter(model, out_dir)
 
     em.items()
@@ -1084,6 +1265,16 @@ def main():
           f"{len(em.emitted_locs)} locations, {len(em.emitted_items)} items, "
           f"{len(em.location_mapping)} id->section, {len(placer.maps)} maps, "
           f"{len(set(r for r, _l, _c in em.icons))} icons")
+    d_, g_ = placer.stats["dumped"], placer.stats["grid"]
+    pct = (100.0 * d_ / (d_ + g_)) if (d_ + g_) else 0.0
+    print(f"markers: {d_} at real overworld coordinates, {g_} grid-estimated "
+          f"({pct:.0f}% dumped)")
+    for mp in placer.maps:
+        if not mp.get("projected"):
+            continue
+        est = sum(len(c["pos"]) for c in mp["cols"])
+        if est:
+            print(f"  {mp['name']}: {est} marker(s) still estimated")
 
     if args.zip:
         n = write_zip(OUT, args.zip)

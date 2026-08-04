@@ -87,11 +87,33 @@ mod/                    the MelonLoader (IL2CPP) game mod (C#)
   src/... WtgArchipelago.csproj NuGet.Config README.md
   ids.json              generated ID table (+ unlock/boss/chest maps) shared with the apworld
   wtg_*.json            in-game dumps (levels, sections, doors, goals, chests)
+poptracker/             the PopTracker map pack (GENERATED -- see below)
 tools/
   build_levels.py       builds what_the_golf/levels.json from the game dump
   export_ids.py         dumps data.py's ID maps + unlock map to mod/ids.json
+  build_poptracker.py   generates poptracker/ from data.py + ids.json
+  wtgpng.py             stdlib-only PNG writer (map + icon art, no Pillow)
+  poptracker_src/       hand-maintained pack inputs (manifest, settings, Lua)
+  poptracker_tests/     pack verification harnesses + how to run them
+  check_poptracker_logic.py  diffs the pack's logic against the apworld's
   build_release.ps1     packs the .apworld + Release mod bundle into dist/
 ```
+
+## The map tracker
+
+`poptracker/` is a [PopTracker](https://github.com/black-sliver/PopTracker) pack:
+a map per chamber (10 → 00) plus one per episode, full logic, and autotracking
+that configures itself from slot data. The map **auto-switches to the area you're
+playing** — the mod publishes its current chamber to Archipelago data storage and
+the pack follows, with a fallback that infers the area from your latest check.
+
+It is **generated wholesale** by `python tools/build_poptracker.py` from
+`what_the_golf/data.py` + `mod/ids.json`, so its 379 location names can never
+drift from a seed's. Never hand-edit `poptracker/` — edit `tools/poptracker_src/`
+or the generator, then rebuild. `--check` fails if the committed output is stale.
+
+Logic is verified against the apworld's real logic (a live `MultiWorld` per option
+combo, ~165k comparisons) — see [`tools/poptracker_tests/README.md`](tools/poptracker_tests/README.md).
 
 ## Roadmap
 
@@ -110,6 +132,10 @@ tools/
 - [x] Packaged release (`.apworld` + mod install bundle) — `tools/build_release.ps1`
 - [x] Clean up build warnings (`CS0162` unreachable code from `const` debug
   flags → `static readonly`; `CS0649` JSON-DTO fields → scoped `#pragma`)
+- [x] PopTracker map pack (`poptracker/`), generated + logic-verified
+- [x] Tracker map auto-switches to the chamber you're playing
+- [ ] Real overworld marker coordinates (needs an in-game dump pass)
+- [ ] Pack release artifact + community pack-list entry
 
 ## Testing the apworld
 

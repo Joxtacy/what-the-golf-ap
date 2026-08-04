@@ -48,6 +48,11 @@ public static class DoorDumper
         public string boss_level_name;    // OverworldMainDoorRobot.bossLevelName
         public int chamber = -1;          // from the door's plates' sub-areas
         public SortedSet<string> plate_areas = new();  // sub-area enum names on this door
+        // World position of the computer door. Boss holes are NOT OverworldGoals
+        // (see GoalWatcher), so GoalDumper never sees them -- this is the only
+        // source of a map coordinate for the 8 computer bosses.
+        public float[] pos;
+        public bool in_scene;             // pos came from a LIVE instance, not an asset
     }
 
     private class DoorsFile
@@ -143,6 +148,18 @@ public static class DoorDumper
                 }
                 if (dr.boss_level_id != bid && !string.IsNullOrEmpty(bid)) { dr.boss_level_id = bid; changed = true; }
 
+                // Only trust a position from an instance that lives in a loaded
+                // scene -- FindObjectsOfTypeAll also returns prefab assets, whose
+                // transforms hold authoring-local coordinates. Upgrade an
+                // asset-sourced position the first time a live instance appears.
+                bool live = false;
+                try { live = r.gameObject.scene.IsValid(); } catch { }
+                if (dr.pos == null || (live && !dr.in_scene))
+                {
+                    var p = Pos(r);
+                    if (p != null) { dr.pos = p; dr.in_scene = live; changed = true; }
+                }
+
                 try
                 {
                     var dplates = r.plates;
@@ -221,6 +238,16 @@ public static class DoorDumper
         string tail = name.Substring(us + 1);
         string digits = new string(tail.Where(char.IsDigit).ToArray());
         if (int.TryParse(digits, out int c)) chamber = c;
+    }
+
+    private static float[] Pos(UnityEngine.Component c)
+    {
+        try
+        {
+            var p = c.transform.position;
+            return new[] { p.x, p.y, p.z };
+        }
+        catch { return null; }
     }
 
     private static void Write()

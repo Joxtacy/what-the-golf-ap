@@ -16,6 +16,12 @@ is only needed for offline / manual tracking.
 
 ## Reading the map
 
+Markers sit at their real overworld coordinates wherever the in-game dump has
+captured them. Anything not yet captured is laid out on a tidy grid in a band
+below a divider marked **ESTIMATED POSITIONS — NOT YET DUMPED**, with its
+sub-area labelled `… EST` and its markers drawn dimmer. Those markers still
+track correctly — only their placement is a guess.
+
 | Marker | Meaning |
 | --- | --- |
 | Bright | in logic — you hold the keys Archipelago expects |

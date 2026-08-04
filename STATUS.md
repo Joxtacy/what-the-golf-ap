@@ -501,6 +501,54 @@ skip this next time). See the mod-UX section above.
   Unity's main thread → the whole game freezes (with the socket-close exception
   logged from the background receive thread while frozen — the tell).
 
+## PopTracker map pack — DONE except real map coordinates (2026-08-03)
+
+`poptracker/` is a PopTracker pack (map per chamber 10→00 + one per episode, full
+logic, AP autotracking). **Generated wholesale** by `tools/build_poptracker.py`
+from `data.py` + `mod/ids.json`; hand-maintained inputs live in
+`tools/poptracker_src/`. `tools/wtgpng.py` is a stdlib-only PNG writer (no Pillow
+under MSYS) that rasterizes the maps and all 76 item icons procedurally.
+
+**Two pack-format constraints shaped it, both easy to regress:**
+- A rule containing `:` is parsed as `code:count`, and EVERY WTG location name has
+  a colon. So pack-internal names are sanitised and the pack emits **zero**
+  `@Location/Section` rules — the two boss-gated chests inline their boss rule as
+  a cross-product rather than using `can_reach_location`.
+- Access rules have **no NOT operator**, so each option is a 2-stage `progressive`
+  item exposing both polarities (`opt_boss_keys_off`/`_on`).
+- `crowns` gates only the 24 chests; a hole's Crown location is unconditional.
+
+**Verification** (`tools/poptracker_tests/README.md`): build-integrity asserts;
+`check_poptracker_logic.py` diffs the pack's rules against a live AP MultiWorld
+per option combo (8 combos, ~165k comparisons, PASS) plus visibility parity;
+`--dump-lua` replays verified cases inside PopTracker (240/240); Lua harnesses
+cover slot data (28/28) and the map auto-switch (42/42). Live-loaded in
+PopTracker 0.35.1 with zero warnings. **A live AP session is still untested** —
+connecting needs a UI click that can't be driven headlessly.
+
+**Map auto-switch:** `mod/src/Mapping/CurrentArea.cs` publishes the current
+chamber/sub-area to data storage under `WTG:CurrentArea:<team>:<slot>`; the pack
+`SetNotify`s on it, with a no-mod-needed fallback that reads the sub-area prefix
+off each location check. **Gotcha:** you cannot pass a `JObject`/`JToken` to
+`session.DataStorage[key]` — the mod compiles against MelonLoader's
+Newtonsoft.Json while MultiClient bundles its own, so the two `JToken` types have
+different assembly identities (CS0029, uncastable). The payload is therefore a
+pipe-delimited string, `v|area|subarea|campaign|in_level|src|scene`, which also
+suits PopTracker's Lua (no JSON parser). `Il2Cpp.SaveGame.SavePosition` is a real
+string member — previously documented but never read by mod code.
+
+**REMAINING — one in-game dump pass.** `GoalDumper` and `DoorDumper` now record
+world positions (guarded on `gameObject.scene.IsValid()`, because
+`FindObjectsOfTypeAll` also returns prefab assets with authoring-local
+transforms), and both merge across sessions. Until that walk happens the pack
+places 24 chest markers at real coordinates and grid-estimates the other 233,
+under a divider labelled "ESTIMATED POSITIONS — NOT YET DUMPED".
+Note the current `wtg_goals.json` is a PARTIAL capture: 117/133 Main holes. The
+16 absent are the 8 computer bosses (not `OverworldGoal`s at all — hence the
+`DoorDumper` change) plus `SoccerBall`/`SoccerBall 2`/`3`, `Explosion4`/`5`, and
+`2D Super Golf Boy 0`/`1`/`2`, which should appear with more walking.
+Procedure is in `tools/poptracker_tests/README.md`.
+
 ## Suggested next steps
 
 0. **`hard_sections` mis-modelled 07B Bowling / 03B Cars — ✅ FIXED + LIVE-VALIDATED 2026-07-28.**
