@@ -151,6 +151,13 @@ def load_world_positions(world):
     scene_by_boss_id = {bd["boss_level_id"]: bd["scene"]
                         for bd in world.get("boss_doors", ())}
     for d in _load_json(DOORS_JSON, {}).get("doors", {}).values():
+        # Main only. An episode can contain a door reusing a campaign boss's
+        # LevelData.ID -- "Alive::ID_2D_HOLEINONE_1" carries Computer 1's id
+        # (349CM9) at a position 18 world units away, and without this filter it
+        # overwrote the real Computer 1 and threw its marker into the next
+        # chamber. No episode hole is a boss, so Main is the only source here.
+        if d.get("campaign", "Main") != "Main":
+            continue
         p = d.get("pos")
         scene = scene_by_boss_id.get(d.get("boss_level_id"))
         if p and scene and d.get("in_scene"):
@@ -825,6 +832,7 @@ class GridPlacer:
         self.maps = []
         self._pts = {}
         self.stats = {"dumped": 0, "grid": 0}
+        self.clamped = []          # markers pushed onto the image edge
         self._build_chambers()
         self._build_episodes()
 
@@ -854,9 +862,16 @@ class GridPlacer:
                     continue
                 px = int(round((p[0] - s["minx"]) / dx * w))
                 py = int(round((s["maxy"] - p[1]) / dy * h))  # Unity y-up -> y-down
-                # Keep the marker on the image even if a flag sits on the very edge.
-                px = max(self.DOT, min(w - self.DOT, px))
-                py = max(self.DOT, min(h - self.DOT, py))
+                # Keep the marker on the image even if it sits on the very edge.
+                cx = max(self.DOT, min(w - self.DOT, px))
+                cy = max(self.DOT, min(h - self.DOT, py))
+                if (cx, cy) != (px, py):
+                    # Clamping means the thing is OUTSIDE the rendered window, so
+                    # the pin no longer points at it. Silent clamping is how a
+                    # badly misplaced Computer 1 went unnoticed -- report it.
+                    self.clamped.append(
+                        f"{k} on {name}: ({px},{py}) -> ({cx},{cy})")
+                px, py = cx, cy
                 self._emit(name, k, (px, py))
                 pts.append((px, py))
             # Anything with no dumped position (Computer 9 has none) goes in a row
@@ -1485,6 +1500,11 @@ def main():
         est = sum(len(c["pos"]) for c in mp["cols"])
         if est:
             print(f"  {mp['name']}: {est} marker(s) still estimated")
+    if placer.clamped:
+        print(f"WARNING: {len(placer.clamped)} marker(s) fall outside their map's "
+              f"rendered window and were pinned to the edge:")
+        for c in placer.clamped:
+            print(f"  {c}")
 
     if args.zip:
         n = write_zip(OUT, args.zip)
