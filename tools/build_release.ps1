@@ -6,8 +6,13 @@
       2. Build the .apworld (zip of what_the_golf\, excluding __pycache__).
       3. Release-build the mod (skips the local-install auto-deploy).
       4. Stage the mod files (+ wtg_ids.json + INSTALL.txt) into a versioned zip.
+      5. Pack the PopTracker pack + record it in poptracker-versions.json.
 
-    Version is read from mod\WtgArchipelago.csproj <Version>.
+    Two versions are in play and they are deliberately independent:
+      * mod + apworld -- mod\WtgArchipelago.csproj <Version>
+      * PopTracker pack -- tools\poptracker_src\pack_version.txt
+    Coupling them would force pointless pack releases for mod-only changes.
+
     Requires: python on PATH, .NET 6 SDK (dotnet).
 
     Usage:   pwsh tools\build_release.ps1
@@ -32,13 +37,20 @@ Write-Host "Building release v$version" -ForegroundColor Cyan
 
 New-Item -ItemType Directory -Force -Path $dist | Out-Null
 
+# --- 0. pre-flight: the committed pack must match a fresh build ---
+# Catches a poptracker/ that was hand-edited or left stale after a data change,
+# BEFORE anything gets packaged.
+Write-Host "[0/5] Checking poptracker/ is up to date..." -ForegroundColor Cyan
+python 'tools/build_poptracker.py' '--check'
+if ($LASTEXITCODE -ne 0) { throw "poptracker/ is stale -- run: python tools/build_poptracker.py" }
+
 # --- 1. regenerate ids.json ---
-Write-Host "[1/4] Regenerating ids.json..." -ForegroundColor Cyan
+Write-Host "[1/5] Regenerating ids.json..." -ForegroundColor Cyan
 python 'tools/export_ids.py'
 if ($LASTEXITCODE -ne 0) { throw "export_ids.py failed" }
 
 # --- 2. build the .apworld (python guarantees forward-slash paths + clean excludes) ---
-Write-Host "[2/4] Packing what_the_golf.apworld..." -ForegroundColor Cyan
+Write-Host "[2/5] Packing what_the_golf.apworld..." -ForegroundColor Cyan
 New-Item -ItemType Directory -Force -Path $dist | Out-Null
 $py = @'
 import os, sys, zipfile
@@ -59,7 +71,7 @@ $py | python - 'what_the_golf' 'dist/what_the_golf.apworld'
 if ($LASTEXITCODE -ne 0) { throw "apworld packing failed" }
 
 # --- 3. Release-build the mod ---
-Write-Host "[3/4] Building mod (Release)..." -ForegroundColor Cyan
+Write-Host "[3/5] Building mod (Release)..." -ForegroundColor Cyan
 dotnet build $csproj -c Release --nologo
 if ($LASTEXITCODE -ne 0) { throw "dotnet build failed" }
 
@@ -71,7 +83,7 @@ foreach ($f in @($modDll, $apDll)) {
 }
 
 # --- 4. stage + zip the mod bundle ---
-Write-Host "[4/4] Staging mod bundle..." -ForegroundColor Cyan
+Write-Host "[4/5] Staging mod bundle..." -ForegroundColor Cyan
 $stage = Join-Path $dist 'mod-stage'
 if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $stage | Out-Null
@@ -86,12 +98,40 @@ if (Test-Path $modZip) { Remove-Item $modZip -Force }
 Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $modZip
 Remove-Item $stage -Recurse -Force
 
+# --- 5. pack the PopTracker pack + record it for auto-update ---
+Write-Host "[5/5] Packing the PopTracker pack..." -ForegroundColor Cyan
+$packVersion = (python 'tools/build_poptracker.py' '--print-version').Trim()
+if ($LASTEXITCODE -ne 0 -or -not $packVersion) { throw "could not read the pack version" }
+$packZipRel = "dist/what-the-golf-poptracker-v$packVersion.zip"
+$packZip    = Join-Path $root $packZipRel
+if (Test-Path $packZip) { Remove-Item $packZip -Force }
+
+# Python writes the zip, not Compress-Archive: PopTracker needs manifest.json at
+# the archive ROOT with forward-slash entries, and Compress-Archive emits
+# back-slashes.
+python 'tools/build_poptracker.py' '--zip' $packZipRel
+if ($LASTEXITCODE -ne 0) { throw "poptracker zip failed" }
+
+$packSha = (Get-FileHash $packZip -Algorithm SHA256).Hash.ToLower()
+python 'tools/build_poptracker.py' '--record-version' $packVersion $packSha
+if ($LASTEXITCODE -ne 0) { throw "recording the pack version failed" }
+
 Write-Host ""
-Write-Host "Release v$version ready in dist\:" -ForegroundColor Green
-Write-Host "  - what_the_golf.apworld"
-Write-Host "  - WtgArchipelago-mod-v$version.zip  (WtgArchipelago.dll, Archipelago.MultiClient.Net.dll, wtg_ids.json, INSTALL.txt)"
+Write-Host "Release ready in dist\:" -ForegroundColor Green
+Write-Host "  mod + apworld  v$version"
+Write-Host "    - what_the_golf.apworld"
+Write-Host "    - WtgArchipelago-mod-v$version.zip  (WtgArchipelago.dll, Archipelago.MultiClient.Net.dll, wtg_ids.json, INSTALL.txt)"
+Write-Host "  PopTracker pack  v$packVersion"
+Write-Host "    - what-the-golf-poptracker-v$packVersion.zip"
+Write-Host "      sha256 $packSha"
 Write-Host ""
-Write-Host "Upload both as assets to a GitHub Release tagged v$version." -ForegroundColor Green
+Write-Host "Next:" -ForegroundColor Green
+Write-Host "  1. Commit the regenerated poptracker-versions.json (and poptracker/ if it changed)."
+Write-Host "  2. Tag v$version and push."
+Write-Host "  3. Upload all three zips as assets on that release."
+Write-Host ""
+Write-Host "The pack's download_url points at tag v$packVersion, so the pack zip must be" -ForegroundColor Yellow
+Write-Host "on a release tagged v$packVersion or PopTracker's auto-update will 404." -ForegroundColor Yellow
 }
 finally {
     Pop-Location

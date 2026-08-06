@@ -1,0 +1,178 @@
+[
+  {
+    "map": "chamber_00",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_00.png",
+    "w": 2048,
+    "h": 2048,
+    "minx": -25.309,
+    "miny": 541.64,
+    "maxx": 14.691,
+    "maxy": 581.64
+  },
+  {
+    "map": "chamber_01",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_01.png",
+    "w": 2048,
+    "h": 922,
+    "minx": -92.23,
+    "miny": 268.9273,
+    "maxx": 20,
+    "maxy": 319.4527
+  },
+  {
+    "map": "chamber_02",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_02.png",
+    "w": 2048,
+    "h": 1281,
+    "minx": -87.5057,
+    "miny": 237.5,
+    "maxx": 26.0057,
+    "maxy": 308.5
+  },
+  {
+    "map": "chamber_03",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_03.png",
+    "w": 2048,
+    "h": 1024,
+    "minx": -92,
+    "miny": 183.94,
+    "maxx": 16,
+    "maxy": 237.94
+  },
+  {
+    "map": "chamber_04",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_04.png",
+    "w": 2048,
+    "h": 888,
+    "minx": -97.0217,
+    "miny": 157.54,
+    "maxx": 7.3617,
+    "maxy": 202.8
+  },
+  {
+    "map": "chamber_05",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_05.png",
+    "w": 2048,
+    "h": 1382,
+    "minx": -114.9719,
+    "miny": 91.01,
+    "maxx": 11.0039,
+    "maxy": 176.019
+  },
+  {
+    "map": "chamber_06",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_06.png",
+    "w": 2048,
+    "h": 756,
+    "minx": -126.3997,
+    "miny": 49.4966,
+    "maxx": 82.3964,
+    "maxy": 126.5717
+  },
+  {
+    "map": "chamber_07",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_07.png",
+    "w": 2048,
+    "h": 820,
+    "minx": -78.014,
+    "miny": 35.44,
+    "maxx": 47.014,
+    "maxy": 85.5
+  },
+  {
+    "map": "chamber_08",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_08.png",
+    "w": 2048,
+    "h": 964,
+    "minx": -118.273,
+    "miny": -4.314,
+    "maxx": 26.0071,
+    "maxy": 63.5991
+  },
+  {
+    "map": "chamber_09",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_09.png",
+    "w": 2048,
+    "h": 1234,
+    "minx": -65.0069,
+    "miny": -24.5,
+    "maxx": 10.5069,
+    "maxy": 21
+  },
+  {
+    "map": "chamber_10",
+    "campaign": "Main",
+    "file": "wtg_map_chamber_10.png",
+    "w": 2048,
+    "h": 2048,
+    "minx": -52.76,
+    "miny": -35.265,
+    "maxx": -12.76,
+    "maxy": 4.735
+  },
+  {
+    "map": "ep_alive",
+    "campaign": "Alive",
+    "file": "wtg_map_ep_alive.png",
+    "w": 991,
+    "h": 2048,
+    "minx": -64.5726,
+    "miny": -79.933,
+    "maxx": 33.1126,
+    "maxy": 121.943
+  },
+  {
+    "map": "ep_amongus",
+    "campaign": "Amongus",
+    "file": "wtg_map_ep_amongus.png",
+    "w": 1730,
+    "h": 2048,
+    "minx": -80.56,
+    "miny": -94.9941,
+    "maxx": 13.71,
+    "maxy": 16.6041
+  },
+  {
+    "map": "ep_hotdog",
+    "campaign": "Hotdog",
+    "file": "wtg_map_ep_hotdog.png",
+    "w": 1026,
+    "h": 2048,
+    "minx": -83.01,
+    "miny": -80.8405,
+    "maxx": -11.44,
+    "maxy": 62.0205
+  },
+  {
+    "map": "ep_olympics",
+    "campaign": "Olympics",
+    "file": "wtg_map_ep_olympics.png",
+    "w": 1196,
+    "h": 2048,
+    "minx": -70.78,
+    "miny": -65.0193,
+    "maxx": -3.5,
+    "maxy": 50.1893
+  },
+  {
+    "map": "ep_snow",
+    "campaign": "Snow",
+    "file": "wtg_map_ep_snow.png",
+    "w": 673,
+    "h": 2048,
+    "minx": -47.23,
+    "miny": -59.5747,
+    "maxx": 55.537,
+    "maxy": 253.1547
+  }
+]

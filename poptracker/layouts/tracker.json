@@ -1,0 +1,17 @@
+{
+  "tracker_default": {
+    "type": "dock",
+    "content": [
+      {
+        "type": "layout",
+        "key": "item_panel",
+        "dock": "left",
+        "max_width": 340
+      },
+      {
+        "type": "layout",
+        "key": "maps_tabbed"
+      }
+    ]
+  }
+}

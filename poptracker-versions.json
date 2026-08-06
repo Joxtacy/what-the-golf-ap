@@ -1,0 +1,16 @@
+{
+  "versions": [
+    {
+      "package_version": "0.1.0",
+      "download_url": "https://github.com/Joxtacy/what-the-golf-ap/releases/download/v0.1.0/what-the-golf-poptracker-v0.1.0.zip",
+      "sha256": "4895c234a698caae28d2184a7032b060974ff38cf2bea749ce877a49da722cb0",
+      "changelog": [
+        "First release.",
+        "Map per chamber (10 -> 00) plus one per DLC episode, on the game's own overworld art.",
+        "Optional \"schematic maps\" variant with diagram backgrounds instead.",
+        "Full logic mirroring the apworld, configured automatically from slot data.",
+        "The map follows you around the overworld as you teleport (needs the game mod)."
+      ]
+    }
+  ]
+}

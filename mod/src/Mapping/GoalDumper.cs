@@ -1,23 +1,44 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace WtgArchipelago.Mapping;
 
 /// <summary>
-/// Enumerates the overworld's OverworldGoal objects (the "flags" you golf into
-/// to enter a level) and records how they map to levels, hub sections, and lock
-/// state. This is the structure that gating hooks into: each goal has a
+/// Enumerates the overworld's OverworldGoal objects (the "flags" you golf into to
+/// enter a level) and records how they map to levels, hub sections, lock state and
+/// WORLD POSITION. This is the structure gating hooks into: each goal has a
 /// levelData (scene), a ParentHubSection (area/chamber), a state
 /// (Hidden/Unplayed/Won/Crown), IsUnlocked(), and a requireGoalToUnlock chain.
 ///
-/// Read-only. Runs periodically from Mod.OnUpdate; goals only exist while in the
-/// overworld, so walk the lab to capture them. Writes wtg_goals.json.
+/// The positions are what lets tools/build_poptracker_maps.py place a marker for
+/// every hole at its true overworld coordinate instead of on a fallback grid.
+///
+/// Read-only. Runs periodically from Mod.OnUpdate (behind DumpersEnabled). Goals
+/// only exist while their overworld is loaded, so walk the lab to capture them --
+/// and each episode is a SEPARATE campaign/overworld, hence the campaign tag and
+/// the cross-session merge below. Writes wtg_goals.json (a JSON array;
+/// tools/build_levels.py reads it as a list, so that shape is load-bearing).
 /// </summary>
 public static class GoalDumper
 {
-    private static readonly Dictionary<string, string> Seen = new();
+    private class GoalRec
+    {
+        public string campaign;      // episode tag (Main/Olympics/Snow/...)
+        public string scene;         // levelData.SceneName (join key)
+        public string section;       // ParentHubSection name ("Hub Section - Cars")
+        public int state;            // Hidden=0 / Unplayed=1 / Won=2 / Crown=3
+        public bool unlocked;        // IsUnlocked() at capture
+        public string requires;      // requireGoalToUnlock's scene, if any
+        public float[] pos;          // world position of the goal flag
+        public bool in_scene;        // pos came from a LIVE instance, not an asset
+    }
+
+    private static readonly Dictionary<string, GoalRec> Seen = new();
+    private static readonly List<string> Order = new();
+    private static bool _loaded;
     private static int _runs;
 
     private static string OutPath =>
@@ -27,9 +48,11 @@ public static class GoalDumper
     {
         try
         {
+            LoadOnce();
             string campaign = CampaignInfo.Current();
             var all = UnityEngine.Resources.FindObjectsOfTypeAll<Il2Cpp.OverworldGoal>();
-            int added = 0;
+            bool changed = false;
+
             for (int i = 0; i < all.Length; i++)
             {
                 var g = all[i];
@@ -39,57 +62,118 @@ public static class GoalDumper
                 string scene = ld != null ? ld.SceneName : null;
                 // Key by campaign too, so episodes that reuse scene names don't drop goals.
                 string key = campaign + "::" + (scene ?? ("goal#" + i));
-                if (Seen.ContainsKey(key)) continue;
+
+                if (!Seen.TryGetValue(key, out var rec))
+                {
+                    rec = new GoalRec { campaign = campaign, scene = scene };
+                    Seen[key] = rec;
+                    Order.Add(key);
+                    changed = true;
+                }
 
                 var section = g.ParentHubSection;
                 string sectionName = section != null ? section.name : null;
                 var req = g.requireGoalToUnlock;
-                string requires = (req != null && req.levelData != null) ? req.levelData.SceneName : null;
+                string requires = (req != null && req.levelData != null)
+                    ? req.levelData.SceneName : null;
+                int state = (int)g.state;
+                bool unlocked = false;
+                try { unlocked = g.IsUnlocked(); } catch { }
 
-                Seen[key] = "{" +
-                    $"\"campaign\":{J(campaign)}," +
-                    $"\"scene\":{J(scene)}," +
-                    $"\"section\":{J(sectionName)}," +
-                    $"\"state\":{(int)g.state}," +
-                    $"\"unlocked\":{(g.IsUnlocked() ? "true" : "false")}," +
-                    $"\"requires\":{J(requires)}" +
-                    "}";
-                added++;
+                // NEVER clobber a known name with null. A goal can be observed
+                // while its ParentHubSection isn't resolved yet, and overwriting
+                // would lose it: build_levels.py drops episode goals by SECTION
+                // ("Hub Section - Special Day"), so a nulled section silently adds
+                // a hole to an episode and shifts every later location id.
+                if (!string.IsNullOrEmpty(sectionName) && rec.section != sectionName)
+                {
+                    rec.section = sectionName;
+                    changed = true;
+                }
+                if (!string.IsNullOrEmpty(requires) && rec.requires != requires)
+                {
+                    rec.requires = requires;
+                    changed = true;
+                }
+                if (rec.state != state) { rec.state = state; changed = true; }
+                if (rec.unlocked != unlocked) { rec.unlocked = unlocked; changed = true; }
+
+                // FindObjectsOfTypeAll also returns PREFAB/asset copies, whose
+                // transform holds authoring-local coordinates -- ChestGate documents
+                // the same trap for canOpen. So only trust an instance that lives in
+                // a loaded scene, and UPGRADE a previously recorded asset position
+                // the first time a real scene instance shows up.
+                bool live = false;
+                try { live = g.gameObject.scene.IsValid(); } catch { }
+                if (rec.pos == null || (live && !rec.in_scene))
+                {
+                    var p = Pos(g);
+                    if (p != null)
+                    {
+                        rec.pos = p;
+                        rec.in_scene = live;
+                        changed = true;
+                    }
+                }
             }
 
-            if (added > 0)
+            if (changed)
             {
                 Write();
-                Plugin.Log.LogInfo($"[GOALS] +{added} goals (total {Seen.Count}) -> {OutPath}");
+                int live = Seen.Values.Count(r => r.pos != null && r.in_scene);
+                Plugin.Log.LogInfo($"[GOALS] {Seen.Count} goals, {live} with live pos "
+                                   + $"(active={campaign}) -> {OutPath}");
             }
             else if (++_runs % 4 == 0)
             {
-                Plugin.Log.LogInfo($"[GOALS] heartbeat: {all.Length} goals loaded, {Seen.Count} captured");
+                Plugin.Log.LogInfo($"[GOALS] heartbeat: {all.Length} goals loaded, "
+                                   + $"{Seen.Count} captured");
             }
         }
         catch (Exception e) { Plugin.Log.LogError($"GoalDumper: {e}"); }
     }
 
-    private static void Write()
+    /// <summary>Merge what a previous session already captured, so the dump can be
+    /// built up over several passes -- it takes Main plus five separate episode
+    /// overworlds, which is a lot to walk in one sitting. Records with no campaign
+    /// tag predate the campaign-aware dumpers and are Main.</summary>
+    private static void LoadOnce()
     {
-        var sb = new StringBuilder("[\n");
-        int i = 0;
-        foreach (var line in Seen.Values)
-            sb.Append("  ").Append(line).Append(++i < Seen.Count ? ",\n" : "\n");
-        sb.Append("]\n");
-        File.WriteAllText(OutPath, sb.ToString());
+        if (_loaded) return;
+        _loaded = true;
+        try
+        {
+            if (!File.Exists(OutPath)) return;
+            var list = JsonConvert.DeserializeObject<List<GoalRec>>(File.ReadAllText(OutPath));
+            if (list == null) return;
+            foreach (var rec in list)
+            {
+                if (rec == null) continue;
+                if (string.IsNullOrEmpty(rec.campaign)) rec.campaign = "Main";
+                string key = rec.campaign + "::"
+                             + (rec.scene ?? ("goal#" + Guid.NewGuid().ToString("N")));
+                if (!Seen.ContainsKey(key))
+                {
+                    Seen[key] = rec;
+                    Order.Add(key);
+                }
+            }
+            Plugin.Log.LogInfo($"[GOALS] loaded {Seen.Count} existing goals from {OutPath}");
+        }
+        catch (Exception e) { Plugin.Log.LogWarning($"GoalDumper.LoadOnce: {e}"); }
     }
 
-    private static string J(string s)
+    private static float[] Pos(UnityEngine.Component c)
     {
-        if (s == null) return "null";
-        var sb = new StringBuilder("\"");
-        foreach (char c in s)
+        try
         {
-            if (c == '"' || c == '\\') sb.Append('\\').Append(c);
-            else if (c < 0x20) sb.Append(' ');
-            else sb.Append(c);
+            var p = c.transform.position;
+            return new[] { p.x, p.y, p.z };
         }
-        return sb.Append('"').ToString();
+        catch { return null; }
     }
+
+    private static void Write() =>
+        File.WriteAllText(OutPath, JsonConvert.SerializeObject(
+            Order.Select(k => Seen[k]).ToList(), Formatting.Indented));
 }

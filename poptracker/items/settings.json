@@ -1,0 +1,145 @@
+[
+  {
+    "name": "Area Access",
+    "type": "progressive",
+    "allow_disabled": false,
+    "loop": true,
+    "initial_stage_idx": 0,
+    "stages": [
+      {
+        "name": "Area Access: Section",
+        "codes": "opt_area,opt_area_section",
+        "inherit_codes": false,
+        "img": "images/items/opt_area_section.png"
+      },
+      {
+        "name": "Area Access: Chamber",
+        "codes": "opt_area,opt_area_chamber",
+        "inherit_codes": false,
+        "img": "images/items/opt_area_chamber.png"
+      }
+    ]
+  },
+  {
+    "name": "Boss Keys",
+    "type": "progressive",
+    "allow_disabled": false,
+    "loop": true,
+    "stages": [
+      {
+        "name": "Boss Keys: Off",
+        "codes": "opt_boss_keys,opt_boss_keys_off",
+        "inherit_codes": false,
+        "img": "images/items/opt_boss_keys_off.png"
+      },
+      {
+        "name": "Boss Keys: On",
+        "codes": "opt_boss_keys,opt_boss_keys_on",
+        "inherit_codes": false,
+        "img": "images/items/opt_boss_keys_on.png"
+      }
+    ]
+  },
+  {
+    "name": "Goal",
+    "type": "progressive",
+    "allow_disabled": false,
+    "loop": true,
+    "stages": [
+      {
+        "name": "Goal: Campaign",
+        "codes": "opt_goal,goal_campaign",
+        "inherit_codes": false,
+        "img": "images/items/goal_campaign.png"
+      },
+      {
+        "name": "Goal: 50% Door",
+        "codes": "opt_goal,goal_door50",
+        "inherit_codes": false,
+        "img": "images/items/goal_door50.png"
+      },
+      {
+        "name": "Goal: 75% Door",
+        "codes": "opt_goal,goal_door75",
+        "inherit_codes": false,
+        "img": "images/items/goal_door75.png"
+      },
+      {
+        "name": "Goal: 100% Door",
+        "codes": "opt_goal,goal_door100",
+        "inherit_codes": false,
+        "img": "images/items/goal_door100.png"
+      },
+      {
+        "name": "Goal: All Bosses",
+        "codes": "opt_goal,goal_all_bosses",
+        "inherit_codes": false,
+        "img": "images/items/goal_all_bosses.png"
+      }
+    ]
+  },
+  {
+    "name": "Crown Chests",
+    "type": "toggle",
+    "codes": "opt_crowns",
+    "img": "images/items/opt_crowns.png",
+    "disabled_img_mods": "@disabled"
+  },
+  {
+    "name": "Hard Sub-area Locks",
+    "type": "toggle",
+    "codes": "opt_hard",
+    "img": "images/items/opt_hard.png",
+    "disabled_img_mods": "@disabled"
+  },
+  {
+    "name": "Show walk-in access (out of logic)",
+    "type": "toggle",
+    "codes": "opt_walk",
+    "img": "images/items/opt_walk.png",
+    "disabled_img_mods": "@disabled",
+    "initial_active_state": true
+  },
+  {
+    "name": "Auto-switch map tabs: OFF",
+    "type": "toggle",
+    "codes": "autotab_off",
+    "img": "images/items/autotab_off.png",
+    "disabled_img_mods": "@disabled"
+  },
+  {
+    "name": "Episode: Sporty Sports",
+    "type": "toggle",
+    "codes": "opt_ep_olympics",
+    "disabled_img_mods": "@disabled",
+    "img": "images/items/opt_ep_olympics.png"
+  },
+  {
+    "name": "Episode: Snow",
+    "type": "toggle",
+    "codes": "opt_ep_snow",
+    "disabled_img_mods": "@disabled",
+    "img": "images/items/opt_ep_snow.png"
+  },
+  {
+    "name": "Episode: Hotdog",
+    "type": "toggle",
+    "codes": "opt_ep_hotdog",
+    "disabled_img_mods": "@disabled",
+    "img": "images/items/opt_ep_hotdog.png"
+  },
+  {
+    "name": "Episode: Alive",
+    "type": "toggle",
+    "codes": "opt_ep_alive",
+    "disabled_img_mods": "@disabled",
+    "img": "images/items/opt_ep_alive.png"
+  },
+  {
+    "name": "Episode: Among Us",
+    "type": "toggle",
+    "codes": "opt_ep_amongus",
+    "disabled_img_mods": "@disabled",
+    "img": "images/items/opt_ep_amongus.png"
+  }
+]

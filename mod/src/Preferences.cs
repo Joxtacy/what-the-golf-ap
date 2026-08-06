@@ -19,6 +19,7 @@ public static class Preferences
     public static MelonPreferences_Entry<bool> HudAnimate;
     public static MelonPreferences_Entry<bool> FlagHud;
     public static MelonPreferences_Entry<bool> OpenHubPortal;
+    public static MelonPreferences_Entry<bool> PublishArea;
 
     // --- Live event feed (see MessageFeed) -----------------------------------
     // A scrolling on-screen log of Archipelago traffic (items found/sent, hints,
@@ -56,6 +57,11 @@ public static class Preferences
         // can warp back to the hub (e.g. to check the flag/% doors) before beating a
         // chamber's computer boss. Client-side only; unlocks no gated content.
         OpenHubPortal = Category.CreateEntry("openHubPortal", true, "Keep the hub portal open (chamber 10)");
+        // Publish the current chamber/sub-area to AP data storage so a PopTracker
+        // pack can auto-switch its map tab as you move. Observation only -- no
+        // effect on logic, generation or gating. On by default so the tracker
+        // works out of the box; off for anyone who'd rather not broadcast it.
+        PublishArea = Category.CreateEntry("publishArea", true, "Publish current area (tracker map auto-switch)");
         // NOTE: the DeathLink outgoing throttle (wipes per sent death) is NOT a client
         // preference -- it's the apworld's `death_link_amnesty` option, delivered via
         // slot data (see ArchipelagoData.DeathLinkAmnesty), so the seed owns it.

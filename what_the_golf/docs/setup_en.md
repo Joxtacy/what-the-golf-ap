@@ -223,6 +223,34 @@ Traps never gate progression — they only change the flavour of your filler.
 
 ---
 
+## Tracking your game (optional)
+
+There's a [PopTracker](https://github.com/black-sliver/PopTracker) pack in this
+repo under `poptracker/`. It gives you a map per chamber (10 → 00) plus one per
+episode, showing where every remaining check is and which ones are currently in
+logic.
+
+1. Install PopTracker, then copy the `poptracker/` folder (or the released
+   `wtg-poptracker-*.zip`) into its `packs/` directory.
+2. Load **WHAT THE GOLF? Map Tracker**, pick the **Archipelago** variant, click
+   **AP**, and enter the same host / slot / password you gave the mod.
+
+Everything configures itself from your seed — goal, area-access granularity,
+boss keys, crown chests and which episodes you enabled. Checks tick off as you
+play, and **the map follows you around the overworld**: teleport to a new
+chamber and the tracker switches to that tab. (That needs the mod's *Publish
+current area* option, on by default in the F8 panel. Without it the tracker
+still switches, just only when you send a check.) Turn tab-switching off in the
+tracker's settings if you'd rather drive it yourself.
+
+Marker colours are PopTracker's usual ones, with one addition specific to this
+game: **yellow** means a check you can physically *walk* to but that Archipelago
+doesn't consider in logic — the sub-area walk-in described above. It's never
+required and never a softlock. On a `hard_sections` seed it disappears, since
+the mod holds those doors shut.
+
+---
+
 ## Required software
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) — the

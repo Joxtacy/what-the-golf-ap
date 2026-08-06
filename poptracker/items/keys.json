@@ -1,0 +1,401 @@
+[
+  {
+    "name": "Chamber 09 Access",
+    "type": "toggle",
+    "img": "images/items/ch_09.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_09"
+  },
+  {
+    "name": "Chamber 08 Access",
+    "type": "toggle",
+    "img": "images/items/ch_08.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_08"
+  },
+  {
+    "name": "Chamber 07 Access",
+    "type": "toggle",
+    "img": "images/items/ch_07.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_07"
+  },
+  {
+    "name": "Chamber 06 Access",
+    "type": "toggle",
+    "img": "images/items/ch_06.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_06"
+  },
+  {
+    "name": "Chamber 05 Access",
+    "type": "toggle",
+    "img": "images/items/ch_05.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_05"
+  },
+  {
+    "name": "Chamber 04 Access",
+    "type": "toggle",
+    "img": "images/items/ch_04.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_04"
+  },
+  {
+    "name": "Chamber 03 Access",
+    "type": "toggle",
+    "img": "images/items/ch_03.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_03"
+  },
+  {
+    "name": "Chamber 02 Access",
+    "type": "toggle",
+    "img": "images/items/ch_02.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_02"
+  },
+  {
+    "name": "Chamber 01 Access",
+    "type": "toggle",
+    "img": "images/items/ch_01.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_01"
+  },
+  {
+    "name": "Chamber 00 Access",
+    "type": "toggle",
+    "img": "images/items/ch_00.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "ch_00"
+  },
+  {
+    "name": "09A: Easy 2D Access",
+    "type": "toggle",
+    "img": "images/items/gate_09A.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_09A"
+  },
+  {
+    "name": "09B: Living Room Access",
+    "type": "toggle",
+    "img": "images/items/gate_09B.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_09B"
+  },
+  {
+    "name": "08A: Platformers Access",
+    "type": "toggle",
+    "img": "images/items/gate_08A.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_08A"
+  },
+  {
+    "name": "08B: Soccer Access",
+    "type": "toggle",
+    "img": "images/items/gate_08B.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_08B"
+  },
+  {
+    "name": "08C: Space Access",
+    "type": "toggle",
+    "img": "images/items/gate_08C.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_08C"
+  },
+  {
+    "name": "08D: Explosion Access",
+    "type": "toggle",
+    "img": "images/items/gate_08D.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_08D"
+  },
+  {
+    "name": "07A: OL Access",
+    "type": "toggle",
+    "img": "images/items/gate_07A.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_07A"
+  },
+  {
+    "name": "07B: Lebowski Access",
+    "type": "toggle",
+    "img": "images/items/gate_07B.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_07B"
+  },
+  {
+    "name": "06A/B: Portal & Super Putt Access",
+    "type": "toggle",
+    "img": "images/items/gate_06AB.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_06AB"
+  },
+  {
+    "name": "05A/B/C: Kitchen, Gravity & FPG Access",
+    "type": "toggle",
+    "img": "images/items/gate_05ABC.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_05ABC"
+  },
+  {
+    "name": "04A: Music Access",
+    "type": "toggle",
+    "img": "images/items/gate_04A.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_04A"
+  },
+  {
+    "name": "04B: Stealth Access",
+    "type": "toggle",
+    "img": "images/items/gate_04B.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_04B"
+  },
+  {
+    "name": "03A: Jungle Access",
+    "type": "toggle",
+    "img": "images/items/gate_03A.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_03A"
+  },
+  {
+    "name": "03B: Cars Access",
+    "type": "toggle",
+    "img": "images/items/gate_03B.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_03B"
+  },
+  {
+    "name": "02: Water Access",
+    "type": "toggle",
+    "img": "images/items/gate_02.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_02"
+  },
+  {
+    "name": "01: Western Access",
+    "type": "toggle",
+    "img": "images/items/gate_01.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_01"
+  },
+  {
+    "name": "00: Finale Access",
+    "type": "toggle",
+    "img": "images/items/gate_00.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "gate_00"
+  },
+  {
+    "name": "Computer 1 Key (Chamber 08)",
+    "type": "toggle",
+    "img": "images/items/bosskey_1.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "bosskey_1"
+  },
+  {
+    "name": "Computer 2 Key (Chamber 07)",
+    "type": "toggle",
+    "img": "images/items/bosskey_2.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "bosskey_2"
+  },
+  {
+    "name": "Computer 3 Key (Chamber 06)",
+    "type": "toggle",
+    "img": "images/items/bosskey_3.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "bosskey_3"
+  },
+  {
+    "name": "Computer 4 Key (Chamber 05)",
+    "type": "toggle",
+    "img": "images/items/bosskey_4.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "bosskey_4"
+  },
+  {
+    "name": "Computer 5 Key (Chamber 05)",
+    "type": "toggle",
+    "img": "images/items/bosskey_5.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "bosskey_5"
+  },
+  {
+    "name": "Computer 7 Key (Chamber 03)",
+    "type": "toggle",
+    "img": "images/items/bosskey_7.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "bosskey_7"
+  },
+  {
+    "name": "Computer 8 Key (Chamber 01)",
+    "type": "toggle",
+    "img": "images/items/bosskey_8.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "bosskey_8"
+  },
+  {
+    "name": "Easy 2D Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_EASY2D.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_EASY2D"
+  },
+  {
+    "name": "Livingroom Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_LIVINGROOM.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_LIVINGROOM"
+  },
+  {
+    "name": "Platformer Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_PLATFORMER.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_PLATFORMER"
+  },
+  {
+    "name": "Soccer 1 Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_SOCCER1.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_SOCCER1"
+  },
+  {
+    "name": "Space Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_SPACE.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_SPACE"
+  },
+  {
+    "name": "Explosion Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_EXPLOSION.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_EXPLOSION"
+  },
+  {
+    "name": "OL Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_OL.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_OL"
+  },
+  {
+    "name": "Lebowski Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_LEBOWSKI.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_LEBOWSKI"
+  },
+  {
+    "name": "Portal Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_PORTAL.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_PORTAL"
+  },
+  {
+    "name": "Superputt Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_SUPERPUTT.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_SUPERPUTT"
+  },
+  {
+    "name": "Gravity Main Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_GRAVITY_MAIN.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_GRAVITY_MAIN"
+  },
+  {
+    "name": "FPG Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_FPG.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_FPG"
+  },
+  {
+    "name": "Music Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_MUSIC.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_MUSIC"
+  },
+  {
+    "name": "Stealth Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_STEALTH.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_STEALTH"
+  },
+  {
+    "name": "Jungle Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_JUNGLE.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_JUNGLE"
+  },
+  {
+    "name": "Cars Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_CARS.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_CARS"
+  },
+  {
+    "name": "Desert 1 Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_DESERT1.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_DESERT1"
+  },
+  {
+    "name": "Desert 2 Chest Key",
+    "type": "toggle",
+    "img": "images/items/chestkey_DESERT2.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "chestkey_DESERT2"
+  },
+  {
+    "name": "Sporty Sports Episode Access",
+    "type": "toggle",
+    "img": "images/items/epkey_olympics.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "epkey_olympics"
+  },
+  {
+    "name": "Snow Episode Access",
+    "type": "toggle",
+    "img": "images/items/epkey_snow.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "epkey_snow"
+  },
+  {
+    "name": "Hotdog Episode Access",
+    "type": "toggle",
+    "img": "images/items/epkey_hotdog.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "epkey_hotdog"
+  },
+  {
+    "name": "Alive Episode Access",
+    "type": "toggle",
+    "img": "images/items/epkey_alive.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "epkey_alive"
+  },
+  {
+    "name": "Among Us Episode Access",
+    "type": "toggle",
+    "img": "images/items/epkey_amongus.png",
+    "disabled_img_mods": "@disabled",
+    "codes": "epkey_amongus"
+  }
+]

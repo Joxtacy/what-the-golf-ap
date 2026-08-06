@@ -501,7 +501,143 @@ skip this next time). See the mod-UX section above.
   Unity's main thread → the whole game freezes (with the socket-close exception
   logged from the background receive thread while frozen — the tell).
 
+## PopTracker map pack — DONE except real map coordinates (2026-08-03)
+
+`poptracker/` is a PopTracker pack (map per chamber 10→00 + one per episode, full
+logic, AP autotracking). **Generated wholesale** by `tools/build_poptracker.py`
+from `data.py` + `mod/ids.json`; hand-maintained inputs live in
+`tools/poptracker_src/`. `tools/wtgpng.py` is a stdlib-only PNG writer (no Pillow
+under MSYS) that rasterizes the maps and all 76 item icons procedurally.
+
+**Two pack-format constraints shaped it, both easy to regress:**
+- A rule containing `:` is parsed as `code:count`, and EVERY WTG location name has
+  a colon. So pack-internal names are sanitised and the pack emits **zero**
+  `@Location/Section` rules — the two boss-gated chests inline their boss rule as
+  a cross-product rather than using `can_reach_location`.
+- Access rules have **no NOT operator**, so each option is a 2-stage `progressive`
+  item exposing both polarities (`opt_boss_keys_off`/`_on`).
+- `crowns` gates only the 24 chests; a hole's Crown location is unconditional.
+
+**Verification** (`tools/poptracker_tests/README.md`): build-integrity asserts;
+`check_poptracker_logic.py` diffs the pack's rules against a live AP MultiWorld
+per option combo (8 combos, ~165k comparisons, PASS) plus visibility parity;
+`--dump-lua` replays verified cases inside PopTracker (240/240); Lua harnesses
+cover slot data (28/28) and the map auto-switch (42/42). Live-loaded in
+PopTracker 0.35.1 with zero warnings. **A live AP session is still untested** —
+connecting needs a UI click that can't be driven headlessly.
+
+**Map auto-switch — LIVE-VALIDATED 2026-08-03** (AP 0.6.7 + PopTracker 0.35.1,
+solo seed with all 17 Access keys in `start_inventory`): 15 publishes, correct
+chamber every time, no spam between changes, no errors, and the tracker's map tab
+followed. All three signal tiers exercised: `src=scene` in a hole
+(`1|09|09B|Main|1|scene|Livingroom couch`), `src=save` teleporting the overworld
+(`1|08|08B|Main|0|save|`), `src=campaign` inside an episode
+(`1|Among Us||Amongus|0|campaign|` -- episode holes have no sub-area, so the
+episode name is the routing key). `tools/watch_area_key.py` reads the key
+server-side, which validates the mod half with no UI clicks.
+
+`mod/src/Mapping/CurrentArea.cs` publishes the current
+chamber/sub-area to data storage under `WTG:CurrentArea:<team>:<slot>`; the pack
+`SetNotify`s on it, with a no-mod-needed fallback that reads the sub-area prefix
+off each location check. **Gotcha:** you cannot pass a `JObject`/`JToken` to
+`session.DataStorage[key]` — the mod compiles against MelonLoader's
+Newtonsoft.Json while MultiClient bundles its own, so the two `JToken` types have
+different assembly identities (CS0029, uncastable). The payload is therefore a
+pipe-delimited string, `v|area|subarea|campaign|in_level|src|scene`, which also
+suits PopTracker's Lua (no JSON parser). `Il2Cpp.SaveGame.SavePosition` is a real
+string member — previously documented but never read by mod code.
+
+**REMAINING — one in-game dump pass.** `GoalDumper` and `DoorDumper` now record
+world positions (guarded on `gameObject.scene.IsValid()`, because
+`FindObjectsOfTypeAll` also returns prefab assets with authoring-local
+transforms), and both merge across sessions. Until that walk happens the pack
+places 24 chest markers at real coordinates and grid-estimates the other 233,
+under a divider labelled "ESTIMATED POSITIONS — NOT YET DUMPED".
+Note the current `wtg_goals.json` is a PARTIAL capture: 117/133 Main holes. The
+16 absent are the 8 computer bosses (not `OverworldGoal`s at all — hence the
+`DoorDumper` change) plus `SoccerBall`/`SoccerBall 2`/`3`, `Explosion4`/`5`, and
+`2D Super Golf Boy 0`/`1`/`2`, which should appear with more walking.
+Procedure is in `tools/poptracker_tests/README.md`.
+
+## PopTracker pack — RELEASE PACKAGING DONE (2026-08-05)
+
+`tools/build_release.ps1` now produces all three artifacts in one shot and gained a
+**pre-flight** `build_poptracker.py --check`, so a stale or hand-edited `poptracker/`
+can never ship. Step 5 packs `dist/what-the-golf-poptracker-v<ver>.zip` (Python
+writes it, not `Compress-Archive` — PopTracker needs `manifest.json` at the archive
+ROOT with forward-slash entries) and records its sha256 in `poptracker-versions.json`.
+
+**Two independent version numbers**: mod+apworld from the csproj `<Version>`, the
+pack from `tools/poptracker_src/pack_version.txt`. Coupling them would force
+pointless pack releases for mod-only changes. The pack's `download_url` points at
+`v<pack version>`, so its zip must be on a release tagged with THAT version or
+auto-update 404s.
+
+`poptracker-versions.json` (repo root) is the auto-update ledger — PopTracker
+fetches it over https, treats the TOP entry as latest, verifies the download
+against its sha256. `--record-version` upserts idempotently so re-cutting a
+release replaces rather than duplicates an entry; changelog lines come from
+`tools/poptracker_src/changelog/<version>.txt` (a build input, excluded from the
+pack via `SKIP_DIRS`).
+
+`.github/workflows/poptracker.yml` (the repo's first workflow) runs `--check`, the
+official `pack-checker --strict`, and a ledger validator (https URLs, 64-hex
+sha256, download_url matches its own tag, no duplicate versions, manifest version
+== newest ledger entry).
+
+**VERIFIED:** full script run clean; the 138-entry zip has manifest at root, no
+back-slashes, no build inputs leaked, CRC ok, sha256 matching the ledger; and
+PopTracker 0.35.1 loads the ZIP directly (not just the folder) with no warnings,
+now reporting "Checking for update" instead of "Nowhere to check for updates".
+**NOT yet done:** no release has been tagged/uploaded, so `versions_url` 404s
+until `poptracker-versions.json` is on `main`; and the community pack-list PR is
+deliberately left until a real release exists.
+
 ## Suggested next steps
+
+A. **OPEN — possible `boss_chamber_access_items` mismatch (found 2026-08-04, NOT acted on).**
+   Every computer door is lit by the plates of the chamber BEFORE it, but the apworld
+   assigns each boss hole to the chamber it OPENS. From `mod/wtg_doors.json`:
+
+   | boss | apworld puts it in | game lights it from |
+   |------|--------------------|---------------------|
+   | C2 | 07A (chamber 07) | EXPLOSION_08D, PLATFORMERS_08A, SOCCER_08B, SPACE_08C |
+   | C3 | 06A (chamber 06) | LEBOWSKI_07B, OL_07A |
+   | C4 | 05A (chamber 05) | PORTAL_06A, SUPERPUTT_06B |
+   | C7 | 03B (chamber 03) | MUSIC_04A, STEALTH_04B |
+   | C5 | 05A (chamber 05) | FPG_05C, GRAVITY_05B  (same chamber — fine) |
+   | C8 | 01  (chamber 01) | WETERN_01             (same chamber — fine) |
+
+   `Rules.boss_chamber_access_items` requires every gate key of the boss's ASSIGNED
+   chamber. So with `boss_keys` **off** + `section` granularity, AP can consider
+   Computer 2 in logic once you hold 07A+07B, while in-game its door stays dark
+   until chamber **08** is complete. If real, the fix is to key that rule off the
+   door's plate areas (the chamber before) rather than `_SCENE_CHAMBER`.
+
+   **Caveats before changing anything:** (a) this only bites with `boss_keys` off in
+   section mode — `BossGate` force-lights on key receipt, and chamber granularity
+   has one key per chamber; (b) the plate data is documented as unreliable for the
+   low chambers (C1 lists `CARS_03B` + both chamber-09 areas, clearly garbage), which
+   is exactly why the current code over-requires a whole chamber instead of trusting
+   plates; (c) it never surfaced in testing because the `all_bosses` live run used a
+   seed with every key. Changing it alters generation, so verify in-game first.
+
+B. **OPEN — 3 tracker map markers sit outside their map's rendered window.**
+   `python tools/build_poptracker.py` prints them on every run:
+
+       scene:2D HoleInOne 2 basic   on chamber_07    95 px below the edge
+       chest:CHEST_LEBOWSKI_SECRET  on chamber_07   381 px right of the edge
+       chest:CHEST_HOLOROOM         on chamber_02  1584 px below the edge
+
+   Same root cause as A for the first two (the computer door and the chest behind it
+   physically stand at the end of chamber 08, not in 07); `CHEST_HOLOROOM` is the
+   documented outlier, assigned to chamber 02 after live testing but physically
+   inside chamber 05's band. They are pinned to the nearest edge, so they point in
+   roughly the right direction but not AT the thing. Fix: have
+   `OverworldSnapshot.CollectGroups` fold each chamber's own chests and computer
+   door into its bounding box, then re-capture Main (one save load). Would need
+   `subarea_by_chest` + a door-id→sub-area map exported into `mod/ids.json`.
+   Note this would stretch chamber 02's map a long way for that one chest.
 
 0. **`hard_sections` mis-modelled 07B Bowling / 03B Cars — ✅ FIXED + LIVE-VALIDATED 2026-07-28.**
    Under section granularity + `hard_sections`, `SectionGate` was trying to clamp the two

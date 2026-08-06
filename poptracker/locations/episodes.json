@@ -1,0 +1,2742 @@
+[
+  {
+    "name": "Sporty Sports Episode",
+    "children": [
+      {
+        "name": "Giraffe Painter 0",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 707,
+            "y": 590
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          },
+          {
+            "name": "Crown",
+            "chest_unopened_img": "images/sections/crown.png",
+            "chest_opened_img": "images/sections/crown_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Elastic Bed",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 929,
+            "y": 546
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          },
+          {
+            "name": "Crown",
+            "chest_unopened_img": "images/sections/crown.png",
+            "chest_opened_img": "images/sections/crown_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Man Ball Olympic",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 698,
+            "y": 1781
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Archery 1 Basic",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 298,
+            "y": 1265
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          },
+          {
+            "name": "Crown",
+            "chest_unopened_img": "images/sections/crown.png",
+            "chest_opened_img": "images/sections/crown_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Pole Vaulting 0",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 740,
+            "y": 267
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Man Ball Running Track Long",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 738,
+            "y": 1196
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Soccer Ball OL Enter the Arena",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 514,
+            "y": 465
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Swimming 0 Tutorial",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 725,
+            "y": 874
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Hammer Throwing 0 Bowling",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 294,
+            "y": 376
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Golf Into Olympics",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 627,
+            "y": 1399
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Hurdles Golf Man",
+        "map_locations": [
+          {
+            "map": "ep_olympics",
+            "x": 267,
+            "y": 910
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_olympics"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_olympics"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Snow Episode",
+    "children": [
+      {
+        "name": "House on Ice",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 400,
+            "y": 575
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Dec 25",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 453,
+            "y": 686
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Pizza Time 5",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 476,
+            "y": 171
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Xmas Bowling",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 545,
+            "y": 556
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Car Sled",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 238,
+            "y": 1213
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Dec 8",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 486,
+            "y": 695
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Xmas Tree 24 Simple",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 153,
+            "y": 914
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Dec 23",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 443,
+            "y": 502
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Puck 1",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 575,
+            "y": 513
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Bowling Snow Tutorial",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 197,
+            "y": 1592
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Freezer Balls 1",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 141,
+            "y": 1877
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Pizza Time 2",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 198,
+            "y": 1032
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Pizza Time 1",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 198,
+            "y": 1491
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Elf Soccer Tutorial",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 172,
+            "y": 1682
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Pizza Time 4",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 493,
+            "y": 404
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Snowball Role and Grow",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 196,
+            "y": 1724
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Snow Board Bicycle Tutorial",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 177,
+            "y": 1195
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Rolling Present Tutorial",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 98,
+            "y": 1731
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Dec 16",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 355,
+            "y": 846
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Pizza Time 3",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 525,
+            "y": 777
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Snowball Moon",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 221,
+            "y": 1275
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Dec 24",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 142,
+            "y": 1794
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Snowman",
+        "map_locations": [
+          {
+            "map": "ep_snow",
+            "x": 188,
+            "y": 886
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_snow"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_snow"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Hotdog Episode",
+    "children": [
+      {
+        "name": "Boss Entry",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 387,
+            "y": 215
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Simply Holes 1",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 746,
+            "y": 1833
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Hole Teleport Tutorial",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 677,
+            "y": 1762
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Spring Hole",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 811,
+            "y": 1668
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Breakable Pickle Jar",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 221,
+            "y": 725
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Car Bicycle with Holes",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 560,
+            "y": 788
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Swap Controllers 0",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 365,
+            "y": 1009
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Evil Flag Hiding",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 286,
+            "y": 993
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Hotdog Cannon",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 734,
+            "y": 1234
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Hole in Tree Fill Holes",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 644,
+            "y": 985
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Donut County 2",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 689,
+            "y": 1668
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Hole Food",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 736,
+            "y": 1716
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Indiana Bones",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 344,
+            "y": 574
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Red Flag",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 618,
+            "y": 1415
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Catchup",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 744,
+            "y": 1397
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Walkingthedog",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 621,
+            "y": 1249
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Explosion 2",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 595,
+            "y": 1809
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Fill Hole Lake",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 446,
+            "y": 970
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Spider Dog",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 358,
+            "y": 716
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Harmonika Dyr Holes",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 215,
+            "y": 574
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Cat Ball",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 575,
+            "y": 1016
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Hound of Music Hills",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 344,
+            "y": 658
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Livingroom TV",
+        "map_locations": [
+          {
+            "map": "ep_hotdog",
+            "x": 415,
+            "y": 1145
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_hotdog"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_hotdog"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Alive Episode",
+    "children": [
+      {
+        "name": "Stones & Vase 0",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 513,
+            "y": 1496
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Sneak Chair",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 152,
+            "y": 1029
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Trees Split Up",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 426,
+            "y": 1799
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Table Controller 1",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 701,
+            "y": 1500
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Table Controller 0",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 685,
+            "y": 1552
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Museum Vases",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 623,
+            "y": 1550
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Singing Hole",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 647,
+            "y": 483
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Mountain Golf Ball 0",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 614,
+            "y": 448
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Tent",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 839,
+            "y": 835
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Statue Tree 01",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 239,
+            "y": 969
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Control Laser",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 173,
+            "y": 983
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Golf Family Snake",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 249,
+            "y": 840
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "House 0",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 422,
+            "y": 1350
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Football 0",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 223,
+            "y": 1434
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Bushes",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 755,
+            "y": 575
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Tree Soccer Player",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 153,
+            "y": 1324
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Printer Controller",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 386,
+            "y": 1135
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Sneak Golfball",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 229,
+            "y": 1045
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Boss Slime 1",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 330,
+            "y": 171
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Traffic Cones",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 223,
+            "y": 1354
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Flag",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 429,
+            "y": 1877
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Carpet",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 599,
+            "y": 1501
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Golfer Snake Club",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 332,
+            "y": 826
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Fence 0",
+        "map_locations": [
+          {
+            "map": "ep_alive",
+            "x": 192,
+            "y": 1384
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_alive"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_alive"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Among Us Episode",
+    "children": [
+      {
+        "name": "Find Imposter Intro",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 596,
+            "y": 1149
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Final Level",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 875,
+            "y": 807
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Wire",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 1455,
+            "y": 921
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Vents Egg",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 275,
+            "y": 986
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Explosion Barrel Flying Ejected",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 994,
+            "y": 474
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Vents",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 1029,
+            "y": 1727
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Bowling Button",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 845,
+            "y": 1601
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Shape Shifter Intro",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 584,
+            "y": 1396
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Vending Machine",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 1075,
+            "y": 1314
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Papers",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 532,
+            "y": 699
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Vents Button Crate",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 807,
+            "y": 1302
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Door Tutorial",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 1175,
+            "y": 1488
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Imposter Flags 2",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 663,
+            "y": 1562
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Shoot Before Button",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 1021,
+            "y": 1191
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Papers Man Ball",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 645,
+            "y": 592
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Roomba Clean Spaceship",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 686,
+            "y": 943
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Trash Chute",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 670,
+            "y": 1772
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Vents Wind",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 662,
+            "y": 276
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      },
+      {
+        "name": "Vents 2",
+        "map_locations": [
+          {
+            "map": "ep_amongus",
+            "x": 1131,
+            "y": 1025
+          }
+        ],
+        "access_rules": [
+          [
+            "epkey_amongus"
+          ]
+        ],
+        "visibility_rules": [
+          [
+            "opt_ep_amongus"
+          ]
+        ],
+        "sections": [
+          {
+            "name": "Clear",
+            "chest_unopened_img": "images/sections/hole.png",
+            "chest_opened_img": "images/sections/hole_opened.png"
+          }
+        ]
+      }
+    ]
+  }
+]

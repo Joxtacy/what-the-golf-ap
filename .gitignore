@@ -12,6 +12,9 @@ __pycache__/
 # Scratch output from tools/disq_objdump.py (disassembly slice buffer)
 tools/_slice.bin
 
+# Generated replay harness from tools/check_poptracker_logic.py --dump-lua
+parity_cases.lua
+
 # Editor / OS
 .vs/
 .idea/
@@ -19,3 +22,9 @@ tools/_slice.bin
 .DS_Store
 Thumbs.db
 dist/
+
+# Live AP test scratch output (tools/watch_area_key.py)
+area_watch*.log
+
+# Staging dir for reviewing captured overworld renders
+mapshots/

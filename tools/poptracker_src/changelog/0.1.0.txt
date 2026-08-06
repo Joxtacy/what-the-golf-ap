@@ -1,0 +1,5 @@
+First release.
+Map per chamber (10 -> 00) plus one per DLC episode, on the game's own overworld art.
+Optional "schematic maps" variant with diagram backgrounds instead.
+Full logic mirroring the apworld, configured automatically from slot data.
+The map follows you around the overworld as you teleport (needs the game mod).

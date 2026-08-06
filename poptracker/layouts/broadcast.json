@@ -1,0 +1,92 @@
+{
+  "tracker_broadcast": {
+    "type": "array",
+    "orientation": "vertical",
+    "margin": "2,2,2,2",
+    "content": [
+      {
+        "type": "itemgrid",
+        "item_size": "32,32",
+        "rows": [
+          [
+            "opt_goal",
+            "flag"
+          ]
+        ]
+      },
+      {
+        "type": "itemgrid",
+        "item_size": "24,24",
+        "rows": [
+          [
+            "gate_09A",
+            "gate_09B"
+          ],
+          [
+            "gate_08A",
+            "gate_08B",
+            "gate_08C",
+            "gate_08D"
+          ],
+          [
+            "gate_07A",
+            "gate_07B"
+          ],
+          [
+            "gate_06AB"
+          ],
+          [
+            "gate_05ABC"
+          ],
+          [
+            "gate_04A",
+            "gate_04B"
+          ],
+          [
+            "gate_03A",
+            "gate_03B"
+          ],
+          [
+            "gate_02"
+          ],
+          [
+            "gate_01"
+          ],
+          [
+            "gate_00"
+          ],
+          [
+            "ch_09",
+            "ch_08",
+            "ch_07",
+            "ch_06",
+            "ch_05"
+          ],
+          [
+            "ch_04",
+            "ch_03",
+            "ch_02",
+            "ch_01",
+            "ch_00"
+          ],
+          [
+            "bosskey_1",
+            "bosskey_2",
+            "bosskey_3",
+            "bosskey_4",
+            "bosskey_5",
+            "bosskey_7",
+            "bosskey_8"
+          ],
+          [
+            "epkey_olympics",
+            "epkey_snow",
+            "epkey_hotdog",
+            "epkey_alive",
+            "epkey_amongus"
+          ]
+        ]
+      }
+    ]
+  }
+}

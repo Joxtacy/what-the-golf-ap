@@ -23,6 +23,13 @@ public class Mod : MelonMod
     // so keep OFF; flip to true + rebuild only when re-capturing game data.
     public static readonly bool DumpersEnabled = false;
 
+    // DEV: render the loaded overworld to PNGs (one per chamber/episode) plus
+    // wtg_snapshots.json recording each image's exact world rect, so the tracker
+    // pack can use the game's own art as map backgrounds. Read-only (spawns its
+    // own camera, destroys it again); runs once per campaign. Keep OFF except
+    // during a capture session.
+    public static readonly bool SnapshotEnabled = false;
+
     // DEV/TEST: run ShortcutPortalDumper (captures the shortcut-portal topology to
     // wtg_portals.json) to identify the chamber-10 hub portal for PortalGate.TargetKeys.
     // Read-only scan; keep OFF except during a capture session.
@@ -178,6 +185,7 @@ public class Mod : MelonMod
     private float _lastGoal;
     private int _gateSlot;            // rotates Boss/Section/Chest -> one scan per tick
     private int _dumpTimer;           // dumpers are OFF by default; frame-based is fine
+    private int _snapTimer;           // overworld snapshot spike; OFF by default
     private int _chestDumpTimer;
     private int _portalProbeTimer;
     private int _episodeProbeTimer;
@@ -203,6 +211,18 @@ public class Mod : MelonMod
         // Live on-screen feed of AP activity (items/hints/chat/DeathLink). Drains its
         // queue + renders here on the main thread; no-op when disabled or empty.
         MessageFeed.Tick();
+
+        // Publish which chamber/sub-area we're in to AP data storage, so an external
+        // tracker can follow along. Self-gates on connected + the preference; the
+        // network write is queued off-thread. Cheap enough to call every frame.
+        Mapping.CurrentArea.Tick();
+
+        // DEV: one-shot per-campaign render of the overworld for the tracker maps.
+        if (SnapshotEnabled && ++_snapTimer >= 180)
+        {
+            _snapTimer = 0;
+            Mapping.OverworldSnapshot.Tick();
+        }
 
         // In-game command console scrollback: drain queued server messages (main thread).
         ConsoleUI.Tick();
