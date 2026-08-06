@@ -55,6 +55,45 @@ SNAPSHOTS = os.path.join(SRC, "images", "maps", "snapshots.json")
 # renders. Must match a key in manifest.json.in's "variants".
 SCHEMATIC_VARIANT = "ap_schematic"
 
+# Auto-update ledger. PopTracker fetches versions_url (https only), takes the TOP
+# entry as latest, and verifies the download against its sha256.
+REPO_URL = "https://github.com/Joxtacy/what-the-golf-ap"
+VERSIONS_JSON = os.path.join(ROOT, "poptracker-versions.json")
+CHANGELOG_DIR = os.path.join(SRC, "changelog")
+
+
+def zip_name(version):
+    return f"what-the-golf-poptracker-v{version}.zip"
+
+
+def record_version(version, sha256):
+    """Upsert this version at the top of poptracker-versions.json.
+
+    Idempotent: re-running for the same version replaces its entry rather than
+    appending a duplicate, so a re-cut release doesn't corrupt the ledger.
+    """
+    doc = _load_json(VERSIONS_JSON, {"versions": []})
+    versions = [v for v in doc.get("versions", [])
+                if v.get("package_version") != version]
+    changelog = []
+    path = os.path.join(CHANGELOG_DIR, f"{version}.txt")
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            changelog = [ln.strip() for ln in f if ln.strip()]
+    else:
+        print(f"  note: no {os.path.relpath(path, ROOT)}; changelog left empty")
+    versions.insert(0, {
+        "package_version": version,
+        "download_url": f"{REPO_URL}/releases/download/v{version}/{zip_name(version)}",
+        "sha256": sha256,
+        "changelog": changelog,
+    })
+    with open(VERSIONS_JSON, "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"versions": versions}, f, indent=2)
+        f.write("\n")
+    print(f"recorded v{version} in {os.path.relpath(VERSIONS_JSON, ROOT)} "
+          f"({len(versions)} version(s), {len(changelog)} changelog line(s))")
+
 # --- palette -----------------------------------------------------------------
 BG = hex_rgb("#12141a")
 PANEL = hex_rgb("#1b1f29")
@@ -1371,13 +1410,16 @@ def validate(model, em, placer):
 
 
 # --- static files + packaging -----------------------------------------------
-# snapshots.json is build input (the camera rects), not pack content.
+# Build inputs that live under poptracker_src/ but must NOT ship in the pack:
+# snapshots.json is the camera rects, changelog/ feeds the version ledger.
 SKIP_SRC = {"manifest.json.in", "pack_version.txt",
             "images/maps/snapshots.json"}
+SKIP_DIRS = {"changelog"}
 
 
 def copy_static(out_dir):
-    for base, _dirs, files in os.walk(SRC):
+    for base, dirs, files in os.walk(SRC):
+        dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
         for fn in files:
             rel = os.path.relpath(os.path.join(base, fn), SRC)
             if rel.replace("\\", "/") in SKIP_SRC or fn in SKIP_SRC:
@@ -1459,9 +1501,21 @@ def main():
     ap.add_argument("--check", action="store_true",
                     help="build to a temp dir and fail if poptracker/ differs")
     ap.add_argument("--zip", metavar="PATH", help="also write a distributable zip")
+    ap.add_argument("--record-version", nargs=2, metavar=("VERSION", "SHA256"),
+                    help="upsert this version into poptracker-versions.json")
+    ap.add_argument("--print-version", action="store_true",
+                    help="print the pack version and exit")
     args = ap.parse_args()
 
     version = read_version()
+
+    if args.print_version:
+        print(version)
+        return
+
+    if args.record_version:
+        record_version(args.record_version[0], args.record_version[1])
+        return
 
     if args.check:
         tmp = tempfile.mkdtemp(prefix="wtgpop-")

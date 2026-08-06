@@ -1,0 +1,66 @@
+name: PopTracker pack
+
+# poptracker/ is generated output that is committed, so the thing most worth
+# guarding is that it still matches a fresh build -- a hand edit or a forgotten
+# rebuild after a data change would otherwise ship silently.
+on:
+  push:
+    paths:
+      - 'poptracker/**'
+      - 'tools/build_poptracker.py'
+      - 'tools/wtgpng.py'
+      - 'tools/poptracker_src/**'
+      - 'what_the_golf/**'
+      - 'mod/ids.json'
+      - '.github/workflows/poptracker.yml'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: poptracker/ matches a fresh build
+        # The generator is stdlib-only by design, so there is nothing to install.
+        run: python tools/build_poptracker.py --check
+
+      - name: Validate against the PopTracker pack schema
+        run: |
+          python -m pip install --quiet pack-checker
+          pack_checker --strict poptracker
+
+      - name: Version ledger is well formed
+        # PopTracker takes the TOP entry as latest and verifies the download
+        # against its sha256, so a malformed or mis-sorted ledger breaks
+        # auto-update for everyone who already has the pack.
+        run: |
+          python - <<'PY'
+          import json, re, sys
+          doc = json.load(open("poptracker-versions.json", encoding="utf-8"))
+          versions = doc["versions"]
+          assert versions, "no versions recorded"
+          seen = set()
+          for v in versions:
+              for key in ("package_version", "download_url", "sha256", "changelog"):
+                  assert key in v, f"{v.get('package_version')} missing {key}"
+              assert re.fullmatch(r"[0-9a-f]{64}", v["sha256"]), \
+                  f"{v['package_version']}: sha256 is not a 64-char hex digest"
+              assert v["download_url"].startswith("https://"), \
+                  f"{v['package_version']}: download_url must be https"
+              assert f"v{v['package_version']}/" in v["download_url"], \
+                  f"{v['package_version']}: download_url does not point at its own tag"
+              assert v["package_version"] not in seen, \
+                  f"duplicate entry for {v['package_version']}"
+              seen.add(v["package_version"])
+          manifest = json.load(open("poptracker/manifest.json", encoding="utf-8"))
+          assert manifest["package_version"] == versions[0]["package_version"], (
+              f"manifest is v{manifest['package_version']} but the ledger's newest "
+              f"entry is v{versions[0]['package_version']}")
+          print(f"ok: {len(versions)} version(s), newest v{versions[0]['package_version']}")
+          PY

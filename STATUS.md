@@ -559,6 +559,40 @@ Note the current `wtg_goals.json` is a PARTIAL capture: 117/133 Main holes. The
 `2D Super Golf Boy 0`/`1`/`2`, which should appear with more walking.
 Procedure is in `tools/poptracker_tests/README.md`.
 
+## PopTracker pack — RELEASE PACKAGING DONE (2026-08-05)
+
+`tools/build_release.ps1` now produces all three artifacts in one shot and gained a
+**pre-flight** `build_poptracker.py --check`, so a stale or hand-edited `poptracker/`
+can never ship. Step 5 packs `dist/what-the-golf-poptracker-v<ver>.zip` (Python
+writes it, not `Compress-Archive` — PopTracker needs `manifest.json` at the archive
+ROOT with forward-slash entries) and records its sha256 in `poptracker-versions.json`.
+
+**Two independent version numbers**: mod+apworld from the csproj `<Version>`, the
+pack from `tools/poptracker_src/pack_version.txt`. Coupling them would force
+pointless pack releases for mod-only changes. The pack's `download_url` points at
+`v<pack version>`, so its zip must be on a release tagged with THAT version or
+auto-update 404s.
+
+`poptracker-versions.json` (repo root) is the auto-update ledger — PopTracker
+fetches it over https, treats the TOP entry as latest, verifies the download
+against its sha256. `--record-version` upserts idempotently so re-cutting a
+release replaces rather than duplicates an entry; changelog lines come from
+`tools/poptracker_src/changelog/<version>.txt` (a build input, excluded from the
+pack via `SKIP_DIRS`).
+
+`.github/workflows/poptracker.yml` (the repo's first workflow) runs `--check`, the
+official `pack-checker --strict`, and a ledger validator (https URLs, 64-hex
+sha256, download_url matches its own tag, no duplicate versions, manifest version
+== newest ledger entry).
+
+**VERIFIED:** full script run clean; the 138-entry zip has manifest at root, no
+back-slashes, no build inputs leaked, CRC ok, sha256 matching the ledger; and
+PopTracker 0.35.1 loads the ZIP directly (not just the folder) with no warnings,
+now reporting "Checking for update" instead of "Nowhere to check for updates".
+**NOT yet done:** no release has been tagged/uploaded, so `versions_url` 404s
+until `poptracker-versions.json` is on `main`; and the community pack-list PR is
+deliberately left until a real release exists.
+
 ## Suggested next steps
 
 0. **`hard_sections` mis-modelled 07B Bowling / 03B Cars — ✅ FIXED + LIVE-VALIDATED 2026-07-28.**

@@ -96,7 +96,8 @@ tools/
   poptracker_src/       hand-maintained pack inputs (manifest, settings, Lua)
   poptracker_tests/     pack verification harnesses + how to run them
   check_poptracker_logic.py  diffs the pack's logic against the apworld's
-  build_release.ps1     packs the .apworld + Release mod bundle into dist/
+  build_release.ps1     packs the .apworld + mod bundle + tracker pack into dist/
+poptracker-versions.json  the tracker pack's auto-update ledger
 ```
 
 ## The map tracker
@@ -134,8 +135,10 @@ combo, ~165k comparisons) — see [`tools/poptracker_tests/README.md`](tools/pop
   flags → `static readonly`; `CS0649` JSON-DTO fields → scoped `#pragma`)
 - [x] PopTracker map pack (`poptracker/`), generated + logic-verified
 - [x] Tracker map auto-switches to the chamber you're playing
-- [ ] Real overworld marker coordinates (needs an in-game dump pass)
-- [ ] Pack release artifact + community pack-list entry
+- [x] Real overworld marker coordinates (captured in-game)
+- [x] Map backgrounds are the game's own overworld art (+ a schematic variant)
+- [x] Pack release artifact + auto-update ledger + CI schema check
+- [ ] Submit to PopTracker's community pack list (after the first release is up)
 
 ## Testing the apworld
 
@@ -159,20 +162,38 @@ shot (requires `python` on PATH and the .NET 6 SDK):
 tools\build_release.ps1
 ```
 
-It regenerates `mod/ids.json` from the apworld, packs
+It first checks `poptracker/` still matches a fresh build (so a stale or
+hand-edited pack can't ship), regenerates `mod/ids.json` from the apworld, packs
 `dist/what_the_golf.apworld` (a zip of `what_the_golf/`, `__pycache__` excluded),
-Release-builds the mod (which skips the Debug auto-deploy to a local game
-install), and bundles the mod into
-`dist/WtgArchipelago-mod-v<version>.zip` alongside `wtg_ids.json` and
-`mod/INSTALL.txt`. The version is read from `<Version>` in
-`mod/WtgArchipelago.csproj`.
+Release-builds the mod (skipping the Debug auto-deploy to a local game install),
+bundles the mod into `dist/WtgArchipelago-mod-v<version>.zip` alongside
+`wtg_ids.json` and `mod/INSTALL.txt`, and finally packs the tracker into
+`dist/what-the-golf-poptracker-v<pack version>.zip` and records its sha256 in
+`poptracker-versions.json`.
 
-To cut a release: bump `<Version>` in the csproj (and `world_version` in
-`what_the_golf/archipelago.json`) to match, run the script, and upload both
-`dist/` files as assets to a GitHub Release tagged `v<version>`. Ship the apworld
-and mod from the **same tag** — the mod's `wtg_ids.json` is generated from the
-apworld, so mixing versions can mismatch IDs. Do **not** redistribute MelonLoader
-or any game/Unity DLLs; players supply those (see the setup guide).
+**Two version numbers, deliberately independent:**
+
+| Artifact | Version source |
+| --- | --- |
+| mod + apworld | `<Version>` in `mod/WtgArchipelago.csproj` |
+| PopTracker pack | `tools/poptracker_src/pack_version.txt` |
+
+Coupling them would force a pointless pack release for every mod-only change.
+
+To cut a release: bump the version(s) you're shipping (and `world_version` in
+`what_the_golf/archipelago.json` to match the csproj), run the script, commit the
+regenerated `poptracker-versions.json`, tag, and upload the `dist/` zips as
+release assets. Ship the apworld and mod from the **same tag** — the mod's
+`wtg_ids.json` is generated from the apworld, so mixing versions can mismatch
+IDs. The pack's `download_url` points at `v<pack version>`, so its zip must be on
+a release tagged with *that* version or PopTracker's auto-update will 404. Do
+**not** redistribute MelonLoader or any game/Unity DLLs; players supply those
+(see the setup guide).
+
+`poptracker-versions.json` is the pack's auto-update ledger: PopTracker fetches
+it over https, treats the top entry as latest, and verifies the download against
+its sha256. `.github/workflows/poptracker.yml` validates it, runs the pack
+schema checker, and re-checks that `poptracker/` matches a fresh build.
 
 Validated against the **released Archipelago 0.6.7** (and `main`/0.6.8): the
 world loads and generates a solvable multiworld across all option combinations
