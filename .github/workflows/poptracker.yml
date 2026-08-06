@@ -33,7 +33,11 @@ jobs:
       - name: Validate against the PopTracker pack schema
         run: |
           python -m pip install --quiet pack-checker
-          pack_checker --strict poptracker
+          # The console script is "pack-checker" with a hyphen. The docs show
+          # "pack_checker.py path/to/pack", which is running the script from a
+          # source checkout, not the installed entry point.
+          pack-checker --version
+          pack-checker --strict poptracker
 
       - name: Version ledger is well formed
         # PopTracker takes the TOP entry as latest and verifies the download
