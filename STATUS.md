@@ -595,6 +595,50 @@ deliberately left until a real release exists.
 
 ## Suggested next steps
 
+A. **OPEN — possible `boss_chamber_access_items` mismatch (found 2026-08-04, NOT acted on).**
+   Every computer door is lit by the plates of the chamber BEFORE it, but the apworld
+   assigns each boss hole to the chamber it OPENS. From `mod/wtg_doors.json`:
+
+   | boss | apworld puts it in | game lights it from |
+   |------|--------------------|---------------------|
+   | C2 | 07A (chamber 07) | EXPLOSION_08D, PLATFORMERS_08A, SOCCER_08B, SPACE_08C |
+   | C3 | 06A (chamber 06) | LEBOWSKI_07B, OL_07A |
+   | C4 | 05A (chamber 05) | PORTAL_06A, SUPERPUTT_06B |
+   | C7 | 03B (chamber 03) | MUSIC_04A, STEALTH_04B |
+   | C5 | 05A (chamber 05) | FPG_05C, GRAVITY_05B  (same chamber — fine) |
+   | C8 | 01  (chamber 01) | WETERN_01             (same chamber — fine) |
+
+   `Rules.boss_chamber_access_items` requires every gate key of the boss's ASSIGNED
+   chamber. So with `boss_keys` **off** + `section` granularity, AP can consider
+   Computer 2 in logic once you hold 07A+07B, while in-game its door stays dark
+   until chamber **08** is complete. If real, the fix is to key that rule off the
+   door's plate areas (the chamber before) rather than `_SCENE_CHAMBER`.
+
+   **Caveats before changing anything:** (a) this only bites with `boss_keys` off in
+   section mode — `BossGate` force-lights on key receipt, and chamber granularity
+   has one key per chamber; (b) the plate data is documented as unreliable for the
+   low chambers (C1 lists `CARS_03B` + both chamber-09 areas, clearly garbage), which
+   is exactly why the current code over-requires a whole chamber instead of trusting
+   plates; (c) it never surfaced in testing because the `all_bosses` live run used a
+   seed with every key. Changing it alters generation, so verify in-game first.
+
+B. **OPEN — 3 tracker map markers sit outside their map's rendered window.**
+   `python tools/build_poptracker.py` prints them on every run:
+
+       scene:2D HoleInOne 2 basic   on chamber_07    95 px below the edge
+       chest:CHEST_LEBOWSKI_SECRET  on chamber_07   381 px right of the edge
+       chest:CHEST_HOLOROOM         on chamber_02  1584 px below the edge
+
+   Same root cause as A for the first two (the computer door and the chest behind it
+   physically stand at the end of chamber 08, not in 07); `CHEST_HOLOROOM` is the
+   documented outlier, assigned to chamber 02 after live testing but physically
+   inside chamber 05's band. They are pinned to the nearest edge, so they point in
+   roughly the right direction but not AT the thing. Fix: have
+   `OverworldSnapshot.CollectGroups` fold each chamber's own chests and computer
+   door into its bounding box, then re-capture Main (one save load). Would need
+   `subarea_by_chest` + a door-id→sub-area map exported into `mod/ids.json`.
+   Note this would stretch chamber 02's map a long way for that one chest.
+
 0. **`hard_sections` mis-modelled 07B Bowling / 03B Cars — ✅ FIXED + LIVE-VALIDATED 2026-07-28.**
    Under section granularity + `hard_sections`, `SectionGate` was trying to clamp the two
    **"Main Crown Door" / "…Variant"** doors — `CROWN_MAIN1` (07B Bowling/Lebowski) and
